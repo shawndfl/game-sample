@@ -5,6 +5,8 @@ SRC_CC := $(wildcard ./src/*.cc)
 SRC := $(notdir $(SRC_CC:%.cc=%))
 OBJ := $(SRC:%=bin/%.o)
 
+#sudo apt install libx11-dev libepoxy-dev
+
 PKGS := epoxy x11
 
 CFLAGS := -Wall -O3 -pthread -std=c++14 -MMD
