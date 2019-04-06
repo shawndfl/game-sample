@@ -36,3 +36,8 @@ bin/
 *.exe
 *.out
 *.app
+
+# eclipse
+*.project
+*.cproject
+.settings/
