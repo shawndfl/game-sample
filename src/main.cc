@@ -4,6 +4,9 @@
 #include <X11/Xlib.h>
 #include <GL/glu.h>
 
+#include "Render.h"
+#include "Logging.h"
+
 XVisualInfo *
 get_glx_visual(Display *dpy) {
    XVisualInfo *visinfo;
@@ -68,6 +71,11 @@ Window get_glx_window(Display *dpy, XVisualInfo *visinfo, bool map) {
 }
 
 int main(int argc, char *argv[]) {
+
+   Render render;
+   render.initialize();
+   LOGD("Testing...");
+
    Display *dpy = XOpenDisplay(NULL);
 
    if (!dpy) {

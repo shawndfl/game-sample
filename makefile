@@ -25,6 +25,7 @@ LDLIBS := -lstdc++ -lGLU -lGL -lXext
 # Bulid app
 #
 all: bin/$(APP)
+	@echo Done making bin/$(APP)
 
 #
 # Debug the app
@@ -38,7 +39,7 @@ debug: all
 bin/%.o: src/%.cc
 	@mkdir -p bin/
 	@echo compiling $<
-	$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 
+	@$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 
 
 #
 # Link
@@ -46,7 +47,7 @@ bin/%.o: src/%.cc
 bin/$(APP): $(OBJ)	
 	@mkdir -p bin/
 	@echo linking $@
-	$(CXX) -o $@ $(OBJ) $(LDFLAGS) $(LDLIBS)
+	@$(CXX) -o $@ $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 #
 # Clean
