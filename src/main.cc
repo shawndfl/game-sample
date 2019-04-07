@@ -74,7 +74,8 @@ int main(int argc, char *argv[]) {
 
    Render render;
    render.initialize();
-   LOGD("Testing...");
+
+   LOGD("Testing... %f ", 12.6);
 
    Display *dpy = XOpenDisplay(NULL);
 
@@ -98,6 +99,7 @@ int main(int argc, char *argv[]) {
 
    glXMakeCurrent(dpy, win, ctx);
 
+   LOGI("Epoxy version: %d ", epoxy_gl_version());
    while (1) {
       XEvent xev;
       XWindowAttributes gwa;
@@ -118,7 +120,6 @@ int main(int argc, char *argv[]) {
          exit(0);
       }
    }
-
-   std::cout << "Hi epoxyL " << epoxy_gl_version() << std::endl;
+   LOGI("Exit ");
    return 0;
 }
