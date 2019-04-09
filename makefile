@@ -24,8 +24,8 @@ LDLIBS := -lstdc++ -lGLU -lGL -lXext
 #
 # Bulid app
 #
-all: bin/$(APP)
-	@echo Done making bin/$(APP)
+all: $(APP)
+	@echo Done making $(APP)
 
 #
 # Debug the app
@@ -44,8 +44,7 @@ bin/%.o: src/%.cc
 #
 # Link
 #
-bin/$(APP): $(OBJ)	
-	@mkdir -p bin/
+$(APP): $(OBJ)		
 	@echo linking $@
 	@$(CXX) -o $@ $(OBJ) $(LDFLAGS) $(LDLIBS)
 
@@ -55,5 +54,6 @@ bin/$(APP): $(OBJ)
 clean:
 	@echo cleaning
 	@rm -f bin/*
+	@rm -f $(APP)
 
 -include $(OBJ:.o=.d)		

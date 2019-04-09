@@ -8,6 +8,8 @@
 #ifndef SRC_LOGGING_H_
 #define SRC_LOGGING_H_
 
+#include <stdio.h>
+
 /**
  * Logging class.
  */
