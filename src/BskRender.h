@@ -5,8 +5,8 @@
  *      Author: user1
  */
 
-#ifndef SRC_RENDER_H_
-#define SRC_RENDER_H_
+#ifndef SRC_BSKRENDER_H_
+#define SRC_BSKRENDER_H_
 
 /**
  * This class is used to render the scene
@@ -21,4 +21,4 @@ public:
    void render();
 };
 
-#endif /* SRC_RENDER_H_ */
+#endif /* SRC_BSKRENDER_H_ */

@@ -5,11 +5,12 @@
  *      Author: user1
  */
 
+#include "BskLogging.h"
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
 
-#include "Logging.h"
 
 
 /*************************************************/

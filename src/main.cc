@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "Render.h"
-#include "Logging.h"
-#include "Display.h"
+#include "BskDisplay.h"
+#include "BskLogging.h"
+#include "BskRender.h"
 
 int main(int argc, char *argv[]) {
 

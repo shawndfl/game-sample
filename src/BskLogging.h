@@ -5,8 +5,8 @@
  *      Author: user1
  */
 
-#ifndef SRC_LOGGING_H_
-#define SRC_LOGGING_H_
+#ifndef SRC_BSKLOGGING_H_
+#define SRC_BSKLOGGING_H_
 
 #include <stdio.h>
 
@@ -49,4 +49,4 @@ private:
       printf ("E (%s:%d)[%s] " FORMAT "\n" , __FILE__, __LINE__, TIMESTAMP,  ##__VA_ARGS__ ); \
 } while(0)
 
-#endif /* SRC_LOGGING_H_ */
+#endif /* SRC_BSKLOGGING_H_ */

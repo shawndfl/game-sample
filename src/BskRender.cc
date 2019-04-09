@@ -5,10 +5,11 @@
  *      Author: user1
  */
 
+#include "BskRender.h"
+
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
 #include <GL/glu.h>
-#include "Render.h"
 
 
 /*************************************************/

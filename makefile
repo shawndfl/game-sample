@@ -1,5 +1,5 @@
 
-APP:=game
+APP:=BlockSimulatedKingdom
 
 SRC_CC := $(wildcard ./src/*.cc)
 SRC := $(notdir $(SRC_CC:%.cc=%))

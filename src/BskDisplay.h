@@ -5,8 +5,8 @@
  *      Author: user1
  */
 
-#ifndef SRC_DISPLAY_H_
-#define SRC_DISPLAY_H_
+#ifndef SRC_BSKDISPLAY_H_
+#define SRC_BSKDISPLAY_H_
 
 #include <epoxy/gl.h>
 #include <epoxy/glx.h>
@@ -35,4 +35,4 @@ private:
    std::shared_ptr<Render> _renderer;
 };
 
-#endif /* SRC_DISPLAY_H_ */
+#endif /* SRC_BSKDISPLAY_H_ */

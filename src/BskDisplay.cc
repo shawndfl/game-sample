@@ -5,10 +5,11 @@
  *      Author: user1
  */
 
-#include "Logging.h"
-#include "Display.h"
-#include "Render.h"
+#include "BskDisplay.h"
+
 #include <X11/Xlib.h>
+#include "BskLogging.h"
+#include "BskRender.h"
 
 /*************************************************/
 display::display() :
