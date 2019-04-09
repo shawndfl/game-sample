@@ -90,6 +90,7 @@ void display::createWindow(int width, int height, Render* renderer) {
    while (1) {
       XEvent xev;
       XWindowAttributes gwa;
+
       XNextEvent(dpy, &xev);
 
       if (xev.type == Expose) {
@@ -101,16 +102,22 @@ void display::createWindow(int width, int height, Render* renderer) {
          }
 
          glXSwapBuffers(dpy, win);
-      }
+      } else if (xev.type == KeyPress) {
 
-      else if (xev.type == KeyPress) {
-         glXMakeCurrent(dpy, None, NULL);
-         glXDestroyContext(dpy, ctx);
-         XDestroyWindow(dpy, win);
-         XCloseDisplay(dpy);
+         LOGI("%d", xev.xkey.keycode);
+
+         //escape
+         if (xev.xkey.keycode == 9) {
+            glXMakeCurrent(dpy, None, NULL);
+            glXDestroyContext(dpy, ctx);
+            XDestroyWindow(dpy, win);
+            XCloseDisplay(dpy);
+            break;
+         }
+      } else {
+         LOGI("%d", xev.type);
       }
    }
-   LOGI("Exit ");
 }
 
 /*************************************************/
