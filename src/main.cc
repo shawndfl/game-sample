@@ -3,6 +3,7 @@
 #include "BskDisplay.h"
 #include "BskLogging.h"
 #include "BskRender.h"
+#include "BskHttpServer.h"
 
 int main(int argc, char *argv[]) {
 
@@ -10,9 +11,13 @@ int main(int argc, char *argv[]) {
 
    render->initialize();
 
-   display disp;
-   disp.createWindow(1280, 1024, render.get());
+   BskHttpServer server;
+   server.StartServer(8080);
+
+   //display disp;
+   //disp.createWindow(1280, 1024, render.get());
 
    LOGI("Exit ");
+
    return 0;
 }
