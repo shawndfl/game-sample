@@ -11,6 +11,23 @@
 #include <queue>
 #include <pthread.h>
 
+class BskHttpServer;
+
+typedef struct ClientContext {
+   int clientfd = -1;
+   pthread_t thread = 0;
+   BskHttpServer* server = nullptr;
+
+}ClientContext;
+
+typedef struct ServerContext {
+   int port = 0;
+   int serverfd = -1;
+   BskHttpServer* server = nullptr;
+   bool listening = false;
+
+}ServerContext;
+
 class BskHttpServer {
 public:
    struct Message {
@@ -21,12 +38,16 @@ public:
    BskHttpServer();
    virtual ~BskHttpServer();
 
-   void StartServer(int port);
+   bool StartServer(int port);
+
+   void Poll();
 
 private:
    std::queue<BskHttpServer::Message> _messages;
    pthread_t _acceptThread;
-   int _serverSocket;
+
+   ServerContext _serverContext;
+   std::vector<ClientContext*>  _clients;
 };
 
 #endif /* SRC_BSKHTTPSERVER_H_ */
