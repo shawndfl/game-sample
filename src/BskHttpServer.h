@@ -10,13 +10,27 @@
 
 #include <queue>
 #include <pthread.h>
+#include <string>
+#include <atomic>
 
 class BskHttpServer;
 
+/**
+ * Simple key value pair
+ */
+typedef struct KeyValue {
+   std::string key;
+   std::string value;
+
+}KeyValue;
+
 typedef struct ClientContext {
+   std::atomic<bool> active;
    int clientfd = -1;
    pthread_t thread = 0;
    BskHttpServer* server = nullptr;
+   std::string requestUrl;
+   std::vector<KeyValue> parameters;
 
 }ClientContext;
 
@@ -27,6 +41,8 @@ typedef struct ServerContext {
    bool listening = false;
 
 }ServerContext;
+
+
 
 class BskHttpServer {
 public:
@@ -43,6 +59,8 @@ public:
    void Poll();
 
 private:
+   void Parse(std::string request);
+
    std::queue<BskHttpServer::Message> _messages;
    pthread_t _acceptThread;
 

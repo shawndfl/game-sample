@@ -19,11 +19,14 @@
 
 #include "BskHttpServer.h"
 
-static pthread_mutex_t messageLock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t clientLock = PTHREAD_MUTEX_INITIALIZER;
+
 #define BACKLOG 50
 
 void* acceptEvent(void * context);
 void* readEvent(void * context);
+size_t readn(int fd, void* buffer, size_t size);
+size_t writen(int fd, const void* buffer, size_t size);
 
 /*************************************************/
 BskHttpServer::BskHttpServer() :
@@ -49,7 +52,8 @@ void* acceptEvent(void * context) {
 
       struct sockaddr clientAddr;
       socklen_t addrLen = sizeof(clientAddr);
-      int clientfd = accept(serverContext->serverfd, &clientAddr, &addrLen);
+      volatile int clientfd = accept(serverContext->serverfd, &clientAddr,
+            &addrLen);
       if (clientfd < 0) {
          LOGE("Error accept %d %d", clientfd, errno);
          exit(EXIT_FAILURE);
@@ -58,18 +62,77 @@ void* acceptEvent(void * context) {
       LOGI("Got a client %d", clientfd);
 
       ClientContext* receiveContext = new ClientContext();
+      receiveContext->active.store(true);
       receiveContext->clientfd = clientfd;
-      //receiveContext->thread =
 
-      readEvent((void*)receiveContext);
+      pthread_attr_t attr;
+      pthread_attr_init(&attr);
+      pthread_create(&receiveContext->thread, &attr, &readEvent,
+            receiveContext);
+      pthread_attr_destroy(&attr);
    }
 
    return nullptr;
 }
 
 /*************************************************/
+size_t readn(int fd, void* buffer, size_t size) {
+   char* chBuffer = (char*)buffer;
+   size_t totalBytesRead = 0;
+   size_t bytesRead = 0;
+   while (totalBytesRead < size) {
+
+      bytesRead = read(fd, chBuffer, size - totalBytesRead);
+      // EOF
+      if (bytesRead == 0) {
+         return totalBytesRead;
+
+         // Error of some kind
+      } else if (bytesRead == (size_t)-1) {
+
+         // Interrupted restart
+         if (errno == EINTR) {
+            continue;
+         } else {
+            LOGE("Error reading %d ", errno);
+            return -1;
+         }
+      }
+      totalBytesRead += bytesRead;
+      chBuffer += bytesRead;
+   }
+   return totalBytesRead;
+}
+
+/*************************************************/
+size_t writen(int fd, const void* buffer, size_t size) {
+   char* chBuffer = (char*)buffer;
+   size_t totalBytesWrote = 0;
+   size_t bytesWrote = 0;
+   while (totalBytesWrote < size) {
+
+      bytesWrote = write(fd, chBuffer, size - totalBytesWrote);
+      // EOF
+      if (bytesWrote <= 0) {
+         // Interrupted restart
+         if (bytesWrote == (size_t)-1 && errno == EINTR) {
+            continue;
+         } else {
+            LOGE("Error writing %d ", errno);
+            return -1;
+         }
+      }
+      totalBytesWrote += bytesWrote;
+      chBuffer += bytesWrote;
+   }
+   return totalBytesWrote;
+}
+
+/*************************************************/
 void* readEvent(void * context) {
    ClientContext* receiveContext = (ClientContext*) context;
+
+   LOGI("Got a client %d", receiveContext->clientfd);
 
    char buffer[1024] = { 0 };
    const char *hello = "HTTP/1.1 200 OK\r\n"
@@ -80,7 +143,7 @@ void* readEvent(void * context) {
 
    while (true) {
 
-      int bytesRead = read(receiveContext->clientfd, buffer, 1024);
+      int bytesRead = readn(receiveContext->clientfd, buffer, 1024);
       LOGI("Read %d bytes", bytesRead);
       LOGI("%s", buffer);
 
@@ -88,11 +151,12 @@ void* readEvent(void * context) {
       LOGI("Sending %s %d", hello, len);
 
       int totalByteSent = 0;
-      while(totalByteSent < len) {
+      while (totalByteSent < len) {
 
-         int bytesSent = send(receiveContext->clientfd, hello, len, 0);
-         if(bytesSent < 0 ) {
-            LOGE("Error sending %d ", errno );
+         int bytesSent = writen(receiveContext->clientfd, hello, len);
+         if (bytesSent < 0) {
+            //EROFS
+            LOGE("Error sending %d ", errno);
             break;
          }
          totalByteSent += bytesSent;
@@ -100,10 +164,14 @@ void* readEvent(void * context) {
 
       //sleep(1);
       // TODO Check to keep alive
-      close (receiveContext->clientfd);
+      close(receiveContext->clientfd);
       break;
    }
    return nullptr;
+}
+
+void Parse(std::string request) {
+
 }
 
 /*************************************************/
@@ -132,10 +200,10 @@ bool BskHttpServer::StartServer(int port) {
    }
 
    if (setsockopt(_serverContext.serverfd, SOL_SOCKET,
-      SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
-         LOGE("setsockopt error: %d", errno);
-         return false;
-      }
+   SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
+      LOGE("setsockopt error: %d", errno);
+      return false;
+   }
 
    struct sockaddr_in address;
    //memset(&address, 0, sizeof(sockaddr_in));
