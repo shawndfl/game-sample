@@ -81,14 +81,72 @@ struct Response {
  *       key: value
  *    Body
  */
-struct Request {
+class Request {
+public:
    enum ParseState {
-      NewRequest,
-      IncompleteStartLine,
-      IncompleteHeader,
-      IncompleteMessage,
-      Complete
+      NewRequest, IncompleteStartLine, IncompleteHeader, IncompleteMessage, Complete, ParseError
    };
+
+   Request();
+
+   /**
+    * gets the size of the body based on the
+    */
+   int getBodySize() const;
+
+   /**
+    * Starts the request parsing process. This function will call
+    * ParseRequestLine(), ParseHeaderLine(), and AppendToBody()
+    */
+   void ParseRequest(const char* buffer, size_t size);
+
+   const std::string& getBody() const;
+   const std::vector<KeyValue>& getHeaders() const;
+   const std::string& getHttpVersion() const;
+   const std::string& getMethod() const;
+   const std::vector<KeyValue>& getParameters() const;
+   const std::string& getParsedLine() const;
+   ParseState getParsedState() const;
+   int getParseErrorCode() const;
+   const std::string& getUri() const;
+
+private:
+   /**
+    * Parses the request line. This is the first line in
+    * the request. Its format is:
+    *    method SP request-target SP HTTP-version CRLF
+    *
+    * NOTE: Don't call directory ParseRequest()
+    * calls this.
+    */
+   bool ParseRequestLine(const std::string& line);
+   /**
+    * Parse header. This will parse a single line.
+    * it should be in the form of:
+    *    field-name: field-value
+    *
+    * NOTE: Don't call directory ParseRequest()
+    * calls this.
+    */
+   bool ParseHeaderLine(const std::string& line);
+
+   /**
+    * This will append a chunk to the message
+    * body.
+    *
+    * NOTE: Don't call directory ParseRequest()
+    * calls this.
+    */
+   bool AppendToBody(const std::string& chunk);
+
+   /**
+    * This error code can be set when parsing
+    * the request. If invalid characters are found
+    * this will be set and a response will be sent
+    * to the client with this number.
+    */
+   int parseErrorCode;
+
    /**
     * The state of the request. It may be incomplete
     * due to tcp frames
@@ -158,33 +216,6 @@ struct Request {
     */
    std::string body;
 
-   /**
-    * gets the size of the body based on the
-    */
-   int getBodySize() const;
-
-   /**
-    * Parses the request line. This is the first line in
-    * the request. Its format is:
-    *    method SP request-target SP HTTP-version CRLF
-    */
-   bool ParseRequestLine(const std::string& line);
-   /**
-    * Parse header. This will parse a single line.
-    * it should be in the form of:
-    *    field-name: field-value
-    */
-   bool ParseHeaderLine(const std::string& line);
-
-   bool AppendToBody(const std::string& chunk);
-
-   /**
-    * This error code can be set when parsing
-    * the request. If invalid characters are found
-    * this will be set and a response will be sent
-    * to the client with this number.
-    */
-   int parseErrorCode;
 };
 
 /**
@@ -241,8 +272,7 @@ public:
     *
     * Returns - The function will return false if it detects an incomplete message
     */
-   void ParseRequest(const char* buffer, size_t size,
-         struct Request& outRequest);
+   void ParseRequest(const char* buffer, size_t size, struct Request& outRequest);
 
 private:
 

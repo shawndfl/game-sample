@@ -1,6 +1,7 @@
 # Binaries
 bin/
 BlockSimulatedKingdom
+unittests/tests
 
 # Prerequisites
 *.d

@@ -14,13 +14,10 @@
 
 /*************************************************/
 Render::Render() {
-   // TODO Auto-generated constructor stub
-
 }
 
 /*************************************************/
 Render::~Render() {
-   // TODO Auto-generated destructor stub
 }
 
 /*************************************************/

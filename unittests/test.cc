@@ -4,7 +4,6 @@
 #include "BskLogging.h"
 
 TEST(Sanity) {
-   BskHttpServer server;
    struct Request request;
    const char* testRequest =
          "GET /test?x=1&y=2 HTTP/1.1\r\n"
@@ -19,18 +18,18 @@ TEST(Sanity) {
                "\r\n"
                "\r\n";
 
-   server.ParseRequest(testRequest, strlen(testRequest), request);
+   request.ParseRequest(testRequest, strlen(testRequest));
 
-   CHECK_EQUAL("HTTP/1.1", request.httpVersion.c_str());
-   CHECK_EQUAL("GET", request.method.c_str());
-   CHECK_EQUAL("/test?x=1&y=2", request.uri.c_str());
+   CHECK_EQUAL("HTTP/1.1", request.getHttpVersion().c_str());
+   CHECK_EQUAL("GET", request.getMethod().c_str());
+   CHECK_EQUAL("/test?x=1&y=2", request.getUri().c_str());
 
-   LOGI("httpVersion = \'%s\'", request.httpVersion.c_str());
-   LOGI("method = \'%s\'", request.method.c_str());
-   LOGI("uri = \'%s\'", request.uri.c_str());
+   LOGI("httpVersion = \'%s\'", request.getHttpVersion().c_str());
+   LOGI("method = \'%s\'", request.getMethod().c_str());
+   LOGI("uri = \'%s\'", request.getUri().c_str());
 
-   for (size_t i = 0; i < request.headers.size(); i++) {
-      KeyValue pair = request.headers[i];
+   for (size_t i = 0; i < request.getHeaders().size(); i++) {
+      KeyValue pair = request.getHeaders()[i];
       LOGI("\'%s\' = \'%s\'", pair.key.c_str(), pair.value.c_str());
    }
 
