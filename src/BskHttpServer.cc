@@ -52,8 +52,7 @@ void* acceptEvent(void * context) {
 
       struct sockaddr clientAddr;
       socklen_t addrLen = sizeof(clientAddr);
-      volatile int clientfd = accept(serverContext->serverfd, &clientAddr,
-            &addrLen);
+      volatile int clientfd = accept(serverContext->serverfd, &clientAddr, &addrLen);
       if (clientfd < 0) {
          LOGE("Error accept %d %d", clientfd, errno);
          exit(EXIT_FAILURE);
@@ -62,33 +61,207 @@ void* acceptEvent(void * context) {
       LOGI("Got a client %d", clientfd);
 
       ClientContext* receiveContext = new ClientContext();
-      receiveContext->active.store(true);
       receiveContext->clientfd = clientfd;
 
       pthread_attr_t attr;
       pthread_attr_init(&attr);
-      pthread_create(&receiveContext->thread, &attr, &readEvent,
-            receiveContext);
+      pthread_create(&receiveContext->thread, &attr, &readEvent, receiveContext);
       pthread_attr_destroy(&attr);
    }
 
    return nullptr;
 }
 
+const char RET = '\r';
+const char SPACE = ' ';
+const char PARAM = '?';
+const char PARAM_EQUAL = '=';
+const char NEXT_PARAM = '&';
+const char HEX_VALUE = '%';
+const char HEADER_EQUAL = ':';
+
+const char SRET[] = "\r";
+const char SSPACE[] = " ";
+const char SPARAM[] = "?";
+const char SPARAM_EQUAL[] = "=";
+const char SNEXT_PARAM[] = "&";
+const char SHEX_VALUE[] = "%";
+const char SHEADER_EQUAL[] = ":";
+
 /*************************************************/
-size_t readn(int fd, void* buffer, size_t size) {
-   char* chBuffer = (char*)buffer;
+
+/*************************************************/
+bool Request::ParseRequestLine(const std::string& line) {
+   size_t i = 0;
+
+   // Find method
+   for (i = 0; i < line.size(); i++) {
+      char ch = line.at(i);
+      // done with method
+      if (ch == ' ') {
+         i++;
+         break;
+      }
+      method += ch;
+   }
+
+   // Find uri
+   for (/*continue from last loop*/; i < line.size(); i++) {
+      char ch = line.at(i);
+      // done with uri
+      if (ch == ' ') {
+         i++;
+         break;
+      }
+      uri += ch;
+   }
+
+   // Find httpVersion
+   for (/*continue from last loop*/; i < line.size(); i++) {
+      char ch = line.at(i);
+      // done with httpVersion. This char should not be here but
+      // just in case
+      if (ch == '\r') {
+         i++;
+         break;
+      }
+      httpVersion += ch;
+   }
+
+   return true;
+}
+
+/*************************************************/
+bool Request::ParseHeaderLine(const std::string& line) {
+   size_t i = 0;
+   KeyValue pair;
+
+   // Find field name
+   for (i = 0; i < line.size(); i++) {
+      char ch = line.at(i);
+      // done with key
+      if (ch == ':') {
+         i++;
+         break;
+      }
+      pair.key += ch;
+   }
+
+   // Trim white space
+   for (/*continue from last loop*/; i < line.size(); i++) {
+      char ch = line.at(i);
+      if (ch != ' ') {
+         break;
+      }
+   }
+
+   // Find field value
+   for (/*continue from last loop*/; i < line.size(); i++) {
+      char ch = line.at(i);
+      // done with httpVersion. This char should not be here but
+      // just in case
+      if (ch == '\r') {
+         i++;
+         break;
+      }
+      pair.value += ch;
+   }
+
+   headers.push_back(pair);
+
+   return true;
+}
+
+/*************************************************/
+bool Request::AppendToBody(const std::string& chunk) {
+   return true;
+}
+
+// tokenize message
+// start-line
+// headers <CRLF>
+// <CRLF>
+// message
+
+/*************************************************/
+void BskHttpServer::ParseRequest(const char* buffer, size_t size, Request& outRequest) {
+
+   const char* ch = buffer;
+   std::string token;
+   size_t i = 0;
+   LOGD("Buffer: %s", buffer);
+
+   while (outRequest.parsedState != Request::Complete) {
+
+      switch (outRequest.parsedState) {
+
+      case Request::IncompleteStartLine:
+      case Request::NewRequest:
+         // Parse Start Line
+         for (i = 0; i < size; /* increment inside loop*/) {
+            // End of line
+            if (i + 2 < size && ch[i] == '\r' && ch[i + 1] == '\n') {
+               outRequest.ParseRequestLine(outRequest.parsedLine);
+               outRequest.parsedState = Request::IncompleteHeader;
+               outRequest.parsedLine.clear(); // reset the parsed line
+               i += 2; // Consume 2 chars
+               break;
+            } else {
+               outRequest.parsedState = Request::IncompleteStartLine;
+               outRequest.parsedLine += ch[i];
+               i++; // Consume 1 char
+            }
+         }
+         break;
+
+      case Request::IncompleteHeader:
+         // Headers
+         for (/* Continue from last loop*/; i < size; /* increment inside loop*/) {
+
+            // End of header
+            if (i + 4 < size && ch[i] == '\r' && ch[i + 1] == '\n' && ch[i + 2] == '\r' && ch[i + 3] == '\n') {
+               outRequest.ParseHeaderLine(outRequest.parsedLine);
+               outRequest.parsedState = Request::IncompleteMessage;
+               outRequest.parsedLine.clear(); // reset the parsed line
+               i += 4; // Consume 4 chars
+               break;
+               // End of one header
+            } else if (i + 2 < size && ch[i] == '\r' && ch[i + 1] == '\n') {
+               outRequest.ParseHeaderLine(outRequest.parsedLine);
+               outRequest.parsedLine.clear(); // reset the parsed line
+               i += 2; // Consume 2 chars
+            } else {
+               outRequest.parsedState = Request::IncompleteHeader;
+               outRequest.parsedLine += ch[i];
+               i++; // Consume 1 char
+            }
+         }
+
+         break;
+      case Request::IncompleteMessage:
+         //TODO get the message length or chunk and parse it
+         // Message
+         for (; i < size; i++) {
+
+         }
+
+         outRequest.parsedState = Request::Complete;
+         break;
+      default:
+         LOGE("Unknown parse state: %d ", outRequest.parsedState);
+      }
+   }
+}
+
+/*************************************************/
+size_t readn(int fd, void* buffer, size_t size, ClientContext& context) {
+   char* chBuffer = (char*) buffer;
    size_t totalBytesRead = 0;
    size_t bytesRead = 0;
    while (totalBytesRead < size) {
 
       bytesRead = read(fd, chBuffer, size - totalBytesRead);
-      // EOF
-      if (bytesRead == 0) {
-         return totalBytesRead;
-
-         // Error of some kind
-      } else if (bytesRead == (size_t)-1) {
+      if (bytesRead == (size_t) -1) {
 
          // Interrupted restart
          if (errno == EINTR) {
@@ -98,6 +271,13 @@ size_t readn(int fd, void* buffer, size_t size) {
             return -1;
          }
       }
+
+//Parse(context, chBuffer, bytesRead);
+
+// EOF
+      if (bytesRead == 0) {
+         return totalBytesRead;
+      }
       totalBytesRead += bytesRead;
       chBuffer += bytesRead;
    }
@@ -106,16 +286,16 @@ size_t readn(int fd, void* buffer, size_t size) {
 
 /*************************************************/
 size_t writen(int fd, const void* buffer, size_t size) {
-   char* chBuffer = (char*)buffer;
+   char* chBuffer = (char*) buffer;
    size_t totalBytesWrote = 0;
    size_t bytesWrote = 0;
    while (totalBytesWrote < size) {
 
       bytesWrote = write(fd, chBuffer, size - totalBytesWrote);
-      // EOF
+// EOF
       if (bytesWrote <= 0) {
          // Interrupted restart
-         if (bytesWrote == (size_t)-1 && errno == EINTR) {
+         if (bytesWrote == (size_t) -1 && errno == EINTR) {
             continue;
          } else {
             LOGE("Error writing %d ", errno);
@@ -143,7 +323,8 @@ void* readEvent(void * context) {
 
    while (true) {
 
-      int bytesRead = readn(receiveContext->clientfd, buffer, 1024);
+      int bytesRead = readn(receiveContext->clientfd, buffer, 1024, *receiveContext);
+
       LOGI("Read %d bytes", bytesRead);
       LOGI("%s", buffer);
 
@@ -162,16 +343,12 @@ void* readEvent(void * context) {
          totalByteSent += bytesSent;
       }
 
-      //sleep(1);
-      // TODO Check to keep alive
+//sleep(1);
+// TODO Check to keep alive
       close(receiveContext->clientfd);
       break;
    }
    return nullptr;
-}
-
-void Parse(std::string request) {
-
 }
 
 /*************************************************/
@@ -185,13 +362,13 @@ bool BskHttpServer::StartServer(int port) {
    _serverContext.server = this;
    _serverContext.port = port;
 
-   // Creating socket file descriptor
+// Creating socket file descriptor
    if ((_serverContext.serverfd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
       LOGE("socket error: %d", errno);
       return false;
    }
 
-   // Forcefully attaching socket to the port 8080
+// Forcefully attaching socket to the port 8080
    int opt = 1;
    if (setsockopt(_serverContext.serverfd, SOL_SOCKET,
    SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) == -1) {
@@ -206,14 +383,13 @@ bool BskHttpServer::StartServer(int port) {
    }
 
    struct sockaddr_in address;
-   //memset(&address, 0, sizeof(sockaddr_in));
+//memset(&address, 0, sizeof(sockaddr_in));
    address.sin_family = AF_INET;
    address.sin_addr.s_addr = INADDR_ANY;
    address.sin_port = htons(_serverContext.port);
 
-   // Forcefully attaching socket to the port 8080
-   if (bind(_serverContext.serverfd, (struct sockaddr *) &address,
-         sizeof(address)) < 0) {
+// Forcefully attaching socket to the port 8080
+   if (bind(_serverContext.serverfd, (struct sockaddr *) &address, sizeof(address)) < 0) {
       LOGE("Error binding to port %d", _serverContext.port);
       return false;
    }
