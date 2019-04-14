@@ -15,6 +15,8 @@
 
 class BskHttpServer;
 
+#define HTTP_VERSION "HTTP/1.1"
+
 /**
  * Simple key value pair. Used for headers and parameters.
  */
@@ -33,6 +35,50 @@ typedef struct KeyValue {
  *    Message Body
  */
 struct Response {
+   enum StatusCode {
+      CODE100,
+      CODE101,
+      CODE200,
+      CODE201,
+      CODE202,
+      CODE203,
+      CODE204,
+      CODE205,
+      CODE206,
+      CODE300,
+      CODE301,
+      CODE302,
+      CODE303,
+      CODE304,
+      CODE305,
+      CODE307,
+      CODE400,
+      CODE401,
+      CODE402,
+      CODE403,
+      CODE404,
+      CODE405,
+      CODE406,
+      CODE407,
+      CODE408,
+      CODE409,
+      CODE410,
+      CODE411,
+      CODE412,
+      CODE413,
+      CODE414,
+      CODE415,
+      CODE416,
+      CODE417,
+      CODE426,
+      CODE500,
+      CODE501,
+      CODE502,
+      CODE503,
+      CODE504,
+      CODE505,
+   };
+
    /**
     *  Status Line
     *  the http version
@@ -53,17 +99,27 @@ struct Response {
     * 5xx (Server Error): The server failed to fulfill an apparently
     *     valid request
     */
-   std::string statusCode;
+   StatusCode statusCode;
 
    /**
-    *    Reason code Human readable reason.
+    * Gets the status code followed by the reason.
     */
-   std::string reasonPhase;
+   std::string getStatusCodeAndReason() const;
+
+   /**
+    * Fills in any headers that user did not fill in.
+    */
+   bool PrepareHeaders();
 
    /**
     * Headers
     */
    std::vector<KeyValue> headers;
+
+   /**
+    * appends a header line
+    */
+   void appendHeader(const std::string& key, const std::string& value);
 
    /**
     * Body
@@ -224,6 +280,12 @@ private:
  * and call the SendResponse() function.
  */
 typedef struct ClientContext {
+
+   ClientContext(BskHttpServer* server, int clientfd) :
+         clientfd(clientfd), thread(0), server(server) {
+
+   }
+
    int clientfd = -1;
    pthread_t thread = 0;
    BskHttpServer* server = nullptr;
@@ -231,12 +293,12 @@ typedef struct ClientContext {
    /**
     * This will be filled in by the server.
     */
-   struct Request* request;
+   struct Request request;
 
    /**
     * The response from the server
     */
-   struct Response* response;
+   struct Response response;
 
    /**
     * Call this after Response is fill out
@@ -256,15 +318,23 @@ typedef struct ServerContext {
 
 } ServerContext;
 
+typedef void (*RequestHandler)(ClientContext* clientContext, void* userData);
+
+/**
+ * The main server class used to start the server
+ */
 class BskHttpServer {
 public:
 
    BskHttpServer();
    virtual ~BskHttpServer();
 
+   /**
+    * Starts the server listening on the givne port.
+    * This will spin up an accept thread. As clients connect
+    * they will each get their own thread.
+    */
    bool StartServer(int port);
-
-   void Poll();
 
    /**
     * Parses what we just got from the client.
@@ -274,12 +344,45 @@ public:
     */
    void ParseRequest(const char* buffer, size_t size, struct Request& outRequest);
 
+   /**
+    * Sets a user call back that handles the http request.
+    * The handler will need to fill in the response structure then call
+    * SendResponse().
+    *
+    * NOTE: The request handler is called on the client thread. Thread synchronization
+    *       will be required when accessing shared resources.
+    */
+   void setRequestHandler(RequestHandler handler);
+
+   /**
+    * User data that is passed to the handler.
+    */
+   void setUserData(void* userData);
+
+   /**
+    * Gets the user data for the request handler.
+    */
+   void* getUserData() const;
+
+   /**
+    * Joins with the accept thread
+    */
+   void JoinAcceptThread();
+
+   /**
+    * Gets the request handler
+    */
+   RequestHandler getRequestHandler() const;
+
 private:
 
    pthread_t _acceptThread;
 
    ServerContext _serverContext;
    std::vector<ClientContext*> _clients;
+
+   RequestHandler _requestHandler;                  /// a callback that handles the http requests
+   void* _userData;
 };
 
 #endif /* SRC_BSKHTTPSERVER_H_ */

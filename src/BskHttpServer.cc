@@ -23,25 +23,19 @@
 
 void* acceptEvent(void * context);
 void* readEvent(void * context);
-size_t readn(int fd, Request* request);
+size_t readn(int fd, Request& request);
 size_t writen(int fd, const void* buffer, size_t size);
 
 /*************************************************/
 //BskHttpServer
 /*************************************************/
-
 BskHttpServer::BskHttpServer() :
-      _acceptThread(0) {
+      _acceptThread(0), _requestHandler(nullptr), _userData(nullptr) {
 
 }
 
 /*************************************************/
 BskHttpServer::~BskHttpServer() {
-}
-
-//TODO remove this
-void BskHttpServer::Poll() {
-
 }
 
 /*************************************************/
@@ -99,13 +93,195 @@ bool BskHttpServer::StartServer(int port) {
    pthread_create(&_acceptThread, &attr, &acceptEvent, &_serverContext);
    pthread_attr_destroy(&attr);
 
+   return true;
+}
+
+/*************************************************/
+void BskHttpServer::JoinAcceptThread() {
    int ret;
    int* retp = &ret;
 
    pthread_join(_acceptThread, (void**) &retp);
 
    LOGI("Join main thread %d", ret);
-   return true;
+}
+
+/*************************************************/
+RequestHandler BskHttpServer::getRequestHandler() const {
+   return _requestHandler;
+}
+
+/*************************************************/
+void BskHttpServer::setRequestHandler(RequestHandler handler) {
+   _requestHandler = handler;
+}
+
+/*************************************************/
+void* BskHttpServer::getUserData() const {
+   return _userData;
+}
+
+/*************************************************/
+void BskHttpServer::setUserData(void* userData) {
+   _userData = userData;
+}
+
+/*************************************************/
+// Client Context
+/*************************************************/
+void ClientContext::SendResponse() {
+
+   const char *hello = "HTTP/1.1 200 OK\r\n"
+         "Content-Type: text/html; charset=ISO-8859-1\r\n"
+         "Server: Mine\r\n"
+         "Content-Length: 8\r\n\r\n"
+         "Hello 99";
+
+   std::string out;
+   out = response.httpVersion + " " + response.getStatusCodeAndReason() + "\r\n";
+
+   // Fill in the size of the content
+   char buf[200] = { 0 };
+   size_t size = response.body.size();
+   sprintf(buf, "%zd", size);
+   response.appendHeader("Content-Length", buf);
+
+   // Write the headers
+   for (size_t i = 0; i < response.headers.size(); i++) {
+      KeyValue pair = response.headers.at(i);
+      out += pair.key + ": " + pair.value + "\r\n";
+   }
+
+   // Done with headers
+   out += "\r\n";
+
+   // Write the body
+   out += response.body;
+   LOGI("Response Size %zd", out.size());
+   LOGI("Response:\"%s\"", out.c_str());
+
+   size_t bytesSent = writen(clientfd, out.c_str(), out.size());
+   if (bytesSent < 0) {
+      //EROFS
+      LOGE("Error sending %d ", errno);
+   }
+
+   if (bytesSent ==  out.size()) {
+      //EROFS
+      LOGI("Sent full message!");
+   }
+
+   // TODO don't close this here
+   close(clientfd);
+
+}
+
+/*************************************************/
+// Response
+/*************************************************/
+bool Response::PrepareHeaders() {
+
+   return false;
+}
+
+/*************************************************/
+void Response::appendHeader(const std::string& key, const std::string& value) {
+   KeyValue pair;
+   pair.key = key;
+   pair.value = value;
+   headers.push_back(pair);
+}
+
+/*************************************************/
+std::string Response::getStatusCodeAndReason() const {
+
+   switch (statusCode) {
+   case CODE100:
+      return "100 Continue";
+   case CODE101:
+      return "101 Switching Protocols";
+   case CODE200:
+      return "200 OK";
+   case CODE201:
+      return "201 Created";
+   case CODE202:
+      return "202 Accepted";
+   case CODE203:
+      return "203 Non-Authoritative Information";
+   case CODE204:
+      return "204 No Content";
+   case CODE205:
+      return "205 Reset Content";
+   case CODE206:
+      return "206 Partial Content";
+   case CODE300:
+      return "300 Multiple Choices";
+   case CODE301:
+      return "301 Moved Permanently";
+   case CODE302:
+      return "302 Found";
+   case CODE303:
+      return "303 See Other";
+   case CODE304:
+      return "304 Not Modified";
+   case CODE305:
+      return "305 Use Proxy";
+   case CODE307:
+      return "307 Temporary Redirect";
+   case CODE400:
+      return "400 Bad Request";
+   case CODE401:
+      return "401 Unauthorized";
+   case CODE402:
+      return "402 Payment Required";
+   case CODE403:
+      return "403 Forbidden";
+   case CODE404:
+      return "404 Not Found";
+   case CODE405:
+      return "405 Method Not Allowed";
+   case CODE406:
+      return "406 Not Acceptable";
+   case CODE407:
+      return "407 Proxy Authentication Required";
+   case CODE408:
+      return "408 Request Timeout";
+   case CODE409:
+      return "409 Conflict";
+   case CODE410:
+      return "410 Gone";
+   case CODE411:
+      return "411 Length Required";
+   case CODE412:
+      return "412 Precondition Failed";
+   case CODE413:
+      return "413 Payload Too Large";
+   case CODE414:
+      return "414 URI Too Long";
+   case CODE415:
+      return "415 Unsupported Media Type";
+   case CODE416:
+      return "416 Range Not Satisfiable";
+   case CODE417:
+      return "417 Expectation Failed";
+   case CODE426:
+      return "426 Upgrade Required";
+   case CODE500:
+      return "500 Internal Server Error";
+   case CODE501:
+      return "501 Not Implemented";
+   case CODE502:
+      return "502 Bad Gateway";
+   case CODE503:
+      return "503 Service Unavailable";
+   case CODE504:
+      return "504 Gateway Timeout";
+   case CODE505:
+      return "505 HTTP Version Not Supported";
+   default:
+      LOGE("Unknown return code: %d ", statusCode);
+      return "500 Internal Server Error";
+   }
 }
 
 /*************************************************/
@@ -209,7 +385,6 @@ void Request::ParseRequest(const char* buffer, size_t size) {
    const char* ch = buffer;
    std::string token;
    size_t i = 0;
-   LOGD("Buffer: %s", buffer);
 
    while (parsedState != Request::Complete) {
 
@@ -346,16 +521,16 @@ void* acceptEvent(void * context) {
 
       struct sockaddr clientAddr;
       socklen_t addrLen = sizeof(clientAddr);
-      volatile int clientfd = accept(serverContext->serverfd, &clientAddr, &addrLen);
+      int clientfd = accept(serverContext->serverfd, &clientAddr, &addrLen);
       if (clientfd < 0) {
          LOGE("Error accept %d %d", clientfd, errno);
          exit(EXIT_FAILURE);
       }
 
+      //TODO add ip address of client
       LOGI("Got a client %d", clientfd);
 
-      ClientContext* receiveContext = new ClientContext();
-      receiveContext->clientfd = clientfd;
+      ClientContext* receiveContext = new ClientContext(serverContext->server, clientfd);
 
       pthread_attr_t attr;
       pthread_attr_init(&attr);
@@ -367,21 +542,21 @@ void* acceptEvent(void * context) {
 }
 
 /*************************************************/
-size_t readn(int fd, Request* request) {
+size_t readn(int fd, Request& request) {
 
    size_t totalBytesRead = 0;
 
    // There is a chance that our buffer is too small for the
    // request. This look will allow us to keep reading until we
    // get a complete request or an error.
-   while (request->getParsedState() != Request::Complete) {
+   while (request.getParsedState() != Request::Complete) {
 
       // Handle parse errors
-      if (request->getParseErrorCode() > 0) {
+      if (request.getParseErrorCode() > 0) {
          return -1;
       }
 
-      const size_t size = 16;
+      const size_t size = 4096;
       char buffer[size] = { 0 };
       char* chBufer = buffer;
       volatile size_t bufferBytesRead = 0;
@@ -406,10 +581,10 @@ size_t readn(int fd, Request* request) {
          }
 
          // Parse the request
-         request->ParseRequest(chBufer, bytesRead);
+         request.ParseRequest(chBufer, bytesRead);
 
          // All done. Got the full request.
-         if (request->getParsedState() == Request::Complete) {
+         if (request.getParsedState() == Request::Complete) {
             break;
          }
          bufferBytesRead += bytesRead;
@@ -447,42 +622,38 @@ size_t writen(int fd, const void* buffer, size_t size) {
 
 /*************************************************/
 void* readEvent(void * context) {
-   ClientContext* receiveContext = (ClientContext*) context;
+   ClientContext* clientContext = (ClientContext*) context;
 
-   LOGI("Got a client %d", receiveContext->clientfd);
-   const char *hello = "HTTP/1.1 200 OK\r\n"
-         "Content-Type: text/html; charset=ISO-8859-1\r\n"
-         "Server: Mine\r\n"
-         "Content-Length: 8\r\n\r\n"
-         "Hello 99";
-
-   receiveContext->request = new Request();
+   LOGI("Got a client %d", clientContext->clientfd);
 
    while (true) {
 
-      int bytesRead = readn(receiveContext->clientfd, receiveContext->request);
+      // Read the request
+      int bytesRead = readn(clientContext->clientfd, clientContext->request);
 
-      LOGI("Read %d bytes", bytesRead);
+      // TODO move this to a initialize response function
+      // Set the http version
+      clientContext->response.httpVersion = HTTP_VERSION;
 
-      int len = strlen(hello);
-      LOGI("Sending %s %d", hello, len);
+      // Fillin the date header
+      char buf[200];
+      time_t now = time(0);
+      struct tm tm = *gmtime(&now);
+      // Sun, 06 Nov 1994 08:49:37 GMT
+      strftime(buf, sizeof buf, "%a, %d %b %Y %H:%M:%S %Z", &tm);
+      clientContext->response.appendHeader("Date", std::string(buf));
 
-      int totalByteSent = 0;
-      while (totalByteSent < len) {
+      // Fill in the server Header
+      clientContext->response.appendHeader("Server", "Embedded");
 
-         int bytesSent = writen(receiveContext->clientfd, hello, len);
-         if (bytesSent < 0) {
-            //EROFS
-            LOGE("Error sending %d ", errno);
-            break;
-         }
-         totalByteSent += bytesSent;
+      // Let the user handle the request
+      if (clientContext->server->getRequestHandler() != nullptr) {
+         clientContext->server->getRequestHandler()(clientContext, clientContext->server->getUserData());
+      } else {
+         LOGW("No request handler. Call BskHttpServer::setRequestHandler()");
       }
 
-      // TODO Check to keep alive
-      close(receiveContext->clientfd);
       break;
    }
    return nullptr;
 }
-

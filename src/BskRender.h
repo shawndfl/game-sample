@@ -19,6 +19,11 @@ public:
    void initialize();
 
    void render();
+
+   bool isInitialized() const;
+
+private:
+   bool _initialized;
 };
 
 #endif /* SRC_BSKRENDER_H_ */
