@@ -326,6 +326,8 @@ typedef void (*RequestHandler)(ClientContext* clientContext, void* userData);
 class BskHttpServer {
 public:
 
+   //TODO: add SSL
+
    BskHttpServer();
    virtual ~BskHttpServer();
 

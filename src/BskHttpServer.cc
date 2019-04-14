@@ -131,12 +131,6 @@ void BskHttpServer::setUserData(void* userData) {
 /*************************************************/
 void ClientContext::SendResponse() {
 
-   const char *hello = "HTTP/1.1 200 OK\r\n"
-         "Content-Type: text/html; charset=ISO-8859-1\r\n"
-         "Server: Mine\r\n"
-         "Content-Length: 8\r\n\r\n"
-         "Hello 99";
-
    std::string out;
    out = response.httpVersion + " " + response.getStatusCodeAndReason() + "\r\n";
 
@@ -157,8 +151,6 @@ void ClientContext::SendResponse() {
 
    // Write the body
    out += response.body;
-   LOGI("Response Size %zd", out.size());
-   LOGI("Response:\"%s\"", out.c_str());
 
    size_t bytesSent = writen(clientfd, out.c_str(), out.size());
    if (bytesSent < 0) {
@@ -166,12 +158,7 @@ void ClientContext::SendResponse() {
       LOGE("Error sending %d ", errno);
    }
 
-   if (bytesSent ==  out.size()) {
-      //EROFS
-      LOGI("Sent full message!");
-   }
-
-   // TODO don't close this here
+   // TODO don't close this here. check to keep alive
    close(clientfd);
 
 }
