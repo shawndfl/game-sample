@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
@@ -297,6 +298,7 @@ bool Request::ParseRequestLine(const std::string& line) {
    // Find uri
    for (/*continue from last loop*/; i < line.size(); i++) {
       char ch = line.at(i);
+
       // done with uri
       if (ch == ' ') {
          i++;
@@ -315,6 +317,87 @@ bool Request::ParseRequestLine(const std::string& line) {
          break;
       }
       httpVersion += ch;
+   }
+
+   // parse the uri to find the uri path
+   for (i = 0; i < uri.size(); i++) {
+      char ch = uri.at(i);
+
+      // found a query
+      if (ch == '?') {
+         i++;
+         break;
+      }
+      uriPath += ch;
+   }
+
+   const int KEY = 0;
+   const int VALUE = 1;
+   int state = KEY;
+
+   std::string key;
+   std::string value;
+
+   // parse the uri to find the uri path
+   for (/*continue from last loop*/; i < uri.size(); i++) {
+      char ch = uri.at(i);
+
+      // found a query
+      if (ch == '#') {
+         i++;
+         break;
+      }
+
+      // collect the key
+      if (state == KEY && ch != '=') {
+         key += ch;
+         // start collecting the value next iteration
+      } else if (state == KEY && ch == '=') {
+         state = VALUE;
+         //collect value
+      } else if (state == VALUE && ch != '&') {
+         // replace + with space
+         if (ch == '+') {
+            value += ' ';
+            // process hex values
+         } else if (ch == '%') {
+            if (i + 2 < uri.size()) {
+               char hex[] = { uri.at(++i), uri.at(++i), '\0' };
+               unsigned char hexChar = (unsigned char) strtol(hex, NULL, 16);
+
+               if (hexChar < 0x1F || hexChar > 0x7E) {
+                  LOGE("Hex value out of range: value=%d Range is 32 to 126", (unsigned char)hexChar);
+               } else {
+                  value += hexChar;
+               }
+            } else {
+               LOGE("Expected hex value ");
+            }
+
+         } else {
+            value += ch;
+         }
+         // got a key and a value. Save it and collect next key
+      } else if (state == VALUE && ch == '&') {
+         state = KEY;
+
+         KeyValue pair;
+         pair.key = key;
+         pair.value = value;
+         queryParameters.push_back(pair);
+         key.clear();
+         value.clear();
+      }
+
+      uriQuery += ch;
+   }
+
+   // Save the last one
+   if (key.size() > 0 && value.size() > 0) {
+      KeyValue pair;
+      pair.key = key;
+      pair.value = value;
+      queryParameters.push_back(pair);
    }
 
    return true;
@@ -453,6 +536,21 @@ void Request::ParseRequest(const char* buffer, size_t size) {
 }
 
 /*************************************************/
+const std::vector<KeyValue>& Request::getQueryParameters() const {
+   return queryParameters;
+}
+
+/*************************************************/
+const std::string& Request::getUriPath() const {
+   return uriPath;
+}
+
+/*************************************************/
+const std::string& Request::getUriQuery() const {
+   return uriQuery;
+}
+
+/*************************************************/
 const std::string& Request::getBody() const {
    return body;
 }
@@ -470,11 +568,6 @@ const std::string& Request::getHttpVersion() const {
 /*************************************************/
 const std::string& Request::getMethod() const {
    return method;
-}
-
-/*************************************************/
-const std::vector<KeyValue>& Request::getParameters() const {
-   return parameters;
 }
 
 /*************************************************/
@@ -617,6 +710,10 @@ void* readEvent(void * context) {
 
       // Read the request
       int bytesRead = readn(clientContext->clientfd, clientContext->request);
+      if (bytesRead == -1) {
+         LOGE("Error reading request from %d", clientContext->clientfd);
+         break;
+      }
 
       // TODO move this to a initialize response function
       // Set the http version

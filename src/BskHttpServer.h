@@ -160,11 +160,13 @@ public:
    const std::vector<KeyValue>& getHeaders() const;
    const std::string& getHttpVersion() const;
    const std::string& getMethod() const;
-   const std::vector<KeyValue>& getParameters() const;
    const std::string& getParsedLine() const;
    ParseState getParsedState() const;
    int getParseErrorCode() const;
    const std::string& getUri() const;
+   const std::vector<KeyValue>& getQueryParameters() const;
+   const std::string& getUriPath() const;
+   const std::string& getUriQuery() const;
 
 private:
    /**
@@ -252,15 +254,26 @@ private:
    std::string method;
 
    /**
-    * URI used by the request
+    * The request target. This is the url and the query
     */
    std::string uri;
+
+   /**
+    * The path part of the uri. This will not have the query (any thing after the '?')
+    */
+   std::string uriPath;
+
+   /**
+    * The query portion of the uri. (any thing after the '?'). This will also get split up into
+    * parameters that can be found in queryParameters.
+    */
+   std::string uriQuery;
 
    /**
     * Parameters used by the request. This is pulled out
     * of the Uri query.
     */
-   std::vector<KeyValue> parameters;
+   std::vector<KeyValue> queryParameters;
 
    /**
     * Headers
