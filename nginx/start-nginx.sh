@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Required:"
+echo "sudo apt install nginx  php-curl php7.2-fpm"
+echo 
+
 home_base=$(cd $(dirname $0); pwd -P)
 site_name=mysite.com
 
