@@ -1,26 +1,25 @@
 
-APP:=tests
+APP:=bin/unitTests
 
-SRC_CC := $(wildcard *.cc) $(filter-out ../src/main.cc,$(wildcard ../src/*.cc))
-SRC := $(notdir $(SRC_CC:%.cc=%))
-OBJ := $(SRC:%=bin/%.o)
-#sudo apt install libx11-dev libepoxy-dev libunittest++-dev
+SRC_CC := $(wildcard ../src/*.cc) $(wildcard ./*.cc)
+SRC_CPP := $(wildcard ./UnitTest++/*.cpp) $(wildcard ./UnitTest++/Posix/*.cpp)
 
-PKGS := epoxy x11 UnitTest++
+SRC_CC := $(notdir $(SRC_CC:%.cc=%))
+SRC_CPP := $(notdir $(SRC_CPP:%.cpp=%))
 
-CFLAGS := -Wall -O1 -pthread -std=c++14 -MMD
-CFLAGS += $(shell pkg-config --cflags $(PKGS))
-CFLAGS += -I /usr/include -I ../src
+OBJ_CC := $(filter-out bin/main.o,$(SRC_CC:%=bin/%.o))
+OBJ_CPP := $(SRC_CPP:%=bin/%.o)
 
-LDFLAGS := -pthread -std=c++14
-LDFLAGS += $(shell pkg-config --libs $(PKGS))
+CFLAGS := -Wall -O3 -std=c++17 -MMD -I../src
+LDLIBS := -lstdc++ -pthread
 
-LDLIBS := -lstdc++ -lGLU -lGL -lXext
+vpath %.cc ../src/
+vpath %.cc ./
+vpath %.cpp ./UnitTest++/
+vpath %.cpp ./UnitTest++/Posix
 
 # Phony targets
-.PHONY: all clean debug
-
-vpath %.cc ../src
+.PHONY: all clean debug env
 
 #
 # Bulid app
@@ -42,13 +41,26 @@ bin/%.o: %.cc
 	@echo compiling $<
 	@$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 
 
+bin/%.o: %.cpp
+	@mkdir -p bin/
+	@echo compiling $<
+	@$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 
+	
 #
 # Link
 #
-$(APP): $(OBJ)		
+$(APP): $(OBJ_CPP) $(OBJ_CC)		
 	@echo linking $@
-	@$(CXX) -o $@ $(OBJ) $(LDFLAGS) $(LDLIBS)
+	@$(CXX) -o $@ $(OBJ_CPP) $(OBJ_CC) $(LDFLAGS) $(LDLIBS)
 
+env:
+	@echo "SRC_CC = $(SRC_CC)"
+	@echo ""		
+	@echo "SRC_CPP = $(SRC_CPP)"
+	@echo ""		
+	@echo "OBJ_CC = $(OBJ_CC)"
+	@echo ""		
+	@echo "OBJ_CPP = $(OBJ_CPP)"
 #
 # Clean
 #

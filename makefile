@@ -7,16 +7,11 @@ OBJ := $(SRC:%=bin/%.o)
 
 #sudo apt install libx11-dev libepoxy-dev libunittest++-dev
 
-PKGS := epoxy x11 UnitTest++
-
-CFLAGS := -Wall -O3 -pthread -std=c++14 -MMD
-CFLAGS += $(shell pkg-config --cflags $(PKGS))
+CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD
 CFLAGS += -I /usr/include 
 
-LDFLAGS := -pthread -std=c++14
-LDFLAGS += $(shell pkg-config --libs $(PKGS))
-
-LDLIBS := -lstdc++ -lGLU -lGL -lXext
+LDFLAGS := -pthread -std=c++17
+LDLIBS := -lstdc++ -lGLESv2 -lglfw
 
 # Phony targets
 .PHONY: all clean debug
