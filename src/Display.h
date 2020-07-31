@@ -9,7 +9,7 @@
 #define SRC_DISPLAY_H_
 
 #include <memory>
-#include "Render.h"
+#include "GameEngine.h"
 
 namespace bsk {
 /**
@@ -17,13 +17,13 @@ namespace bsk {
  */
 class Display {
 public:
-   Display(Render& renderer);
+   Display(GameEngine& renderer);
    virtual ~Display();
 
    void runDisplay(uint width, uint height);
 
 private:
-   Render&   renderer_;
+   GameEngine&   game_;
 };
 }
 

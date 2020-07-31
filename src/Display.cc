@@ -16,8 +16,8 @@
 namespace bsk {
 
 /*************************************************/
-Display::Display(Render& renderer) :
-      renderer_(renderer) {
+Display::Display(GameEngine& game) :
+      game_(game) {
 
 }
 
@@ -39,18 +39,19 @@ void Display::runDisplay(uint width, uint height) {
    window = glfwCreateWindow(width, height, "Block Simulated Kingdom", NULL, NULL);
    glfwMakeContextCurrent(window);
 
-   renderer_.initialize(width, height);
-
+   game_.start(width, height);
 
    while (!glfwWindowShouldClose(window)) {
       glfwPollEvents();
 
-      if(!renderer_.render()) {
+      if(!game_.update()) {
          break;
       }
 
       glfwSwapBuffers(window);
    }
+
+   game_.dispose();
 
    glfwTerminate();
 }

@@ -20,7 +20,7 @@ public:
    Render();
    virtual ~Render();
 
-   void initialize(uint widht, uint height);
+   bool initialize(uint widht, uint height);
 
    bool render();
 

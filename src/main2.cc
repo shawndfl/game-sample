@@ -1,12 +1,12 @@
 
 #include "Logging.h"
-#include "Render.h"
+#include "GameEngine.h"
 #include "Display.h"
 
 int main(int argc, char *argv[]) {
 
-   bsk::Render render;
-   bsk::Display display(render);
+   bsk::GameEngine game;
+   bsk::Display display(game);
 
    display.runDisplay(600, 800);
 

@@ -6,7 +6,6 @@
 #include "BskRender.h"
 #include "BskHttpServer.h"
 
-//TODO Test json content using cJSON
 
 void Handler(ClientContext* clientContext, void* userdata) {
 //   std::shared_ptr<Render> render = std::shared_ptr<Render>((Render*)userdata);

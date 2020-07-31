@@ -19,7 +19,7 @@ Render::~Render() {
 }
 
 /*************************************************/
-void Render::initialize(uint width, uint height) {
+bool Render::initialize(uint width, uint height) {
 
    LOGD("GL_VERSION: " << glGetString(GL_VERSION));
    LOGD("GL_RENDERER: " << glGetString(GL_RENDERER));
@@ -36,7 +36,7 @@ void Render::initialize(uint width, uint height) {
    //glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) 0);
    //glEnableVertexAttribArray(pos);
    //glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+   return true;
 }
 
 /*************************************************/
@@ -53,6 +53,7 @@ bool Render::render() {
 
 /*************************************************/
 void Render::dispose() {
+   LOGI("Close render");
    //glDeleteBuffers(1, &vbo);
 }
 
