@@ -37,7 +37,6 @@ static const GLushort faces[] = {
         0, 2, 3
 };
 
-
 /*************************************************/
 Font::Font() {
    screenX_  = 0;

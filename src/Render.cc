@@ -56,6 +56,7 @@ void Render::dispose() {
 /*************************************************/
 void Render::resize(uint width, uint height) {
    glViewport(0, 0, width, height);
+
 }
 
 }

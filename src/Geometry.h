@@ -14,6 +14,14 @@ namespace bsk {
 
 class Geometry {
 public:
+   enum Attributes{
+         APos         = 0x01,
+         APosTex1     = 0x02,
+         APosNormTex1 = 0x03,
+         APosNormTex2 = 0x04,
+         APosNormTexSkin  = 0x05,
+   };
+
    Geometry();
    virtual ~Geometry();
 

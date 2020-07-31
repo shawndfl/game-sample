@@ -8,12 +8,31 @@
 #ifndef SRC_SHADERPROGRAM_H_
 #define SRC_SHADERPROGRAM_H_
 
+#include <string>
+#include <vector>
+#include <GLES2/gl2.h>
+
+#include "Geometry.h"
+
 namespace bsk {
 
 class ShaderProgram {
 public:
+
    ShaderProgram();
+
    virtual ~ShaderProgram();
+
+   bool loadProgram(const std::string& vertexSource, const std::string& fragmentSource);
+
+   void enableProgram();
+
+   void attachGeometry(const Geometry& geometry);
+
+private:
+
+   GLuint              program_;
+   std::vector<GLint>  attributeId_;
 };
 
 } /* namespace bsk */
