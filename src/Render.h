@@ -8,6 +8,10 @@
 #ifndef SRC_BSKRENDER_H_
 #define SRC_BSKRENDER_H_
 
+#include <GLES2/gl2.h>
+#include <sys/types.h>
+
+namespace bsk {
 /**
  * This class is used to render the scene
  */
@@ -16,14 +20,13 @@ public:
    Render();
    virtual ~Render();
 
-   void initialize();
+   void initialize(uint widht, uint height);
 
-   void render();
+   bool render();
 
-   bool isInitialized() const;
+   void dispose();
 
 private:
-   bool _initialized;
 };
-
+}
 #endif /* SRC_BSKRENDER_H_ */

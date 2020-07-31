@@ -1,7 +1,7 @@
 
 #if 0
 
-#include "BskDisplay.h"
+#include "Display.h"
 #include "BskLogging.h"
 #include "BskRender.h"
 #include "BskHttpServer.h"
@@ -58,9 +58,10 @@ int main(int argc, char *argv[]) {
 }
 #endif
 
-
+#if 0
 #include <stdio.h>
 #include <stdlib.h>
+#include "BskLogging.h"
 
 #define GLFW_INCLUDE_ES2
 #include <GLFW/glfw3.h>
@@ -73,11 +74,13 @@ static const GLchar* vertex_shader_source =
     "void main() {\n"
     "   gl_Position = vec4(position, 1.0);\n"
     "}\n";
+
 static const GLchar* fragment_shader_source =
     "#version 100\n"
     "void main() {\n"
-    "   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+    "   gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);\n"
     "}\n";
+
 static const GLfloat vertices[] = {
         0.0f,  0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
@@ -129,6 +132,9 @@ GLint common_get_shader_program(const char *vertex_shader_source, const char *fr
 }
 
 int main(void) {
+    LOGD("Starting game " << 1);
+    LOGD("Starting game " << 2);
+    LOGD("Starting game " << 3);
     GLuint shader_program, vbo;
     GLint pos;
     GLFWwindow* window;
@@ -167,3 +173,4 @@ int main(void) {
     glfwTerminate();
     return EXIT_SUCCESS;
 }
+#endif
