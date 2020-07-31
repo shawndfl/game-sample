@@ -15,6 +15,23 @@
 
 namespace bsk {
 
+Display* Display::instance_ = nullptr;
+
+/*************************************************/
+void Display::create(GameEngine& game) {
+   if(instance_ == nullptr) {
+      instance_ = new Display(game);
+   }
+}
+
+/*************************************************/
+Display* Display::get() {
+   if(instance_ == nullptr){
+      LOGD("Call Display::create() first");
+   }
+   return instance_;
+}
+
 /*************************************************/
 Display::Display(GameEngine& game) :
       game_(game) {
@@ -24,6 +41,16 @@ Display::Display(GameEngine& game) :
 /*************************************************/
 Display::~Display() {
 
+}
+
+/*************************************************/
+void Display::resize(uint width, uint height) {
+   game_.resize(width, height);
+}
+
+/*************************************************/
+void rezise(GLFWwindow* window, int width, int height) {
+   Display::get()->resize((uint)width, (uint)height);
 }
 
 /*************************************************/
@@ -40,6 +67,7 @@ void Display::runDisplay(uint width, uint height) {
    glfwMakeContextCurrent(window);
 
    game_.start(width, height);
+   glfwSetWindowSizeCallback(window, &rezise);
 
    while (!glfwWindowShouldClose(window)) {
       glfwPollEvents();
@@ -55,4 +83,5 @@ void Display::runDisplay(uint width, uint height) {
 
    glfwTerminate();
 }
+
 }

@@ -17,13 +17,26 @@ namespace bsk {
  */
 class Display {
 public:
-   Display(GameEngine& renderer);
    virtual ~Display();
 
    void runDisplay(uint width, uint height);
 
+   void resize(uint width, uint height);
+
+   static void create(GameEngine& renderer);
+
+   static Display* get();
+
 private:
-   GameEngine&   game_;
+   /**
+    * Singleton
+    */
+   Display(GameEngine& renderer);
+
+private:
+
+   static Display*   instance_;
+   GameEngine&       game_;
 };
 }
 

@@ -13,6 +13,7 @@
 namespace bsk {
 
 class Render;
+class FontManager;
 
 /**
  * The main game engine that processes
@@ -29,11 +30,14 @@ public:
 
    bool start(uint width, uint height);
 
+   void resize(uint width, uint height);
+
    bool update();
 
    void dispose();
 private:
    std::unique_ptr<Render>        render_;
+   std::unique_ptr<FontManager>   fontManager_;
 };
 
 }

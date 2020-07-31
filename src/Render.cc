@@ -42,10 +42,6 @@ bool Render::initialize(uint width, uint height) {
 /*************************************************/
 bool Render::render() {
    glClear(GL_COLOR_BUFFER_BIT);
-   //glUseProgram(shader_program);
-
-
-  // glDrawArrays(GL_TRIANGLES, 0, 3);
 
    return true;
 
@@ -57,5 +53,9 @@ void Render::dispose() {
    //glDeleteBuffers(1, &vbo);
 }
 
+/*************************************************/
+void Render::resize(uint width, uint height) {
+   glViewport(0, 0, width, height);
+}
 
 }

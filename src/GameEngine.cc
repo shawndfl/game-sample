@@ -7,12 +7,15 @@
 
 #include "GameEngine.h"
 #include "Render.h"
+#include "FontManager.h"
 #include "Logging.h"
 
 namespace bsk {
 /*************************************************/
 GameEngine::GameEngine()  {
-   render_ = std::make_unique<Render>();
+   render_        = std::make_unique<Render>();
+   fontManager_   = std::make_unique<FontManager>();
+
 }
 
 /*************************************************/
@@ -28,6 +31,7 @@ bool GameEngine::initialize() {
 bool GameEngine::start(uint width, uint height) {
    bool error = false;
    error |= !render_->initialize(width, height);
+   fontManager_->addFont("Hello", 0,0);
 
    return error;
 }
@@ -36,7 +40,7 @@ bool GameEngine::start(uint width, uint height) {
 bool bsk::GameEngine::update() {
 
    render_->render();
-
+   fontManager_->update();
    return true;
 }
 
@@ -46,4 +50,11 @@ void bsk::GameEngine::dispose() {
    render_->dispose();
 
 }
+
+/*************************************************/
+void GameEngine::resize(uint width, uint height) {
+   render_->resize(width, height);
+
+}
+
 }
