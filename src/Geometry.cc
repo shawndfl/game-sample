@@ -6,16 +6,80 @@
  */
 
 #include "Geometry.h"
+#include "Logging.h"
 
 namespace bsk {
 
+/*************************************************/
 Geometry::Geometry() {
-   // TODO Auto-generated constructor stub
-
+   ib_ = 0;
+   vb_ = 0;
+   attribute_ = APos;
 }
 
+/*************************************************/
 Geometry::~Geometry() {
-   // TODO Auto-generated destructor stub
+}
+
+/*************************************************/
+void Geometry::initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute) {
+
+   dispose();
+
+   GLint size;
+   GLint byteSize;
+
+   // setup vertex buffer
+   byteSize = verts.size() * sizeof(float);
+   glGenBuffers(1, &vb_);
+   glBindBuffer(GL_ARRAY_BUFFER, vb_);
+   glBufferData(GL_ARRAY_BUFFER, byteSize, verts.data(), GL_STATIC_DRAW);
+   glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+   if (byteSize != size) {
+      glDeleteBuffers(1, &vb_);
+      LOGD("Error creating vertex buffer with size of: " << byteSize);
+   }
+
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+   // setup index buffer
+   byteSize = indice.size() * sizeof(float);
+   glGenBuffers(1, &ib_);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteSize, 0, GL_STATIC_DRAW);
+   glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, byteSize, indice.data());
+
+   glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+   if (byteSize != size) {
+      glDeleteBuffers(1, &ib_);
+      LOGD("Error creating index buffer with size of: " << byteSize);
+   }
+
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+/*************************************************/
+void Geometry::dispose() {
+   if (vb_ != 0) {
+      glDeleteBuffers(1, &vb_);
+      vb_ = 0;
+   }
+
+   if (ib_ != 0) {
+      glDeleteBuffers(1, &ib_);
+      ib_ = 0;
+   }
+}
+
+/*************************************************/
+void Geometry::makeActive() const {
+   glBindBuffer(GL_ARRAY_BUFFER, vb_);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
+}
+
+/*************************************************/
+Geometry::Attributes Geometry::getAttribute() const {
+   return attribute_;
 }
 
 } /* namespace bsk */

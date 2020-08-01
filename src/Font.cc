@@ -48,6 +48,18 @@ Font::Font() {
 
    ib_       = 0;
    vb_       = 0;
+
+   shader_.loadProgram(vertexShaderSource, fragmentShaderSource);
+   std::vector<float> verts;
+   for (int i = 0; i < 12; i++) {
+      verts.push_back(vertices[i]);
+   }
+   std::vector<GLushort> indices;
+   for (int i = 0; i < 6; i++) {
+      indices.push_back(faces[i]);
+   }
+   geometry_.initialize(verts, indices, Geometry::APos);
+   shader_.attachGeometry(geometry_);
 }
 
 /*************************************************/
@@ -57,6 +69,7 @@ Font::~Font() {
 /*************************************************/
 void Font::initialize(const std::string& text, uint screenX, uint screenY) {
    dispose();
+#if 0
    text_ = text;
    screenX_ = screenX;
    screenY_ = screenY;
@@ -108,6 +121,7 @@ void Font::initialize(const std::string& text, uint screenX, uint screenY) {
    GLuint pos = glGetAttribLocation(program_, "position");
    glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) 0);
    glEnableVertexAttribArray (pos);
+
    glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
    if(vertexSize != size){
       glDeleteBuffers(1, &vb_);
@@ -130,16 +144,20 @@ void Font::initialize(const std::string& text, uint screenX, uint screenY) {
    }
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+#endif
 
 }
 
 /*************************************************/
 void Font::render() {
    //LOGD("text: "<< text_ << " x:" <<  screenX_ << " y:" << screenY_);
+#if 0
    glUseProgram(program_);
    glBindBuffer(GL_ARRAY_BUFFER, vb_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
-
+#endif
+   shader_.enableProgram();
+   geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, NULL);
 }
 

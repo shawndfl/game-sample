@@ -10,7 +10,9 @@
 
 #include <sys/types.h>
 #include <string>
-#include "GLES2/gl2.h"
+#include <GLES2/gl2.h>
+#include "Geometry.h"
+#include "ShaderProgram.h"
 
 namespace bsk {
 
@@ -29,6 +31,9 @@ private:
    std::string    text_;
    uint           screenX_;
    uint           screenY_;
+
+   Geometry       geometry_;
+   ShaderProgram  shader_;
 
    GLuint          fragment_;
    GLuint          vertex_;

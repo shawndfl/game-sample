@@ -23,7 +23,7 @@ public:
 
    virtual ~ShaderProgram();
 
-   bool loadProgram(const std::string& vertexSource, const std::string& fragmentSource);
+   bool loadProgram(const char* vertexSource, const char* fragmentSource);
 
    void enableProgram();
 

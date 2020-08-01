@@ -20,14 +20,14 @@ ShaderProgram::~ShaderProgram() {
 }
 
 /*************************************************/
-bool ShaderProgram::loadProgram(const std::string& vertexSource, const std::string& fragmentSource) {
+bool ShaderProgram::loadProgram(const char* vertexSource, const char* fragmentSource) {
    const uint LOG_LEN = 1024;
    GLchar infoLog[LOG_LEN];
    GLint success;
 
    // Vertex Shader
    GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
-   glShaderSource(vertex, 1, (const GLchar *const*) vertexSource.c_str(), NULL);
+   glShaderSource(vertex, 1, &vertexSource, NULL);
    glCompileShader (vertex);
    glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
    if (!success) {
@@ -38,7 +38,7 @@ bool ShaderProgram::loadProgram(const std::string& vertexSource, const std::stri
 
    // Fragment Shader
    GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
-   glShaderSource(fragment, 1, (const GLchar *const*)fragmentSource.c_str(), NULL);
+   glShaderSource(fragment, 1, &fragmentSource, NULL);
    glCompileShader (fragment);
    glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
    if (!success) {
@@ -55,9 +55,11 @@ bool ShaderProgram::loadProgram(const std::string& vertexSource, const std::stri
    if (!success) {
       glGetProgramInfoLog(program_, LOG_LEN, NULL, infoLog);
       LOGD("Program link error: " << infoLog);
+
+      glDeleteShader(vertex);
+      glDeleteShader(fragment);
       return false;
    }
-
    glDeleteShader(vertex);
    glDeleteShader(fragment);
 
@@ -75,10 +77,13 @@ void ShaderProgram::enableProgram() {
 
 /*************************************************/
 void ShaderProgram::attachGeometry(const Geometry& geometry) {
-   GLint index = glGetAttribLocation(program_, "position");
-   if (index != -1) {
-      glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) 0);
-      attributeId_.push_back(index);
+   if(geometry.getAttribute() == Geometry::APos) {
+      geometry.makeActive();
+      GLint index = glGetAttribLocation(program_, "position");
+      if (index != -1) {
+         glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) 0);
+         attributeId_.push_back(index);
+      }
    }
 }
 
