@@ -11,18 +11,15 @@
 #define PNG_DEBUG 3
 #include <libpng/png.h>
 
-int x, y;
+namespace bsk {
 
-bool read_png_file(const char* filename, png_bytepp image) {
 
-   int width, height;
-   png_byte color_type;
-   png_byte bit_depth;
+/*************************************************/
+bool read_png_file(const char* filename, Image& image) {
 
    png_structp png_ptr;
    png_infop info_ptr;
-   int number_of_passes;
-   unsigned char header[8];    // 8 is the maximum size that can be checked
+   unsigned char header[8] = {0};    // 8 is the maximum size that can be checked
 
    /* open file and test for it being a png */
    FILE* fp = fopen(filename, "rb");
@@ -58,12 +55,13 @@ bool read_png_file(const char* filename, png_bytepp image) {
 
    png_read_info(png_ptr, info_ptr);
 
-   width = png_get_image_width(png_ptr, info_ptr);
-   height = png_get_image_height(png_ptr, info_ptr);
-   color_type = png_get_color_type(png_ptr, info_ptr);
-   bit_depth = png_get_bit_depth(png_ptr, info_ptr);
+   image.Initialize(
+         png_get_image_width(png_ptr, info_ptr),
+         png_get_image_height(png_ptr, info_ptr),
+         (Image::BitDepth) png_get_bit_depth(png_ptr, info_ptr),
+         (Image::ColorType) png_get_color_type(png_ptr, info_ptr),
+         png_get_rowbytes(png_ptr, info_ptr));
 
-   number_of_passes = png_set_interlace_handling(png_ptr);
    png_read_update_info(png_ptr, info_ptr);
 
    /* read file */
@@ -72,22 +70,85 @@ bool read_png_file(const char* filename, png_bytepp image) {
       return false;
    }
 
-   //*image = new png_bytep[height * png_get_rowbytes(png_ptr, info_ptr)];
-
-   //row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
-   //for (y = 0; y < height; y++) {
-   //   row_pointers[y] = (png_byte*) malloc(png_get_rowbytes(png_ptr, info_ptr));
-   //}
-
-   //png_read_image(png_ptr, image);
+   png_read_image(png_ptr, image.getImageData());
 
    fclose(fp);
 
    return true;
 }
 
+/*************************************************/
+bool write_png_file(const char* filename,  Image& image) {
 
-namespace bsk {
+   png_structp png_ptr;
+   png_infop info_ptr;
+
+   /* create file */
+   FILE* fp = fopen(filename, "wb");
+   if (!fp) {
+      LOGD("[write_png_file] File %s could not be opened for writing "<< filename);
+      return false;
+   }
+
+   /* initialize stuff */
+   png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+   if (!png_ptr) {
+      LOGD("[write_png_file] png_create_write_struct failed");
+      return false;
+   }
+
+   info_ptr = png_create_info_struct(png_ptr);
+   if (!info_ptr) {
+      LOGD("[write_png_file] png_create_info_struct failed");
+      return false;
+   }
+
+   if (setjmp(png_jmpbuf(png_ptr))) {
+      LOGD("[write_png_file] Error during init_io");
+      return false;
+   }
+
+   png_init_io(png_ptr, fp);
+
+   /* write header */
+   if (setjmp(png_jmpbuf(png_ptr))) {
+      LOGD("[write_png_file] Error during writing header");
+      return false;
+   }
+
+   png_set_IHDR(png_ptr,
+         info_ptr,
+         image.getWidth(),
+         image.getHeight(),
+         image.getBitDepth(),
+         image.getColorType(),
+         PNG_INTERLACE_NONE,
+         PNG_COMPRESSION_TYPE_BASE,
+         PNG_FILTER_TYPE_BASE);
+
+   png_write_info(png_ptr, info_ptr);
+
+   /* write bytes */
+   if (setjmp(png_jmpbuf(png_ptr))) {
+      LOGD("[write_png_file] Error during writing bytes");
+      return false;
+   }
+
+   png_write_image(png_ptr, image.getImageData());
+
+   /* end write */
+   if (setjmp(png_jmpbuf(png_ptr))) {
+      LOGD("[write_png_file] Error during end of write");
+      return false;
+   }
+
+   png_write_end(png_ptr, NULL);
+
+   fclose(fp);
+
+   return true;
+}
 
 /*************************************************/
 ImageLoader::ImageLoader() {
@@ -100,9 +161,14 @@ ImageLoader::~ImageLoader() {
 }
 
 /*************************************************/
-bool ImageLoader::loadImage(const std::string& filename) {
+bool ImageLoader::loadImage(const std::string& filename, Image& image) {
 
-   return false;
+   bool result =  read_png_file(filename.c_str(), image);
+   if(result) {
+      std::string file2 = "out.png";
+      result = write_png_file(file2.c_str(), image);
+   }
+   return result;
 }
 
 } /* namespace bsk */

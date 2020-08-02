@@ -9,15 +9,18 @@
 #define SRC_IMAGELOADER_H_
 
 #include <string>
+#include "Image.h"
 
 namespace bsk {
 
+
 class ImageLoader {
 public:
+
    ImageLoader();
    virtual ~ImageLoader();
 
-   bool loadImage(const std::string& filename);
+   static bool loadImage(const std::string& filename, Image& image);
 
 };
 

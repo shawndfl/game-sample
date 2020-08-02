@@ -6,12 +6,12 @@
  */
 
 #include "FontManager.h"
+#include "ImageLoader.h"
 
 namespace bsk {
 
 FontManager::FontManager() {
-   // TODO Auto-generated constructor stub
-
+   ImageLoader::loadImage("assets/img/font.png", fontImg_);
 }
 
 FontManager::~FontManager() {

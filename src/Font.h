@@ -13,6 +13,7 @@
 #include <GLES2/gl2.h>
 #include "Geometry.h"
 #include "ShaderProgram.h"
+#include "ImageLoader.h"
 
 namespace bsk {
 

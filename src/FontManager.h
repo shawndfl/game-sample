@@ -27,6 +27,7 @@ public:
 
 private:
    std::vector<Font>    fonts_;
+   Image                fontImg_;
 
 };
 

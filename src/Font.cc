@@ -7,7 +7,7 @@
 
 #include "Font.h"
 #include "Logging.h"
-#include "GLES2/gl2.h"
+#include <GLES2/gl2.h>
 
 namespace bsk {
 
@@ -68,9 +68,8 @@ Font::~Font() {
 
 /*************************************************/
 void Font::initialize(const std::string& text, uint screenX, uint screenY) {
+
    dispose();
-
-
 }
 
 /*************************************************/
