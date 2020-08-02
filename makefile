@@ -11,7 +11,7 @@ CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD
 CFLAGS += -I /usr/include 
 
 LDFLAGS := -pthread -std=c++17
-LDLIBS := -lstdc++ -lGLESv2 -lglfw
+LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng
 
 # Phony targets
 .PHONY: all clean debug
