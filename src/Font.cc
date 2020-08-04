@@ -14,15 +14,20 @@ namespace bsk {
 
 static const GLchar* vertexShaderSource =
     "#version 100\n"
-    "attribute vec3 position;\n"
+    "attribute vec3 pos;\n"
+    "attribute vec2 tex1;\n"
+    "out vec2 out_tex1;\n"
     "void main() {\n"
-    "   gl_Position = vec4(position, 1.0);\n"
+    "   gl_Position = vec4(pos, 1.0);\n"
+    "   out_text1 = text1;\n"
     "}\n";
 
 static const GLchar* fragmentShaderSource =
     "#version 100\n"
+    "in vec2 text1;\n"
+    "uniform sampler2D diffused;\n"
     "void main() {\n"
-    "   gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);\n"
+    "   gl_FragColor = texture(diffused, text1);\n"
     "}\n";
 
 static const GLfloat vertices[] = {
@@ -59,7 +64,9 @@ Font::Font() {
       indices.push_back(faces[i]);
    }
    geometry_.initialize(verts, indices, Geometry::APos);
-   shader_.attachGeometry(geometry_);
+   if(!shader_.bindGeometry(geometry_)) {
+
+   }
 }
 
 /*************************************************/
@@ -77,7 +84,6 @@ void Font::render() {
    //LOGD("text: "<< text_ << " x:" <<  screenX_ << " y:" << screenY_);
 
    shader_.enableProgram();
-   geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, NULL);
 }
 

@@ -69,8 +69,12 @@ bool read_png_file(const char* filename, Image& image) {
       LOGD("Error during read_image: " << filename);
       return false;
    }
+   const int rowStep = png_get_rowbytes(png_ptr, info_ptr);
 
-   png_read_image(png_ptr, image.getImageData());
+   for(uint i = 0; i < image.getHeight(); i++) {
+      unsigned char* offset = image.getImageData() + (i * rowStep);
+      png_read_row(png_ptr, offset, NULL);
+   }
 
    fclose(fp);
 
@@ -78,7 +82,7 @@ bool read_png_file(const char* filename, Image& image) {
 }
 
 /*************************************************/
-bool write_png_file(const char* filename,  Image& image) {
+bool write_png_file(const char* filename, const Image& image) {
 
    png_structp png_ptr;
    png_infop info_ptr;
@@ -135,7 +139,11 @@ bool write_png_file(const char* filename,  Image& image) {
       return false;
    }
 
-   png_write_image(png_ptr, image.getImageData());
+   for (uint i = 0; i < image.getHeight(); i++) {
+   //for (int i = (int)image.getHeight() - 1; i >= 0; i--) {
+      unsigned char* offset = image.getImageData() + (i * image.getRowBytes());
+      png_write_row(png_ptr, offset);
+   }
 
    /* end write */
    if (setjmp(png_jmpbuf(png_ptr))) {
@@ -164,10 +172,13 @@ ImageLoader::~ImageLoader() {
 bool ImageLoader::loadImage(const std::string& filename, Image& image) {
 
    bool result =  read_png_file(filename.c_str(), image);
-   if(result) {
-      std::string file2 = "out.png";
-      result = write_png_file(file2.c_str(), image);
-   }
+   return result;
+}
+
+/*************************************************/
+bool ImageLoader::saveImage(const std::string& filename, const Image& image) {
+
+   bool result =  write_png_file(filename.c_str(), image);
    return result;
 }
 

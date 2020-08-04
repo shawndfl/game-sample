@@ -18,6 +18,7 @@ Image::Image() {
    bitDepth_   = Image::BitDepth8;
    numberOfPasses_ = 0;
    data_       = nullptr;
+   rowBytes_ = 0;
 }
 
 /*************************************************/
@@ -32,16 +33,14 @@ void Image::Initialize(int width, int height, BitDepth bitDepth, ColorType color
    colorType_  = colorType;
    bitDepth_   = bitDepth;
    numberOfPasses_ = 0;
+   rowBytes_   = rowBytes;
 
-   data_       =  new unsigned char*[height_];
-   for (uint y = 0; y < height_; y++) {
-      data_[y] = new unsigned char[rowBytes];
-   }
+   data_       =  new unsigned char[height_ * rowBytes_];
 
 }
 
 /*************************************************/
-unsigned char** Image::getImageData() const {
+unsigned char* Image::getImageData() const {
    return data_;
 }
 
@@ -56,12 +55,7 @@ void Image::setValue(int row, int col, float r, float g, float b, float a) {
 /*************************************************/
 void Image::dispose() {
    if (data_ != nullptr) {
-      LOGD("Pointer " << " " << height_);
-      for (uint i = 0; i < height_; i++) {
-         LOGD("i " << i);
-         delete[] data_[i];
-      }
-      delete[] data_;
+      delete data_;
       data_ = nullptr;
    }
 }
@@ -84,6 +78,11 @@ uint Image::getHeight() const {
 /*************************************************/
 uint Image::getWidth() const {
    return width_;
+}
+
+/*************************************************/
+uint Image::getRowBytes() const {
+   return rowBytes_;
 }
 
 } /* namespace bsk */

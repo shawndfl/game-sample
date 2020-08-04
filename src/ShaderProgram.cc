@@ -63,28 +63,76 @@ bool ShaderProgram::loadProgram(const char* vertexSource, const char* fragmentSo
    glDeleteShader(vertex);
    glDeleteShader(fragment);
 
+
    return true;
 }
 
 /*************************************************/
 void ShaderProgram::enableProgram() {
+   // enable our shader program
    glUseProgram(program_);
 
-   for(auto attr: attributeId_) {
+   for( auto attr: attributes_) {
       glEnableVertexAttribArray(attr);
    }
 }
 
 /*************************************************/
-void ShaderProgram::attachGeometry(const Geometry& geometry) {
-   if(geometry.getAttribute() == Geometry::APos) {
-      geometry.makeActive();
-      GLint index = glGetAttribLocation(program_, "position");
+bool ShaderProgram::bindGeometry(const Geometry& geometry) {
+   // enable out geometry
+   geometry.makeActive();
+
+   // set our attributes
+   long offset = 0;
+   if ((geometry.getAttribute() & Geometry::APos) > 0) {
+      GLint index = glGetAttribLocation(program_, "pos");
       if (index != -1) {
-         glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) 0);
-         attributeId_.push_back(index);
+         glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) offset);
+         attributes_.push_back(index);
+         offset += 3 * sizeof(float);
+      } else {
+         LOGD("Cannot find \'pos\'");
+         return false;
       }
    }
+
+   if ((geometry.getAttribute() & Geometry::ATex1) > 0) {
+      GLint index = glGetAttribLocation(program_, "tex1");
+      if (index != -1) {
+         glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*) offset);
+         attributes_.push_back(index);
+         offset += 2 * sizeof(float);
+      } else {
+         LOGD("Cannot find \'tex1\'");
+         return false;
+      }
+   }
+
+   if ((geometry.getAttribute() & Geometry::ANorm) > 0) {
+      GLint index = glGetAttribLocation(program_, "norm");
+      if (index != -1) {
+         glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*) offset);
+         attributes_.push_back(index);
+         offset += 3 * sizeof(float);
+      } else {
+         LOGD("Cannot find \'norm\'");
+         return false;
+      }
+   }
+
+   if ((geometry.getAttribute() & Geometry::ATex2) > 0) {
+      GLint index = glGetAttribLocation(program_, "tex2");
+      if (index != -1) {
+         glVertexAttribPointer(index, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*) offset);
+         attributes_.push_back(index);
+         offset += 2 * sizeof(float);
+      } else {
+         LOGD("Cannot find \'tex2\'");
+         return false;
+      }
+   }
+
+   return true;
 }
 
 } /* namespace bsk */

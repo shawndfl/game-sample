@@ -22,6 +22,9 @@ public:
 
    static bool loadImage(const std::string& filename, Image& image);
 
+   static bool saveImage(const std::string& filename, const Image& image);
+
+
 };
 
 } /* namespace bsk */

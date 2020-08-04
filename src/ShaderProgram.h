@@ -25,14 +25,16 @@ public:
 
    bool loadProgram(const char* vertexSource, const char* fragmentSource);
 
+   void setTexture();
+
    void enableProgram();
 
-   void attachGeometry(const Geometry& geometry);
+   bool bindGeometry(const Geometry& geometry);
 
 private:
 
    GLuint              program_;
-   std::vector<GLint>  attributeId_;
+   std::vector<GLuint> attributes_;
 };
 
 } /* namespace bsk */

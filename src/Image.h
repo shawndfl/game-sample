@@ -37,7 +37,7 @@ public:
 
    void Initialize(int width, int height, BitDepth bitDepth, ColorType colorType, int rowBytes);
 
-   unsigned char** getImageData() const;
+   unsigned char* getImageData() const;
 
    void setValue(int row, int col, float r, float g = 0, float b = 0, float a = 0);
 
@@ -46,14 +46,16 @@ public:
    ColorType getColorType() const;
    uint getHeight() const;
    uint getWidth() const;
+   uint getRowBytes() const;
 
 private:
    uint        width_;
    uint        height_;
+   uint        rowBytes_;
    ColorType   colorType_;
    BitDepth    bitDepth_;
    int         numberOfPasses_;
-   unsigned char** data_;
+   unsigned char* data_;
 
 };
 

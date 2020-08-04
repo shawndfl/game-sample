@@ -18,6 +18,11 @@ public:
    virtual ~Texture();
 
    void setImage(const Image& img);
+
+   void dispose();
+
+private:
+   uint texture_;
 };
 
 } /* namespace bsk */
