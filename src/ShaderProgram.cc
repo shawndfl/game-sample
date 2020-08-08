@@ -63,6 +63,7 @@ bool ShaderProgram::loadProgram(const char* vertexSource, const char* fragmentSo
    glDeleteShader(vertex);
    glDeleteShader(fragment);
 
+   diffusedTex1_ = glGetUniformLocation(program_, "diffused");
 
    return true;
 }

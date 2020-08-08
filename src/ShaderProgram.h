@@ -13,9 +13,13 @@
 #include <GLES2/gl2.h>
 
 #include "Geometry.h"
+#include "Material.h"
 
 namespace bsk {
 
+/*
+ * Shader program that will require a material and geometry
+ */
 class ShaderProgram {
 public:
 
@@ -25,16 +29,19 @@ public:
 
    bool loadProgram(const char* vertexSource, const char* fragmentSource);
 
-   void setTexture();
-
    void enableProgram();
 
    bool bindGeometry(const Geometry& geometry);
+
+   bool bindMaterial(const Material& material);
 
 private:
 
    GLuint              program_;
    std::vector<GLuint> attributes_;
+
+   // uniforms
+   int                 diffusedTex1_;
 };
 
 } /* namespace bsk */

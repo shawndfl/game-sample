@@ -15,7 +15,7 @@ namespace bsk {
 
 class Geometry {
 public:
-   enum Attributes {
+   enum Attributes: int {
          APos     = 0x01,
          ATex1    = 0x02,
          ANorm    = 0x04,
@@ -27,7 +27,7 @@ public:
 
    virtual ~Geometry();
 
-   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute);
+   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, int attribute);
 
    void dispose();
 

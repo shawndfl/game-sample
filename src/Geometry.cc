@@ -22,7 +22,7 @@ Geometry::~Geometry() {
 }
 
 /*************************************************/
-void Geometry::initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute) {
+void Geometry::initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, int attribute) {
 
    dispose();
 
