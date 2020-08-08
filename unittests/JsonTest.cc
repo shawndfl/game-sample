@@ -6,8 +6,8 @@
 SUITE(Json) {
 
 TEST(ToString) {
-   JsonNode node;
-   JsonNode value;
+   bsk::JsonNode node;
+   bsk::JsonNode value;
    value.set(12);
    node.set("test", value);
    CHECK_EQUAL("{\"test\":12.000000}", node.toString());
@@ -15,7 +15,7 @@ TEST(ToString) {
 }
 
 TEST(Array) {
-   JsonNode node;
+   bsk::JsonNode node;
    node.append() = 12;
    node.append() = 13;
    CHECK_EQUAL("[12.000000,13.000000]", node.toString());
@@ -23,9 +23,9 @@ TEST(Array) {
 }
 
 TEST(DeepObjects) {
-   JsonNode object;
+   bsk::JsonNode object;
 
-   JsonNode& array = object["array"];
+   bsk::JsonNode& array = object["array"];
    array.append() = "testing1";
    array.append() = "testing2";
    array.append() = "testing3";
@@ -40,7 +40,7 @@ TEST(DeepObjects) {
 
    object["null"].setNull();
 
-   JsonNode& object2 = object["sub_object"];
+   bsk::JsonNode& object2 = object["sub_object"];
    object2["item1"] = 45;
    object2["item2"] = "testing";
    object2["item3"] = "testing";
@@ -71,16 +71,16 @@ TEST(ParseCompare) {
 
    object["null"].setNull();
 
-   JsonNode& object2 = object["sub_object"];
+   bsk::JsonNode& object2 = object["sub_object"];
    object2["item1"] = 45;
    object2["item2"] = "testing";
    object2["item3"] = "testing";
 
-   JsonNode& array2 = object2["item4"];
+   bsk::JsonNode& array2 = object2["item4"];
    array2[3] = 9;
 
-   JsonParser parser;
-   JsonNode data = parser.parse(object.toString(true));
+   bsk::JsonParser parser;
+   bsk::JsonNode data = parser.parse(object.toString(true));
 
    CHECK_EQUAL(object.toString(), data.toString());
 
@@ -88,8 +88,8 @@ TEST(ParseCompare) {
 
 
 TEST(Parse) {
-   JsonParser parser;
-   JsonNode data = parser.parse("{}");
+   bsk::JsonParser parser;
+   bsk::JsonNode data = parser.parse("{}");
 
    CHECK_EQUAL("{}", data.toString(true));
 
