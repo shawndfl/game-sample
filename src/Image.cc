@@ -7,6 +7,7 @@
 
 #include "Image.h"
 #include "Logging.h"
+#include <GLES2/gl2.h>
 
 namespace bsk {
 
@@ -83,6 +84,33 @@ uint Image::getWidth() const {
 /*************************************************/
 uint Image::getRowBytes() const {
    return rowBytes_;
+}
+
+/*************************************************/
+uint Image::getOpenGlColorType() const {
+    if((colorType_ & CTAlpha) > 0) {
+        return GL_RGBA;
+    } else {
+        return GL_RGB;
+    }
+}
+
+/*************************************************/
+uint Image::getOpenGlByteDepth() const {
+    switch (bitDepth_) {
+    case BitDepth1:
+        return GL_UNSIGNED_BYTE;
+    case BitDepth2:
+        return GL_UNSIGNED_BYTE;
+    case BitDepth4:
+        return GL_UNSIGNED_BYTE;
+    case BitDepth8:
+        return GL_UNSIGNED_BYTE;
+    case BitDepth16:
+        return GL_UNSIGNED_SHORT;
+    default:
+        return GL_UNSIGNED_BYTE;
+    }
 }
 
 } /* namespace bsk */

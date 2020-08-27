@@ -48,6 +48,10 @@ public:
    uint getWidth() const;
    uint getRowBytes() const;
 
+   uint getOpenGlColorType() const;
+
+   uint getOpenGlByteDepth() const;
+
 private:
    uint        width_;
    uint        height_;

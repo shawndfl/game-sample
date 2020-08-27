@@ -31,7 +31,13 @@ void Texture::setImage(const Image& img) {
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
    // load the image
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getWidth(), img.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getImageData());
+   glTexImage2D(GL_TEXTURE_2D, 0,
+           img.getOpenGlColorType(),
+           img.getWidth(),
+           img.getHeight(),
+           0, img.getOpenGlColorType(),
+           img.getOpenGlByteDepth(),
+           img.getImageData());
    glGenerateMipmap(GL_TEXTURE_2D);
    glBindTexture(GL_TEXTURE_2D, 0);
 }
