@@ -27,7 +27,7 @@ public:
 
    virtual ~ShaderProgram();
 
-   bool loadProgram(const char* vertexSource, const char* fragmentSource);
+   bool loadProgram();
 
    void enableProgram();
 
@@ -42,6 +42,7 @@ private:
 
    // uniforms
    int                 diffusedTex1_;
+
 };
 
 } /* namespace bsk */

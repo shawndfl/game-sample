@@ -21,8 +21,13 @@ public:
 
    void dispose();
 
+   /**
+    * Texture unit is between 0 and 32
+    */
+   void apply(uint textureUnit) const;
+
 private:
-   uint texture_;
+   uint 	texture_;
 };
 
 } /* namespace bsk */

@@ -39,8 +39,18 @@ void Texture::setImage(const Image& img) {
 /*************************************************/
 void Texture::dispose() {
    if(texture_ != 0) {
-
+	   glDeleteTextures(1, &texture_);
    }
+
+}
+
+/*************************************************/
+void Texture::apply(uint textureUnit) const {
+	if(textureUnit > 32) {
+		textureUnit = 0;
+	}
+	glActiveTexture(GL_TEXTURE0 + textureUnit);
+	glBindTexture(GL_TEXTURE_2D, texture_);
 
 }
 

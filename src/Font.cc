@@ -12,27 +12,6 @@
 namespace bsk {
 
 
-static const GLchar* vertexShaderSource =
-    "#version 300 es\n"
-    "precision mediump float;\n"
-    "in vec3 pos;\n"
-    "in vec2 texCoord;\n"
-    "out vec2 tex1;\n"
-    "void main() {\n"
-    "   gl_Position = vec4(pos, 1.0);\n"
-    "   tex1 = texCoord;\n"
-    "}\n";
-
-static const GLchar* fragmentShaderSource =
-    "#version 300 es\n"
-    "precision mediump float;\n"
-    "in vec2 tex1;\n"
-    "uniform sampler2D diffused;\n"
-    "out vec4 FragColor;\n"
-    "void main() {\n"
-    "   FragColor = texture(diffused, tex1);\n"
-    "}\n";
-
 static const GLfloat vertices[] = {
         -0.5f,  0.5f, 0.0f, 0.0, 0.0,
          0.5f,  0.5f, 0.0f, 1.0, 0.0,
@@ -50,14 +29,7 @@ Font::Font() {
    screenX_  = 0;
    screenY_  = 0;
 
-   fragment_ = 0;
-   vertex_   = 0;
-   program_  = 0;
-
-   ib_       = 0;
-   vb_       = 0;
-
-   shader_.loadProgram(vertexShaderSource, fragmentShaderSource);
+   shader_.loadProgram();
    std::vector<float> verts;
    for (int i = 0; i < 20; i++) {
       verts.push_back(vertices[i]);
@@ -66,8 +38,18 @@ Font::Font() {
    for (int i = 0; i < 6; i++) {
       indices.push_back(faces[i]);
    }
+
+   Texture diffused;
+   Image img;
+   ImageLoader::loadImage("assets/img/font.png", img);
+   diffused.setImage(img);
+   mat_.setDiffused(diffused);
+
    geometry_.initialize(verts, indices, Geometry::APos | Geometry::ATex1);
    if(!shader_.bindGeometry(geometry_)) {
+
+   }
+   if(!shader_.bindMaterial(mat_)){
 
    }
 }
@@ -92,14 +74,7 @@ void Font::render() {
 
 /*************************************************/
 void Font::dispose() {
-   glDeleteBuffers(1, &ib_);
-   ib_ = 0;
 
-   glDeleteBuffers(1, &vb_);
-   vb_ = 0;
-
-   glDeleteProgram(program_);
-   program_ = 0;
 }
 
 } /* namespace bsk */

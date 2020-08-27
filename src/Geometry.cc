@@ -22,9 +22,11 @@ Geometry::~Geometry() {
 }
 
 /*************************************************/
-void Geometry::initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, int attribute) {
+void Geometry::initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute) {
 
    dispose();
+
+   attribute_ = attribute;
 
    GLint size;
    GLint byteSize;
@@ -43,7 +45,7 @@ void Geometry::initialize(const std::vector<float>& verts, const std::vector<GLu
    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
    // setup index buffer
-   byteSize = indice.size() * sizeof(float);
+   byteSize = indice.size() * sizeof(GLushort);
    glGenBuffers(1, &ib_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
    glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteSize, 0, GL_STATIC_DRAW);

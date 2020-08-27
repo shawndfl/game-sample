@@ -14,6 +14,7 @@
 #include "Geometry.h"
 #include "ShaderProgram.h"
 #include "ImageLoader.h"
+#include "Material.h"
 
 namespace bsk {
 
@@ -35,13 +36,8 @@ private:
 
    Geometry       geometry_;
    ShaderProgram  shader_;
+   Material       mat_;
 
-   GLuint          fragment_;
-   GLuint          vertex_;
-   GLuint          program_;
-
-   GLuint          vb_;
-   GLuint          ib_;
 };
 
 } /* namespace bsk */

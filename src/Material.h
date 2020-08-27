@@ -14,16 +14,27 @@ namespace bsk {
 
 class Material {
 public:
-   Material();
-   virtual ~Material();
+	Material();
+	virtual ~Material();
+
+	void apply() const;
+
+	const Texture& getDiffused() const;
+	void setDiffused(const Texture &diffused);
+	float getOpacity() const;
+	void setOpacity(float opacity);
+	const Texture& getOverlay() const;
+	void setOverlay(const Texture &overlay);
+	bool isTransparent() const;
+	void setTransparent(bool transparent);
 
 private:
-   Texture   diffused_;
-   Texture   texture2_;
+	Texture 	diffused_;		/// the main texture
+	Texture 	overlay_;		/// The overlay texture
 
-   float     opacity_;     /// Opacity
+	float 		opacity_;      /// Opacity
 
-   bool      transparent_;
+	bool 		transparent_;	/// If this material is transparent
 };
 
 } /* namespace bsk */

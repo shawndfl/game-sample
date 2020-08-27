@@ -15,7 +15,7 @@ FontManager::FontManager() {
 }
 
 FontManager::~FontManager() {
-   // TODO Auto-generated destructor stub
+
 }
 
 void FontManager::update() {

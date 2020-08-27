@@ -15,7 +15,7 @@ namespace bsk {
 
 class Geometry {
 public:
-   enum Attributes: int {
+   enum Attributes: char {
          APos     = 0x01,
          ATex1    = 0x02,
          ANorm    = 0x04,
@@ -27,7 +27,7 @@ public:
 
    virtual ~Geometry();
 
-   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, int attribute);
+   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute);
 
    void dispose();
 
@@ -46,5 +46,10 @@ protected:
 };
 
 } /* namespace bsk */
+
+inline bsk::Geometry::Attributes operator|(bsk::Geometry::Attributes a, bsk::Geometry::Attributes b)
+{
+    return static_cast<bsk::Geometry::Attributes>(static_cast<char>(a) | static_cast<char>(b));
+}
 
 #endif /* SRC_GEOMETRY_H_ */
