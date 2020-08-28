@@ -21,6 +21,7 @@ make -j 10
 ```
 
 # TODO
-* Finish making materials to display textures
-* Fix up unit tests
-* Add Vector3 math and unit tests.
+[x] Finish making materials to display textures
+[ ] Add Vector3 math and unit tests.
+[x] Get text to display
+[ ] Get controller input working

@@ -14,6 +14,7 @@ namespace bsk {
 
 class Render;
 class FontManager;
+class Joystick;
 
 /**
  * The main game engine that processes
@@ -23,8 +24,6 @@ class GameEngine {
 public:
 
    virtual ~GameEngine();
-
-   bool initialize();
 
    bool start(uint width, uint height);
 
@@ -45,7 +44,7 @@ private:
 
    std::unique_ptr<Render>        render_;
    std::unique_ptr<FontManager>   fontManager_;
-
+   std::unique_ptr<Joystick>      joy_;
    uint         height_;
    uint         width_;
 };

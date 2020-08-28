@@ -9,6 +9,7 @@
 #include "Render.h"
 #include "FontManager.h"
 #include "Logging.h"
+#include "Joystick.h"
 
 namespace bsk {
 
@@ -16,17 +17,14 @@ namespace bsk {
 GameEngine::GameEngine()  {
    render_        = std::make_unique<Render>();
    fontManager_   = std::make_unique<FontManager>();
+   joy_           = std::make_unique<Joystick>();
+
    width_ = 1024;
    height_ = 1024;
 }
 
 /*************************************************/
 GameEngine::~GameEngine() {
-}
-
-/*************************************************/
-bool GameEngine::initialize() {
-   return true;
 }
 
 /*************************************************/
@@ -39,7 +37,6 @@ uint GameEngine::getHeight() {
     return height_;
 }
 
-
 /*************************************************/
 GameEngine& GameEngine::get() {
     static GameEngine* instance = new GameEngine();
@@ -49,6 +46,8 @@ GameEngine& GameEngine::get() {
 /*************************************************/
 bool GameEngine::start(uint width, uint height) {
    bool error = false;
+
+   error |= !joy_->initialize();
    error |= !render_->initialize(width, height);
    fontManager_->addFont("Hello!\nTest", -.8, 1);
 
@@ -60,6 +59,7 @@ bool bsk::GameEngine::update() {
 
    render_->render();
    fontManager_->update();
+   joy_->poll();
    return true;
 }
 

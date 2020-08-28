@@ -99,7 +99,6 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
         //LOGD("offset " << (int)chXOffset1 << ", " << (int)chYOffset1 << ", " << (int)chXOffset2 << ", " << (int)chYOffset2);
 
         float scaleX = chHeight * (float) chYOffset1;
-        LOGD("scaleX "<< scaleX);
 
         float tu1 = (float) (chWidth * (float) chXOffset1) / (float) width;
         float tv1 = (float) (chHeight * (float) chYOffset1) / (float) height;
