@@ -11,11 +11,13 @@
 #include "Logging.h"
 
 namespace bsk {
+
 /*************************************************/
 GameEngine::GameEngine()  {
    render_        = std::make_unique<Render>();
    fontManager_   = std::make_unique<FontManager>();
-
+   width_ = 1024;
+   height_ = 1024;
 }
 
 /*************************************************/
@@ -28,10 +30,27 @@ bool GameEngine::initialize() {
 }
 
 /*************************************************/
+uint GameEngine::getWidth() {
+    return width_;
+}
+
+/*************************************************/
+uint GameEngine::getHeight() {
+    return height_;
+}
+
+
+/*************************************************/
+GameEngine& GameEngine::get() {
+    static GameEngine* instance = new GameEngine();
+    return *instance;
+}
+
+/*************************************************/
 bool GameEngine::start(uint width, uint height) {
    bool error = false;
    error |= !render_->initialize(width, height);
-   fontManager_->addFont("Hello", 0,0);
+   fontManager_->addFont("Hello!\nTest", -.8, 1);
 
    return error;
 }

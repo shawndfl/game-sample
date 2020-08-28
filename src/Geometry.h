@@ -27,11 +27,13 @@ public:
 
    virtual ~Geometry();
 
-   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute);
+   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute, bool dynamic = false);
 
    void dispose();
 
    void makeActive() const;
+
+   GLuint IndexCount() const;
 
    Attributes getAttribute() const;
 
@@ -39,6 +41,8 @@ protected:
 
    GLuint    vb_;
    GLuint    ib_;
+
+   int       indexCount_;
 
    Attributes             attribute_;
    std::vector<GLuint>    attributeIndex_;

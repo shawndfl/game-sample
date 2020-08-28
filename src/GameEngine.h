@@ -22,8 +22,6 @@ class FontManager;
 class GameEngine {
 public:
 
-   GameEngine();
-
    virtual ~GameEngine();
 
    bool initialize();
@@ -35,9 +33,21 @@ public:
    bool update();
 
    void dispose();
+
+   static GameEngine& get();
+
+   uint getWidth();
+
+   uint getHeight();
+
 private:
+   GameEngine();
+
    std::unique_ptr<Render>        render_;
    std::unique_ptr<FontManager>   fontManager_;
+
+   uint         height_;
+   uint         width_;
 };
 
 }

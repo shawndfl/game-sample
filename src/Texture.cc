@@ -47,7 +47,6 @@ void Texture::dispose() {
    if(texture_ != 0) {
 	   glDeleteTextures(1, &texture_);
    }
-
 }
 
 /*************************************************/

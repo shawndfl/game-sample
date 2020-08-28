@@ -24,9 +24,9 @@ void FontManager::update() {
    }
 }
 
-void FontManager::addFont(const std::string& text, uint width, uint height) {
+void FontManager::addFont(const std::string& text, float width, float height, float scale) {
    Font font;
-   font.initialize(text, width, height);
+   font.initialize(text, width, height, scale);
    fonts_.push_back(font);
 }
 

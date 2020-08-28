@@ -23,7 +23,15 @@ public:
    Font();
    virtual ~Font();
 
-   void initialize(const std::string& text, uint screenX, uint screenY);
+   /**
+    * The text to display. Characters can be between ' ' and '~'.
+    * '\n' will move text to the next line.
+    *
+    * screenX - the offset in screen space (-1, 1)
+    * screenY - the offset in screen space (-1, 1)
+    *
+    */
+   void initialize(const std::string& text, float screenX, float screenY, float scale = 1.0);
 
    void render();
 
@@ -31,8 +39,8 @@ public:
 
 private:
    std::string    text_;
-   uint           screenX_;
-   uint           screenY_;
+   int           screenX_;
+   int           screenY_;
 
    Geometry       geometry_;
    ShaderProgram  shader_;

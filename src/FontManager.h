@@ -23,7 +23,7 @@ public:
 
    void update();
 
-   void addFont(const std::string& text, uint width, uint height);
+   void addFont(const std::string& text, float width, float height, float scale = 1.0);
 
 private:
    std::vector<Font>    fonts_;
