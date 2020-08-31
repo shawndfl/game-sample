@@ -50,23 +50,28 @@ bool Joystick::initialize(const std::string &device) {
 
 /*************************************************/
 void Joystick::poll() {
-    struct js_event e;
-    int res = read(fd_, &e, sizeof(e));
+
+    int res = read(fd_, &state_, sizeof(state_));
     if(res > 0) {
-        switch(e.type) {
+        switch(state_.type) {
         case JS_EVENT_BUTTON:
-            LOGD("button event: " << (int)e.number << " state " << e.value);
+            LOGD("button event: " << (int)state_.number << " state " << state_.value);
             break;
         case JS_EVENT_AXIS:
-            LOGD("axis event: " << (int)e.number << " state " << e.value);
+            LOGD("axis event: " << (int)state_.number << " state " << state_.value);
             break;
         case JS_EVENT_INIT:
             LOGD("init");
             break;
         default:
-            LOGD("Unknown event: " << (int)e.type);
+            LOGD("Unknown event: " << (int)state_.type);
         }
     }
+}
+
+/*************************************************/
+const struct js_event& Joystick::getState() const {
+    return state_;
 }
 
 } /* namespace bsk */

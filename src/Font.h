@@ -37,14 +37,14 @@ public:
 
    void dispose();
 
+   const Geometry& getGeometry() const;
+
 private:
    std::string    text_;
    int           screenX_;
    int           screenY_;
 
    Geometry       geometry_;
-   ShaderProgram  shader_;
-   Material       mat_;
 
 };
 

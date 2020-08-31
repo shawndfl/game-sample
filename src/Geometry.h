@@ -10,6 +10,7 @@
 
 #include <GLES2/gl2.h>
 #include <vector>
+#include <sys/types.h>
 
 namespace bsk {
 
@@ -27,7 +28,9 @@ public:
 
    virtual ~Geometry();
 
-   void initialize(const std::vector<float>& verts, const std::vector<GLushort>& indice, Attributes attribute, bool dynamic = false);
+   void initialize(uint vertexCount, uint indexCount, Attributes attribute, bool dynamic = false);
+
+   void setBuffers(const std::vector<float>& verts, const std::vector<GLushort>& indice);
 
    void dispose();
 
@@ -41,8 +44,10 @@ protected:
 
    GLuint    vb_;
    GLuint    ib_;
+   GLuint    vao_;
 
-   int       indexCount_;
+   uint       indexCount_;
+   uint       vertexCount_;
 
    Attributes             attribute_;
    std::vector<GLuint>    attributeIndex_;

@@ -39,6 +39,10 @@ public:
 
    uint getHeight();
 
+    const FontManager& getFontManager() const;
+    const Joystick& getJoy() const;
+    const Render& getRender() const;
+
 private:
    GameEngine();
 

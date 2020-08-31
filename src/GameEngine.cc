@@ -49,7 +49,15 @@ bool GameEngine::start(uint width, uint height) {
 
    error |= !joy_->initialize();
    error |= !render_->initialize(width, height);
-   fontManager_->addFont("Hello!\nTest", -.8, 1);
+   error |= !fontManager_->initialize();
+
+   std::stringstream stream;
+   stream <<  "Hello!\nTest";
+   fontManager_->setFont("title", stream, -.8, 1);
+
+   stream.str("");
+   stream << "Hello2";
+   fontManager_->setFont("title2", stream, -.5, .5);
 
    return error;
 }
@@ -60,6 +68,16 @@ bool bsk::GameEngine::update() {
    render_->render();
    fontManager_->update();
    joy_->poll();
+
+
+   if(joy_->getState().type == JS_EVENT_BUTTON) {
+       if(joy_->getState().number == 9) {
+           std::stringstream stream;
+           stream <<  "Button hit: " << joy_->getState().value;
+           fontManager_->setFont("input", stream, -.9, 0);
+       }
+   }
+
    return true;
 }
 
@@ -74,6 +92,21 @@ void bsk::GameEngine::dispose() {
 void GameEngine::resize(uint width, uint height) {
    render_->resize(width, height);
 
+}
+
+/*************************************************/
+const FontManager& GameEngine::getFontManager() const {
+    return *fontManager_;
+}
+
+/*************************************************/
+const Joystick& GameEngine::getJoy() const {
+    return *joy_;
+}
+
+/*************************************************/
+const Render& GameEngine::getRender() const {
+    return *render_;
 }
 
 }

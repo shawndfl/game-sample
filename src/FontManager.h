@@ -9,8 +9,9 @@
 #define SRC_FONTMANAGER_H_
 
 #include "Font.h"
-#include <vector>
+#include <map>
 #include <string>
+#include <sstream>
 
 #include <sys/types.h>
 
@@ -21,13 +22,17 @@ public:
    FontManager();
    virtual ~FontManager();
 
+   bool initialize();
+
    void update();
 
-   void addFont(const std::string& text, float width, float height, float scale = 1.0);
+   void setFont(const std::string& id, const std::stringstream& text, float width, float height, float scale = 1.0);
 
 private:
-   std::vector<Font>    fonts_;
-   Image                fontImg_;
+   std::map<std::string, Font>    fonts_;
+   Image                          fontImg_;
+   ShaderProgram                  shader_;
+   Material                       mat_;
 
 };
 

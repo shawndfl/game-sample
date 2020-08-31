@@ -127,8 +127,6 @@ bool ShaderProgram::bindGeometry(const Geometry &geometry) {
         }
     }
 
-    LOGD("offset " << offset);
-
     if ((geometry.getAttribute() & Geometry::ATex1) > 0) {
         GLint index = glGetAttribLocation(program_, "a_tex1");
         if (index != -1) {
@@ -141,7 +139,6 @@ bool ShaderProgram::bindGeometry(const Geometry &geometry) {
             return false;
         }
     }
-    LOGD("offset " << offset);
 
     if ((geometry.getAttribute() & Geometry::ANorm) > 0) {
         GLint index = glGetAttribLocation(program_, "a_norm");

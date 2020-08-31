@@ -12,47 +12,13 @@
 
 namespace bsk {
 
-
-static const GLfloat vertices[] = {
-        -0.5f,  0.5f, 0.0f, 0.0, 0.0,
-         0.5f,  0.5f, 0.0f, 1.0, 0.0,
-         0.5f, -0.5f, 0.0f, 1.0, 1.0,
-        -0.5f, -0.5f, 0.0f, 0.0, 1.0
-};
-
-static const GLushort faces[] = {
-        0, 1, 2,
-        0, 2, 3
-};
-
 /*************************************************/
 Font::Font() {
    screenX_  = 0;
    screenY_  = 0;
+   const uint MAX_CH = 50;
 
-   shader_.loadProgram();
-   std::vector<float> verts;
-   for (int i = 0; i < 20; i++) {
-      verts.push_back(vertices[i]);
-   }
-   std::vector<GLushort> indices;
-   for (int i = 0; i < 6; i++) {
-      indices.push_back(faces[i]);
-   }
-
-   Texture diffused;
-   Image img;
-   ImageLoader::loadImage("assets/img/font.png", img);
-   diffused.setImage(img);
-   mat_.setDiffused(diffused);
-
-   geometry_.initialize(verts, indices, Geometry::APos | Geometry::ATex1);
-   if(!shader_.bindGeometry(geometry_)) {
-
-   }
-   if(!shader_.bindMaterial(mat_)){
-
-   }
+   geometry_.initialize(MAX_CH * 4 * 5, MAX_CH * 6, Geometry::APos | Geometry::ATex1);
 }
 
 /*************************************************/
@@ -62,7 +28,7 @@ Font::~Font() {
 /*************************************************/
 void Font::initialize(const std::string& text, float screenX, float screenY, float scale) {
 
-    const int rows = 10;
+    //const int rows = 10;
     const int cols = 10;
     const int width = 1024;
     const int height = 1024;
@@ -70,8 +36,8 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
     const float chHeight = 102.4;
     const float chStep = scale * .1;
 
-    const int screenWidth = GameEngine::get().getWidth();
-    const int screenHeight = GameEngine::get().getHeight();
+    //const int screenWidth = GameEngine::get().getWidth();
+    //const int screenHeight = GameEngine::get().getHeight();
 
     std::vector<float> verts;
     std::vector<GLushort> indices;
@@ -98,7 +64,7 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
 
         //LOGD("offset " << (int)chXOffset1 << ", " << (int)chYOffset1 << ", " << (int)chXOffset2 << ", " << (int)chYOffset2);
 
-        float scaleX = chHeight * (float) chYOffset1;
+        //float scaleX = chHeight * (float) chYOffset1;
 
         float tu1 = (float) (chWidth * (float) chXOffset1) / (float) width;
         float tv1 = (float) (chHeight * (float) chYOffset1) / (float) height;
@@ -146,31 +112,23 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
         xpos += chStep;
     }
 
-    //for (int i = 0; i < verts.size(); i++) {
-    //    LOGD("vert " << i << ":  " << verts[i]);
-    //}
-
-    //for (int i = 0; i < indices.size(); i++) {
-    //    LOGD("indices " << i << ":  " << indices[i]);
-    //}
-
-    geometry_.initialize(verts, indices, Geometry::APos | Geometry::ATex1);
-    if(!shader_.bindGeometry(geometry_)) {
-
-    }
+    geometry_.setBuffers(verts, indices);
 }
 
 /*************************************************/
 void Font::render() {
-   //LOGD("text: "<< text_ << " x:" <<  screenX_ << " y:" << screenY_);
-
-   shader_.enableProgram();
+   geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
 }
 
 /*************************************************/
 void Font::dispose() {
 
+}
+
+/*************************************************/
+const Geometry& Font::getGeometry() const {
+    return geometry_;
 }
 
 } /* namespace bsk */
