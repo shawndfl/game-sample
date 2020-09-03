@@ -1,12 +1,12 @@
 /*
- * ShaderProgram.h
+ * ShaderBackground.h
  *
  *  Created on: Jul 31, 2020
  *      Author: sdady
  */
 
-#ifndef SRC_SHADERPROGRAM_H_
-#define SRC_SHADERPROGRAM_H_
+#ifndef SRC_SHADERBACKGROUND_H_
+#define SRC_SHADERBACKGROUND_H_
 
 #include <string>
 #include <vector>
@@ -20,12 +20,12 @@ namespace bsk {
 /*
  * Shader program that will require a material and geometry
  */
-class ShaderProgram {
+class ShaderBackground {
 public:
 
-   ShaderProgram();
+   ShaderBackground();
 
-   virtual ~ShaderProgram();
+   virtual ~ShaderBackground();
 
    bool loadProgram();
 
@@ -40,13 +40,6 @@ public:
    int getPosition() const;
    int getTexture() const;
    int getByteStride() const;
-   int getColor() const;
-   int getDiffused() const;
-   int getOverlay() const;
-   int getUoffset() const;
-   int getUscale() const;
-   int getVoffset() const;
-   int getVscale() const;
 
 private:
 
@@ -72,4 +65,4 @@ private:
 
 } /* namespace bsk */
 
-#endif /* SRC_SHADERPROGRAM_H_ */
+#endif /* SRC_SHADERBACKGROUND_H_ */

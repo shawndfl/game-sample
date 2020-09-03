@@ -26,18 +26,16 @@ Font::~Font() {
 }
 
 /*************************************************/
-void Font::initialize(const std::string& text, float screenX, float screenY, float scale) {
+void Font::initialize(const std::string& text, float screenX, float screenY, float scale , Vector4 color) {
 
-    //const int rows = 10;
+    color_ = color;
+
     const int cols = 10;
     const int width = 1024;
     const int height = 1024;
     const float chWidth = 102.4;
     const float chHeight = 102.4;
     const float chStep = scale * .1;
-
-    //const int screenWidth = GameEngine::get().getWidth();
-    //const int screenHeight = GameEngine::get().getHeight();
 
     std::vector<float> verts;
     std::vector<GLushort> indices;
@@ -116,8 +114,11 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
 }
 
 /*************************************************/
-void Font::render() {
-   geometry_.makeActive();
+void Font::render(const ShaderProgram& shader) {
+
+   color_.setUniform(shader.getColor());
+
+   geometry_.makeActive(shader);
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
 }
 

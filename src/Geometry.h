@@ -14,6 +14,8 @@
 
 namespace bsk {
 
+class ShaderProgram;
+
 class Geometry {
 public:
    enum Attributes: char {
@@ -34,7 +36,7 @@ public:
 
    void dispose();
 
-   void makeActive() const;
+   void makeActive(const ShaderProgram& shader) const;
 
    GLuint IndexCount() const;
 

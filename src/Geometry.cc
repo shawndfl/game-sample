@@ -7,6 +7,7 @@
 
 #include "Geometry.h"
 #include "Logging.h"
+#include "ShaderProgram.h"
 
 namespace bsk {
 
@@ -99,31 +100,32 @@ void Geometry::dispose() {
 }
 
 /*************************************************/
-void Geometry::makeActive() const {
+void Geometry::makeActive(const ShaderProgram& shader) const {
    glBindBuffer(GL_ARRAY_BUFFER, vb_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
 
       // set our attributes
    long offset = 0;
-   unsigned short stride = 5 * sizeof(float);
+   unsigned short stride = shader.getByteStride();
 
    if ((getAttribute() & Geometry::APos) > 0) {
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+      glVertexAttribPointer(shader.getPosition(), 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
       glEnableVertexAttribArray(0);
-      offset += 3 * sizeof(float);
    }
 
+   offset += 3 * sizeof(float);
    if ((getAttribute() & Geometry::ATex1) > 0) {
-      glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+      glVertexAttribPointer(shader.getTexture(), 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
       glEnableVertexAttribArray(1);
-      offset += 2 * sizeof(float);
    }
 
+   offset += 2 * sizeof(float);
    if ((getAttribute() & Geometry::ANorm) > 0) {
-      glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+      glVertexAttribPointer(shader.getNormal(), 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
       glEnableVertexAttribArray(2);
-      offset += 3 * sizeof(float);
    }
+
+   offset += 3 * sizeof(float);
 
 }
 

@@ -12,8 +12,8 @@
 #include <map>
 #include <string>
 #include <sstream>
-
 #include <sys/types.h>
+#include "Vector4.h"
 
 namespace bsk {
 
@@ -26,7 +26,7 @@ public:
 
    void update();
 
-   void setFont(const std::string& id, const std::stringstream& text, float width, float height, float scale = 1.0);
+   void setFont(const std::string& id, const std::stringstream& text, float width, float height, float scale = 1.0, Vector4 color = Vector4(1,1,1,1));
 
 private:
    std::map<std::string, Font>    fonts_;

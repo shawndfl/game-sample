@@ -1,11 +1,11 @@
 /*
- * ShaderProgram.cc
+ * ShaderBackground.cc
  *
  *  Created on: Jul 31, 2020
  *      Author: sdady
  */
 
-#include "ShaderProgram.h"
+#include "ShaderBackground.h"
 #include "Logging.h"
 
 namespace bsk {
@@ -36,7 +36,7 @@ static const GLchar *fragmentShaderSource =
         "                                          \n";
 
 /*************************************************/
-ShaderProgram::ShaderProgram() {
+ShaderBackground::ShaderBackground() {
    program_ = 0;
 
    diffused_ = -1;
@@ -55,11 +55,11 @@ ShaderProgram::ShaderProgram() {
 }
 
 /*************************************************/
-ShaderProgram::~ShaderProgram() {
+ShaderBackground::~ShaderBackground() {
 }
 
 /*************************************************/
-bool ShaderProgram::loadProgram() {
+bool ShaderBackground::loadProgram() {
     const uint LOG_LEN = 1024;
     GLchar infoLog[LOG_LEN];
     GLint success;
@@ -126,7 +126,7 @@ bool ShaderProgram::loadProgram() {
 }
 
 /*************************************************/
-int ShaderProgram::getUniformLocation(const std::string& name) {
+int ShaderBackground::getUniformLocation(const std::string& name) {
    int id = glGetUniformLocation(program_, name.c_str());
    if(id == -1) {
       LOGD("Cannot find uniform: " << name);
@@ -135,7 +135,7 @@ int ShaderProgram::getUniformLocation(const std::string& name) {
 }
 
 /*************************************************/
-int ShaderProgram::getAttributeLocation(const std::string& name) {
+int ShaderBackground::getAttributeLocation(const std::string& name) {
    int id = glGetAttribLocation(program_, name.c_str());
    if(id == -1) {
       LOGD("Cannot find attribute: " << name);
@@ -144,7 +144,7 @@ int ShaderProgram::getAttributeLocation(const std::string& name) {
 }
 
 /*************************************************/
-void ShaderProgram::enableProgram() {
+void ShaderBackground::enableProgram() {
     // enable our shader program
     glUseProgram(program_);
     glEnable(GL_BLEND);
@@ -152,58 +152,30 @@ void ShaderProgram::enableProgram() {
 }
 
 /*************************************************/
-bool ShaderProgram::bindMaterial(const Material &material) {
+bool ShaderBackground::bindMaterial(const Material &material) {
 
     material.apply();
     return true;
 }
 
 /*************************************************/
-int ShaderProgram::getNormal() const {
+int ShaderBackground::getNormal() const {
    return normal_;
 }
 
 /*************************************************/
-int ShaderProgram::getPosition() const {
+int ShaderBackground::getPosition() const {
    return position_;
 }
 
 /*************************************************/
-int ShaderProgram::getTexture() const {
+int ShaderBackground::getTexture() const {
    return texture_;
 }
 
 /*************************************************/
-int ShaderProgram::getByteStride() const {
+int ShaderBackground::getByteStride() const {
    return byteStride_;
-}
-
-int ShaderProgram::getColor() const {
-   return color_;
-}
-
-int ShaderProgram::getDiffused() const {
-   return diffused_;
-}
-
-int ShaderProgram::getOverlay() const {
-   return overlay_;
-}
-
-int ShaderProgram::getUoffset() const {
-   return uoffset_;
-}
-
-int ShaderProgram::getUscale() const {
-   return uscale_;
-}
-
-int ShaderProgram::getVoffset() const {
-   return voffset_;
-}
-
-int ShaderProgram::getVscale() const {
-   return vscale_;
 }
 
 } /* namespace bsk */

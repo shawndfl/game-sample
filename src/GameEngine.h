@@ -9,6 +9,7 @@
 #define SRC_GAMEENGINE_H_
 
 #include <memory>
+#include "Timer.h"
 
 namespace bsk {
 
@@ -31,6 +32,8 @@ public:
 
    bool update();
 
+   bool updateFixed();
+
    void dispose();
 
    static GameEngine& get();
@@ -51,6 +54,7 @@ private:
    std::unique_ptr<Joystick>      joy_;
    uint         height_;
    uint         width_;
+   Timer        timer_;
 };
 
 }

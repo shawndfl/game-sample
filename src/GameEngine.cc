@@ -10,6 +10,7 @@
 #include "FontManager.h"
 #include "Logging.h"
 #include "Joystick.h"
+#include <unistd.h>
 
 namespace bsk {
 
@@ -69,12 +70,16 @@ bool bsk::GameEngine::update() {
    fontManager_->update();
    joy_->poll();
 
+   Milliseconds dt =  timer_.getDelta();
+   timer_.reset();
+   LOGD("Delta " << dt);
+   usleep(25000);
 
    if(joy_->getState().type == JS_EVENT_BUTTON) {
        if(joy_->getState().number == 9) {
            std::stringstream stream;
            stream <<  "Button hit: " << joy_->getState().value;
-           fontManager_->setFont("input", stream, -.9, 0);
+           fontManager_->setFont("input", stream, -.9, 0, 5.0,  Vector4(1, 1, 0, 1));
        }
    }
 

@@ -15,6 +15,7 @@
 #include "ShaderProgram.h"
 #include "ImageLoader.h"
 #include "Material.h"
+#include "Vector4.h"
 
 namespace bsk {
 
@@ -31,20 +32,22 @@ public:
     * screenY - the offset in screen space (-1, 1)
     *
     */
-   void initialize(const std::string& text, float screenX, float screenY, float scale = 1.0);
+   void initialize(const std::string& text, float screenX, float screenY, float scale = 1.0, Vector4 color = Vector4(1,1,1,1));
 
-   void render();
+   void render(const ShaderProgram& shader);
 
    void dispose();
 
    const Geometry& getGeometry() const;
 
 private:
-   std::string    text_;
+   std::string   text_;
    int           screenX_;
    int           screenY_;
 
-   Geometry       geometry_;
+   Geometry      geometry_;
+
+   Vector4       color_;
 
 };
 

@@ -9,6 +9,7 @@
 #define SRC_MATERIAL_H_
 
 #include "Texture.h"
+#include "Vector4.h"
 
 namespace bsk {
 
@@ -32,9 +33,15 @@ private:
 	Texture 	diffused_;		/// the main texture
 	Texture 	overlay_;		/// The overlay texture
 
-	float 		opacity_;      /// Opacity
+	float    opacity_;      /// Opacity
 
 	bool 		transparent_;	/// If this material is transparent
+
+   Vector4        color_;
+   float          uscale;
+   float          vscale;
+   float          uoffset;
+   float          voffset;
 };
 
 } /* namespace bsk */
