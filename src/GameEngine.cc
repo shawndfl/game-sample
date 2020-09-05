@@ -10,6 +10,8 @@
 #include "FontManager.h"
 #include "Logging.h"
 #include "Joystick.h"
+#include "Level1.h"
+
 #include <unistd.h>
 
 namespace bsk {
@@ -19,7 +21,7 @@ GameEngine::GameEngine()  {
    render_        = std::make_unique<Render>();
    fontManager_   = std::make_unique<FontManager>();
    joy_           = std::make_unique<Joystick>();
-
+   level1_        = std::make_unique<Level1>();
    width_ = 1024;
    height_ = 1024;
 }
@@ -60,6 +62,7 @@ bool GameEngine::start(uint width, uint height) {
    stream << "Hello2";
    fontManager_->setFont("title2", stream, -.5, .5);
 
+   level1_->start();
    return error;
 }
 
@@ -72,16 +75,7 @@ bool bsk::GameEngine::update() {
 
    Milliseconds dt =  timer_.getDelta();
    timer_.reset();
-   LOGD("Delta " << dt);
-   usleep(25000);
-
-   if(joy_->getState().type == JS_EVENT_BUTTON) {
-       if(joy_->getState().number == 9) {
-           std::stringstream stream;
-           stream <<  "Button hit: " << joy_->getState().value;
-           fontManager_->setFont("input", stream, -.9, 0, 5.0,  Vector4(1, 1, 0, 1));
-       }
-   }
+   level1_->update(dt);
 
    return true;
 }
@@ -100,17 +94,17 @@ void GameEngine::resize(uint width, uint height) {
 }
 
 /*************************************************/
-const FontManager& GameEngine::getFontManager() const {
+FontManager& GameEngine::getFontManager() {
     return *fontManager_;
 }
 
 /*************************************************/
-const Joystick& GameEngine::getJoy() const {
+Joystick& GameEngine::getJoy() {
     return *joy_;
 }
 
 /*************************************************/
-const Render& GameEngine::getRender() const {
+Render& GameEngine::getRender() {
     return *render_;
 }
 

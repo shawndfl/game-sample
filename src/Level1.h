@@ -8,6 +8,10 @@
 #ifndef SRC_LEVEL1_H_
 #define SRC_LEVEL1_H_
 
+#include "Timer.h"
+#include "GameEngine.h"
+#include "Character.h"
+
 namespace bsk {
 
 class Level1 {
@@ -17,7 +21,11 @@ public:
 
    void start();
 
-   void update();
+   void update(Milliseconds dt);
+private:
+
+   Character  character_;
+
 };
 
 } /* namespace bsk */

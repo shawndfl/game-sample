@@ -16,6 +16,7 @@ namespace bsk {
 class Render;
 class FontManager;
 class Joystick;
+class Level1;
 
 /**
  * The main game engine that processes
@@ -42,9 +43,9 @@ public:
 
    uint getHeight();
 
-    const FontManager& getFontManager() const;
-    const Joystick& getJoy() const;
-    const Render& getRender() const;
+    FontManager& getFontManager();
+    Joystick& getJoy();
+    Render& getRender();
 
 private:
    GameEngine();
@@ -52,6 +53,7 @@ private:
    std::unique_ptr<Render>        render_;
    std::unique_ptr<FontManager>   fontManager_;
    std::unique_ptr<Joystick>      joy_;
+   std::unique_ptr<Level1>        level1_;
    uint         height_;
    uint         width_;
    Timer        timer_;
