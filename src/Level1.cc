@@ -22,18 +22,13 @@ Level1::~Level1() {
 
 /*************************************************/
 void Level1::start() {
-
+   character_.initialize();
 }
 
 /*************************************************/
 void Level1::update(Milliseconds dt) {
 
-   Joystick& joystick = GameEngine::get().getJoy();
-   if(joystick.getState().type == JS_EVENT_BUTTON) {
-         if(joystick.getState().number == 9) {
-
-         }
-     }
+   character_.update(dt);
 
 
 }

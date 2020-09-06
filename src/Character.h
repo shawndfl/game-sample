@@ -8,6 +8,11 @@
 #ifndef SRC_CHARACTER_H_
 #define SRC_CHARACTER_H_
 
+#include "Timer.h"
+#include "ShaderProgram.h"
+
+#include <GLES2/gl2.h>
+
 namespace bsk {
 
 class Character {
@@ -17,10 +22,14 @@ public:
 
    void initialize();
 
-   void update();
+   void update(Milliseconds dt);
 
 private:
 
+   ShaderProgram     shader_;
+   Image             img_;
+   Material          mat_;
+   Geometry          geometry_;
 };
 
 } /* namespace bsk */

@@ -50,7 +50,7 @@ bool Joystick::initialize(const std::string &device) {
 
 /*************************************************/
 void Joystick::poll() {
-
+    memset( &state_, 0, sizeof(state_));
     int res = read(fd_, &state_, sizeof(state_));
     if(res > 0) {
         switch(state_.type) {
