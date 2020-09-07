@@ -33,9 +33,8 @@ public:
 
    bool bindMaterial(const Material& material);
 
-   int getUniformLocation(const std::string& name);
+   void setScreenSize(uint width, uint height);
 
-   int getAttributeLocation(const std::string& name);
    int getNormal() const;
    int getPosition() const;
    int getTexture() const;
@@ -48,12 +47,18 @@ public:
    int getVoffset() const;
    int getVscale() const;
 
+
+private:
+   int getUniformLocation(const std::string& name);
+
+   int getAttributeLocation(const std::string& name);
 private:
 
    GLuint         program_;
 
    // uniforms
    int          diffused_;
+   int          screen_;
    int          overlay_;
    int          color_;
    int          uscale_;

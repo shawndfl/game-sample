@@ -24,6 +24,7 @@ public:
 
    void update(Milliseconds dt);
 
+   void resize(uint width, uint height);
 private:
 
    ShaderProgram     shader_;

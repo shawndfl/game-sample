@@ -7,21 +7,28 @@
 
 #include "ShaderProgram.h"
 #include "Logging.h"
+#include "math.h"
 
 namespace bsk {
 
 static const GLchar *vertexShaderSource =
-        "#version 300 es                           \n"
-        "precision mediump float;                  \n"
-        "uniform vec4 u_color;               \n"
-        "in vec3 a_pos;							   \n"
-        "in vec2 a_tex;                           \n"
-        "out vec2 v_tex;                          \n"
-        "void main() {                             \n"
-        "   gl_Position = vec4(a_pos, 1.0);        \n"
-        "   v_tex = a_tex;                       \n"
-        "}                                         \n"
-        "                                          \n";
+        "#version 300 es                              \n"
+        "precision mediump float;                     \n"
+        "uniform vec4 u_color;                        \n"
+        "uniform vec2 u_screen;                       \n"
+        "                                             \n"
+        "in vec3 a_pos;							            \n"
+        "in vec2 a_tex;                               \n"
+        "out vec2 v_tex;                              \n"
+        "                                             \n"
+        "void main() {                                \n"
+        "   float x = (2.0 * (a_pos.x / u_screen.x)) - 1.0;   \n"
+        "   float y = 1.0 - (2.0 * (a_pos.y / u_screen.y));   \n"
+        "   vec3 pos = vec3(x, y, a_pos.z);           \n"
+        "   gl_Position = vec4(pos, 1.0);             \n"
+        "   v_tex = a_tex;                            \n"
+        "}                                            \n"
+        "                                             \n";
 
 static const GLchar *fragmentShaderSource =
         "#version 300 es						            \n"
@@ -40,6 +47,7 @@ ShaderProgram::ShaderProgram() {
    program_ = 0;
 
    diffused_ = -1;
+   screen_ = -1;
    overlay_= -1;
    color_= -1;
    uscale_= -1;
@@ -105,6 +113,7 @@ bool ShaderProgram::loadProgram() {
     // collect all the uniform variables
     diffused_ = getUniformLocation("u_diffused");
     color_ = getUniformLocation("u_color");
+    screen_ = getUniformLocation("u_screen");
 
     // setup attributes
     position_ = getAttributeLocation("a_pos");
@@ -178,32 +187,48 @@ int ShaderProgram::getByteStride() const {
    return byteStride_;
 }
 
+/*************************************************/
 int ShaderProgram::getColor() const {
    return color_;
 }
 
+/*************************************************/
 int ShaderProgram::getDiffused() const {
    return diffused_;
 }
 
+/*************************************************/
 int ShaderProgram::getOverlay() const {
    return overlay_;
 }
 
+/*************************************************/
 int ShaderProgram::getUoffset() const {
    return uoffset_;
 }
 
+/*************************************************/
 int ShaderProgram::getUscale() const {
    return uscale_;
 }
 
+/*************************************************/
 int ShaderProgram::getVoffset() const {
    return voffset_;
 }
 
+/*************************************************/
 int ShaderProgram::getVscale() const {
    return vscale_;
+}
+
+/*************************************************/
+void ShaderProgram::setScreenSize(uint width, uint height) {
+   glUseProgram(program_);
+
+   Vector2 size(width, height);
+   size.setUniform(screen_);
+
 }
 
 } /* namespace bsk */

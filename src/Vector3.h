@@ -10,11 +10,16 @@
 
 namespace bsk {
 
+/**
+ * Vector3 class
+ */
 class Vector3 {
 public:
    Vector3();
    Vector3(float x, float y, float z);
    virtual ~Vector3();
+
+   void setUniform(int name);
 
 
    float x;

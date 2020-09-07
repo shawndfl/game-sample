@@ -10,7 +10,7 @@
 #include "Joystick.h"
 #include "Logging.h"
 #include "ImageLoader.h"
-#include "Vector4.h"
+#include "math.h"
 
 namespace bsk {
 
@@ -49,9 +49,13 @@ void Character::initialize() {
 
    std::vector<float> verts;
    std::vector<GLushort> indices;
+
+   float characterSize = 32;
+   Vector2 pos(200, 200);
+
    // pos
-   verts.push_back(-0.5);
-   verts.push_back(0.5);
+   verts.push_back(pos.x - characterSize);
+   verts.push_back(pos.y - characterSize);
    verts.push_back(0);
 
    //tex
@@ -59,8 +63,8 @@ void Character::initialize() {
    verts.push_back(0);
 
    // pos
-   verts.push_back(0.5);
-   verts.push_back(0.5);
+   verts.push_back(pos.x + characterSize);
+   verts.push_back(pos.x - characterSize);
    verts.push_back(0);
 
    //tex
@@ -68,8 +72,8 @@ void Character::initialize() {
    verts.push_back(0);
 
    // pos
-   verts.push_back(0.5);
-   verts.push_back(-0.5);
+   verts.push_back(pos.x + characterSize);
+   verts.push_back(pos.x + characterSize);
    verts.push_back(0);
 
    //tex
@@ -77,8 +81,8 @@ void Character::initialize() {
    verts.push_back(1);
 
    // pos
-   verts.push_back(-0.5);
-   verts.push_back(-0.5);
+   verts.push_back(pos.x - characterSize);
+   verts.push_back(pos.x + characterSize);
    verts.push_back(0);
 
    //tex
@@ -116,6 +120,11 @@ void Character::update(Milliseconds dt) {
    mat_.apply();
    geometry_.makeActive(shader_);
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
+}
+
+/*************************************************/
+void Character::resize(uint width, uint height) {
+   shader_.setScreenSize(width, height);
 }
 
 } /* namespace bsk */

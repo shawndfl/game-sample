@@ -26,7 +26,9 @@ public:
 
    void update();
 
-   void setFont(const std::string& id, const std::stringstream& text, float width, float height, float scale = 1.0, Vector4 color = Vector4(1,1,1,1));
+   void resize(uint width, uint height);
+
+   void setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize = 16, Vector4 color = Vector4(1,1,1,1));
 
 private:
    std::map<std::string, Font>    fonts_;

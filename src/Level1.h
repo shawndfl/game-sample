@@ -11,6 +11,7 @@
 #include "Timer.h"
 #include "GameEngine.h"
 #include "Character.h"
+#include "math.h"
 
 namespace bsk {
 
@@ -19,9 +20,11 @@ public:
    Level1();
    virtual ~Level1();
 
-   void start();
+   bool start();
 
    void update(Milliseconds dt);
+
+   void resize(uint width, uint height);
 private:
 
    Character  character_;

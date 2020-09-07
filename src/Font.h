@@ -32,7 +32,7 @@ public:
     * screenY - the offset in screen space (-1, 1)
     *
     */
-   void initialize(const std::string& text, float screenX, float screenY, float scale = 1.0, Vector4 color = Vector4(1,1,1,1));
+   void initialize(const std::string& text, uint x, uint y, uint pixelSize = 16, Vector4 color = Vector4(1,1,1,1));
 
    void render(const ShaderProgram& shader);
 

@@ -26,7 +26,7 @@ Font::~Font() {
 }
 
 /*************************************************/
-void Font::initialize(const std::string& text, float screenX, float screenY, float scale , Vector4 color) {
+void Font::initialize(const std::string& text, uint x, uint y, uint pixelSize, Vector4 color) {
 
     color_ = color;
 
@@ -35,12 +35,12 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
     const int height = 1024;
     const float chWidth = 102.4;
     const float chHeight = 102.4;
-    const float chStep = scale * .1;
+    const float chStep = pixelSize;
 
     std::vector<float> verts;
     std::vector<GLushort> indices;
-    float xpos = screenX;
-    float ypos = screenY;
+    uint xpos = x;
+    uint ypos = y;
     float zpos = 0;
     int charCount = 0;
 
@@ -48,8 +48,8 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
         unsigned char ch = text[i];
 
         if(ch =='\n') {
-            ypos -= chStep;
-            xpos = screenX;
+            ypos += chStep;
+            xpos = x;
             continue;
         } else  if (ch < ' ' || ch > '~') {
             ch = '?';
@@ -86,14 +86,14 @@ void Font::initialize(const std::string& text, float screenX, float screenY, flo
 
         // bottom right
         verts.push_back(xpos + chStep);
-        verts.push_back(ypos - chStep);
+        verts.push_back(ypos + chStep);
         verts.push_back(zpos);
         verts.push_back(tu2);
         verts.push_back(tv2);
 
         // bottom left
         verts.push_back(xpos);
-        verts.push_back(ypos - chStep);
+        verts.push_back(ypos + chStep);
         verts.push_back(zpos);
         verts.push_back(tu1);
         verts.push_back(tv2);

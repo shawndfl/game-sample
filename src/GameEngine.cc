@@ -48,22 +48,21 @@ GameEngine& GameEngine::get() {
 
 /*************************************************/
 bool GameEngine::start(uint width, uint height) {
-   bool error = false;
 
-   error |= !joy_->initialize();
-   error |= !render_->initialize(width, height);
-   error |= !fontManager_->initialize();
+   if(!joy_->initialize()) {
+      return false;
+   }
+   if(!render_->initialize(width, height)){
+      return false;
+   }
+   if(!fontManager_->initialize()) {
+      return false;
+   }
+   if(!level1_->start()){
+      return false;
+   }
 
-   std::stringstream stream;
-   stream <<  "Hello!\nTest";
-   fontManager_->setFont("title", stream, -.8, 1);
-
-   stream.str("");
-   stream << "Hello2";
-   fontManager_->setFont("title2", stream, -.5, .5);
-
-   level1_->start();
-   return error;
+   return true;
 }
 
 /*************************************************/
@@ -90,7 +89,8 @@ void bsk::GameEngine::dispose() {
 /*************************************************/
 void GameEngine::resize(uint width, uint height) {
    render_->resize(width, height);
-
+   fontManager_->resize(width, height);
+   level1_ ->resize(width, height);
 }
 
 /*************************************************/

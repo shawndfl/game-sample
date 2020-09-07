@@ -53,8 +53,13 @@ bool FontManager::initialize() {
 }
 
 /*************************************************/
-void FontManager::setFont(const std::string& id, const std::stringstream& text, float width, float height, float scale, Vector4 color) {
-   fonts_[id].initialize(text.str(), width, height, scale, color);
+void FontManager::resize(uint width, uint height) {
+   shader_.setScreenSize(width, height);
+}
+
+/*************************************************/
+void FontManager::setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize, Vector4 color) {
+   fonts_[id].initialize(text.str(), x, y, pixelSize, color);
 }
 
 } /* namespace bsk */

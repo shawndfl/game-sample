@@ -66,7 +66,12 @@ void Display::runDisplay(uint width, uint height) {
    window = glfwCreateWindow(width, height, "Block Simulated Kingdom", NULL, NULL);
    glfwMakeContextCurrent(window);
 
-   game_.start(width, height);
+   if(!game_.start(width, height)) {
+      LOGD("Error with start.");
+      exit(1);
+   }
+
+   game_.resize(width, height);
    glfwSetWindowSizeCallback(window, &rezise);
 
    while (!glfwWindowShouldClose(window)) {
