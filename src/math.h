@@ -12,6 +12,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+#include "Matrix4.h"
 
 
 #endif /* SRC_MATH_H_ */

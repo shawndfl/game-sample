@@ -11,6 +11,7 @@
 #include "GameEngine.h"
 #include "Joystick.h"
 #include "FontManager.h"
+#include "Logging.h"
 
 namespace bsk {
 
@@ -35,6 +36,9 @@ bool Level1::start() {
    GameEngine::get().getFontManager().setFont("title2", stream, 300, 300, 32);
 
    character_.initialize();
+
+   Matrix4 mat;
+   LOGD("Matrix: " << mat);
    return true;
 }
 
