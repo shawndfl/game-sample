@@ -9,7 +9,7 @@
 #include "Logging.h"
 
 #define PNG_DEBUG 3
-#include <libpng/png.h>
+#include <png.h>
 
 namespace bsk {
 

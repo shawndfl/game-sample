@@ -8,7 +8,7 @@ OBJ := $(SRC:%=bin/%.o)
 #sudo apt install libx11-dev libepoxy-dev libunittest++-dev
 
 CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD
-CFLAGS += -I /usr/include 
+CFLAGS += -I/usr/include -I/usr/include/libpng
 
 LDFLAGS := -pthread -std=c++17
 LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng

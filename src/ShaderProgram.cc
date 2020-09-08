@@ -11,12 +11,12 @@
 namespace bsk {
 
 static const GLchar *vertexShaderSource =
-        "#version 300 es                           \n"
+        "#version 100                            \n"
         "precision mediump float;                  \n"
         "uniform vec4 u_color;               \n"
-        "in vec3 a_pos;							   \n"
-        "in vec2 a_tex;                           \n"
-        "out vec2 v_tex;                          \n"
+        "attribute vec3 a_pos;							   \n"
+        "attribute vec2 a_tex;                           \n"
+        "varying vec2 v_tex;                          \n"
         "void main() {                             \n"
         "   gl_Position = vec4(a_pos, 1.0);        \n"
         "   v_tex = a_tex;                       \n"
@@ -24,14 +24,13 @@ static const GLchar *vertexShaderSource =
         "                                          \n";
 
 static const GLchar *fragmentShaderSource =
-        "#version 300 es						            \n"
+        "#version 100 						            \n"
         "precision mediump float;                      \n"
-        "in vec2 v_tex;                                \n"
+        "varying vec2 v_tex;                                \n"
         "uniform sampler2D u_diffused;               \n"
         "uniform vec4 u_color;               \n"
-        "out vec4 FragColor;                       \n"
         "void main() {                             \n"
-        "   FragColor = texture(u_diffused, v_tex) * u_color; \n"
+        "  gl_FragColor = texture2D(u_diffused, v_tex).rgba * u_color; \n"
         "}                                         \n"
         "                                          \n";
 
