@@ -21,7 +21,9 @@ public:
 
    void runDisplay(uint width, uint height);
 
-   void resize(uint width, uint height);
+   void resizeEvent(uint width, uint height);
+
+   void keyboardEvent(int key, int scancode, int action, int mods);
 
    static void create(GameEngine& renderer);
 

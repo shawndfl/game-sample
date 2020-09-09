@@ -39,7 +39,15 @@ public:
 
    Matrix4& operator =(const Matrix4& rhs);
 
-   void setUniform(int name);
+   void setTranslation(const Vector3& position);
+
+   void setTranslation(float x, float y, float z);
+
+   Matrix4& transpose();
+
+   Vector3 getTranslation();
+
+   void setUniform(int name) const;
 
 };
 

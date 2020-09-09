@@ -10,6 +10,7 @@
 
 #include "Timer.h"
 #include "ShaderProgram.h"
+#include "math.h"
 
 #include <GLES2/gl2.h>
 
@@ -25,12 +26,16 @@ public:
    void update(Milliseconds dt);
 
    void resize(uint width, uint height);
+
+   void setPosition(float x, float y);
+
 private:
 
    ShaderProgram     shader_;
    Image             img_;
    Material          mat_;
    Geometry          geometry_;
+   Matrix4           transform_;
 };
 
 } /* namespace bsk */

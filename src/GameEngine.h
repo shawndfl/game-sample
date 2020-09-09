@@ -17,6 +17,7 @@ class Render;
 class FontManager;
 class Joystick;
 class Level1;
+class Keyboard;
 
 /**
  * The main game engine that processes
@@ -47,13 +48,20 @@ public:
     Joystick& getJoy();
     Render& getRender();
 
+    /**
+     * Called to raise a key event
+     */
+    void keyEvent(int key, int scancode, int action, int mods);
+
 private:
    GameEngine();
 
    std::unique_ptr<Render>        render_;
    std::unique_ptr<FontManager>   fontManager_;
    std::unique_ptr<Joystick>      joy_;
+   std::unique_ptr<Keyboard>      keyboard_;
    std::unique_ptr<Level1>        level1_;
+
    uint         height_;
    uint         width_;
    Timer        timer_;

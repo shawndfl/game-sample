@@ -21,6 +21,9 @@ Vector3::~Vector3() {
 
 }
 
+Vector3::Vector3(float x, float y, float z): x(x), y(y), z(z) {
+}
+
 /*************************************************/
 void Vector3::setUniform(int name) {
    glUniform3f(name, x, y, z);

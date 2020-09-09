@@ -31,7 +31,7 @@ Joystick::~Joystick() {
 bool Joystick::initialize(const std::string &device) {
     fd_ = open (device.c_str(), O_RDONLY);
     if(fd_ == -1) {
-        LOGE("Can not open device " << device.c_str());
+        LOGE("Cannot open device " << device.c_str());
         return false;
     }
 

@@ -48,8 +48,45 @@ Matrix4& Matrix4::operator =(const Matrix4 &rhs) {
 }
 
 /*************************************************/
-void Matrix4::setUniform(int name) {
-   glUniformMatrix4fv(name, 16, false, m);
+void Matrix4::setTranslation(const Vector3& position) {
+   m14 = position.x;
+   m24 = position.y;
+   m34 = position.z;
+}
+
+/*************************************************/
+void Matrix4::setTranslation(float x, float y, float z) {
+   m14 = x;
+   m24 = y;
+   m34 = z;
+}
+
+/*************************************************/
+Vector3 Matrix4::getTranslation() {
+   Vector3 pos(m14, m24, m34);
+   return pos;
+}
+
+/*************************************************/
+Matrix4& Matrix4::transpose() {
+
+
+   float tmp;
+
+   tmp = m[ 1 ]; m[ 1 ] = m[ 4 ]; m[ 4 ] = tmp;
+   tmp = m[ 2 ]; m[ 2 ] = m[ 8 ]; m[ 8 ] = tmp;
+   tmp = m[ 6 ]; m[ 6 ] = m[ 9 ]; m[ 9 ] = tmp;
+
+   tmp = m[ 3 ]; m[ 3 ] = m[ 12 ]; m[ 12 ] = tmp;
+   tmp = m[ 7 ]; m[ 7 ] = m[ 13 ]; m[ 13 ] = tmp;
+   tmp = m[ 11 ]; m[ 11 ] = m[ 14 ]; m[ 14 ] = tmp;
+
+   return *this;
+}
+
+/*************************************************/
+void Matrix4::setUniform(int name) const {
+   glUniformMatrix4fv(name, 1, false, m);
 }
 
 

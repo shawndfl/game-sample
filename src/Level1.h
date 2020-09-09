@@ -25,6 +25,10 @@ public:
    void update(Milliseconds dt);
 
    void resize(uint width, uint height);
+
+   void keyEvent(int key, int scancode, int action, int mods);
+
+   void dispose();
 private:
 
    Character  character_;

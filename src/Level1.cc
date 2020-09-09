@@ -37,8 +37,7 @@ bool Level1::start() {
 
    character_.initialize();
 
-   Matrix4 mat;
-   LOGD("Matrix: " << mat);
+   character_.setPosition(0,0);
    return true;
 }
 
@@ -52,6 +51,26 @@ void Level1::update(Milliseconds dt) {
 /*************************************************/
 void Level1::resize(uint width, uint height) {
    character_.resize(width, height);
+}
+
+/*************************************************/
+void Level1::keyEvent(int key, int scancode, int action, int mods) {
+   LOGD("key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods);
+
+   // move right
+   if(key == 262 && action == 1) {
+      character_.setPosition(-1, -1);
+   }
+
+   // move left
+   if(key == 263 && action == 1) {
+      character_.setPosition(0, 0);
+   }
+}
+
+/*************************************************/
+void Level1::dispose() {
+
 }
 
 } /* namespace bsk */

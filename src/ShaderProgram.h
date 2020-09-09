@@ -14,6 +14,7 @@
 
 #include "Geometry.h"
 #include "Material.h"
+#include "math.h"
 
 namespace bsk {
 
@@ -35,6 +36,8 @@ public:
 
    void setScreenSize(uint width, uint height);
 
+   void setMVP(const Matrix4& mvp);
+
    int getNormal() const;
    int getPosition() const;
    int getTexture() const;
@@ -47,7 +50,6 @@ public:
    int getVoffset() const;
    int getVscale() const;
 
-
 private:
    int getUniformLocation(const std::string& name);
 
@@ -57,6 +59,7 @@ private:
    GLuint         program_;
 
    // uniforms
+   int          mvp_;
    int          diffused_;
    int          screen_;
    int          overlay_;

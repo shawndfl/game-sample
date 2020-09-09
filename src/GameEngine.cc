@@ -11,6 +11,7 @@
 #include "Logging.h"
 #include "Joystick.h"
 #include "Level1.h"
+#include "Keyboard.h"
 
 #include <unistd.h>
 
@@ -22,6 +23,8 @@ GameEngine::GameEngine()  {
    fontManager_   = std::make_unique<FontManager>();
    joy_           = std::make_unique<Joystick>();
    level1_        = std::make_unique<Level1>();
+   keyboard_      = std::make_unique<Keyboard>();
+
    width_ = 1024;
    height_ = 1024;
 }
@@ -47,11 +50,16 @@ GameEngine& GameEngine::get() {
 }
 
 /*************************************************/
+void GameEngine::keyEvent(int key, int scancode, int action, int mods) {
+   level1_->keyEvent(key, scancode, action, mods);
+}
+
+/*************************************************/
 bool GameEngine::start(uint width, uint height) {
 
-   if(!joy_->initialize()) {
-      return false;
-   }
+   joy_->initialize();
+   keyboard_->initialize("/dev/input/event1");
+
    if(!render_->initialize(width, height)){
       return false;
    }
@@ -71,6 +79,7 @@ bool bsk::GameEngine::update() {
    render_->render();
    fontManager_->update();
    joy_->poll();
+   keyboard_ ->poll();
 
    Milliseconds dt =  timer_.getDelta();
    timer_.reset();

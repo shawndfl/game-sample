@@ -16,7 +16,7 @@ static const GLchar *vertexShaderSource =
         "precision mediump float;                     \n"
         "uniform vec4 u_color;                        \n"
         "uniform vec2 u_screen;                       \n"
-        "                                             \n"
+        "uniform mat4 u_mvp;                          \n"
         "in vec3 a_pos;							            \n"
         "in vec2 a_tex;                               \n"
         "out vec2 v_tex;                              \n"
@@ -25,7 +25,7 @@ static const GLchar *vertexShaderSource =
         "   float x = (2.0 * (a_pos.x / u_screen.x)) - 1.0;   \n"
         "   float y = 1.0 - (2.0 * (a_pos.y / u_screen.y));   \n"
         "   vec3 pos = vec3(x, y, a_pos.z);           \n"
-        "   gl_Position = vec4(pos, 1.0);             \n"
+        "   gl_Position = u_mvp  * vec4(pos, 1.0);    \n"
         "   v_tex = a_tex;                            \n"
         "}                                            \n"
         "                                             \n";
@@ -46,6 +46,7 @@ static const GLchar *fragmentShaderSource =
 ShaderProgram::ShaderProgram() {
    program_ = 0;
 
+   mvp_ = -1;
    diffused_ = -1;
    screen_ = -1;
    overlay_= -1;
@@ -111,9 +112,10 @@ bool ShaderProgram::loadProgram() {
     glDeleteShader(fragment);
 
     // collect all the uniform variables
-    diffused_ = getUniformLocation("u_diffused");
-    color_ = getUniformLocation("u_color");
-    screen_ = getUniformLocation("u_screen");
+    diffused_     = getUniformLocation("u_diffused");
+    color_        = getUniformLocation("u_color");
+    screen_       = getUniformLocation("u_screen");
+    mvp_          = getUniformLocation("u_mvp");
 
     // setup attributes
     position_ = getAttributeLocation("a_pos");
@@ -128,7 +130,12 @@ bool ShaderProgram::loadProgram() {
     Vector4 colorValue(1,1,0,1);
     colorValue.setUniform(color_);
 
+    // set diffused map to texture channel 0
     glUniform1f(diffused_, 0);
+
+    // set the mvp to identity
+    Matrix4 mat;
+    setMVP(mat);
 
 
     return true;
@@ -230,5 +237,12 @@ void ShaderProgram::setScreenSize(uint width, uint height) {
    size.setUniform(screen_);
 
 }
+
+/*************************************************/
+void ShaderProgram::setMVP(const Matrix4& mvp) {
+   glUseProgram(program_);
+   mvp.setUniform(mvp_);
+}
+
 
 } /* namespace bsk */

@@ -32,6 +32,7 @@ Display* Display::get() {
    return instance_;
 }
 
+
 /*************************************************/
 Display::Display(GameEngine& game) :
       game_(game) {
@@ -44,13 +45,23 @@ Display::~Display() {
 }
 
 /*************************************************/
-void Display::resize(uint width, uint height) {
+void Display::resizeEvent(uint width, uint height) {
    game_.resize(width, height);
 }
 
 /*************************************************/
-void rezise(GLFWwindow* window, int width, int height) {
-   Display::get()->resize((uint)width, (uint)height);
+void resize(GLFWwindow* window, int width, int height) {
+   Display::get()->resizeEvent((uint)width, (uint)height);
+}
+
+/*************************************************/
+void Display::keyboardEvent(int key, int scancode, int action, int mods) {
+   game_.keyEvent(key, scancode, action, mods);
+}
+
+/*************************************************/
+void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
+   Display::get()->keyboardEvent(key, scancode, action, mods);
 }
 
 /*************************************************/
@@ -72,7 +83,8 @@ void Display::runDisplay(uint width, uint height) {
    }
 
    game_.resize(width, height);
-   glfwSetWindowSizeCallback(window, &rezise);
+   glfwSetKeyCallback(window, &keyboard);
+   glfwSetWindowSizeCallback(window, &resize);
 
    while (!glfwWindowShouldClose(window)) {
       glfwPollEvents();

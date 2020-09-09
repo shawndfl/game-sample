@@ -51,7 +51,7 @@ void Character::initialize() {
    std::vector<GLushort> indices;
 
    float characterSize = 32;
-   Vector2 pos(200, 200);
+   Vector2 pos(0, 0);
 
    // pos
    verts.push_back(pos.x - characterSize);
@@ -98,6 +98,8 @@ void Character::initialize() {
    indices.push_back(3);
 
    geometry_.setBuffers(verts, indices);
+
+   setPosition(0, 0);
 }
 
 /*************************************************/
@@ -125,6 +127,15 @@ void Character::update(Milliseconds dt) {
 /*************************************************/
 void Character::resize(uint width, uint height) {
    shader_.setScreenSize(width, height);
+}
+
+/*************************************************/
+void Character::setPosition(float x, float y) {
+   transform_.setTranslation(x, y, 0);
+   Matrix4 transpose = transform_;
+   LOGD("transpose " << transpose);
+   //transpose.transpose();
+   shader_.setMVP(transpose);
 }
 
 } /* namespace bsk */
