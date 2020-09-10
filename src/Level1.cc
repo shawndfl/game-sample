@@ -59,12 +59,12 @@ void Level1::keyEvent(int key, int scancode, int action, int mods) {
 
    // move right
    if(key == 262 && action == 1) {
-      character_.setPosition(-1, -1);
+      character_.setPosition(1, 1);
    }
 
    // move left
    if(key == 263 && action == 1) {
-      character_.setPosition(0, 0);
+      character_.move(.01, .01);
    }
 }
 

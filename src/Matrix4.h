@@ -43,6 +43,8 @@ public:
 
    void setTranslation(float x, float y, float z);
 
+   void createLookAt(const Vector3& eye, const Vector3& target, const Vector3& upAxis);
+
    Matrix4& transpose();
 
    Vector3 getTranslation();

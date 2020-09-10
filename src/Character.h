@@ -29,6 +29,8 @@ public:
 
    void setPosition(float x, float y);
 
+   void move(float x, float y);
+
 private:
 
    ShaderProgram     shader_;
@@ -36,6 +38,8 @@ private:
    Material          mat_;
    Geometry          geometry_;
    Matrix4           transform_;
+
+
 };
 
 } /* namespace bsk */

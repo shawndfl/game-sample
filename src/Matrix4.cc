@@ -7,6 +7,7 @@
 
 #include "Matrix4.h"
 #include <GLES2/gl2.h>
+#include <math.h>
 
 namespace bsk {
 
@@ -82,6 +83,52 @@ Matrix4& Matrix4::transpose() {
    tmp = m[ 11 ]; m[ 11 ] = m[ 14 ]; m[ 14 ] = tmp;
 
    return *this;
+}
+
+/*************************************************/
+void Matrix4::createLookAt(const Vector3& eye, const Vector3& target, const Vector3& upAxis) {
+   Vector3 lookat = eye - target;
+   Vector3 right;
+   Vector3 up = upAxis;
+
+
+   if (lookat.length() == 0) {
+
+      // eye and target are in the same position
+
+      lookat.z = 1.0;
+
+   }
+
+   lookat.normalize();
+   right.crossVectors(up, lookat);
+
+   if (right.length() == 0) {
+
+      // up and z are parallel
+
+      if (fabsf(up.z) == 1.0) {
+
+         lookat.x += 0.0001;
+
+      } else {
+
+         lookat.z += 0.0001;
+
+      }
+
+      lookat.normalize();
+      right.crossVectors(up, lookat);
+
+   }
+
+   right.normalize();
+   up.crossVectors(lookat, right);
+
+   m[ 0 ] = right.x; m[ 4 ] = up.x; m[ 8 ] = lookat.x;
+   m[ 1 ] = right.y; m[ 5 ] = up.y; m[ 9 ] = lookat.y;
+   m[ 2 ] = right.z; m[ 6 ] = up.z; m[ 10 ] = lookat.z;
+
 }
 
 /*************************************************/

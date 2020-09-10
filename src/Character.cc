@@ -132,10 +132,19 @@ void Character::resize(uint width, uint height) {
 /*************************************************/
 void Character::setPosition(float x, float y) {
    transform_.setTranslation(x, y, 0);
+   Matrix4 camera;
+   camera.createLookAt(Vector3::ZERO, Vector3::FORWARD, Vector3::UP );
+
    Matrix4 transpose = transform_;
    LOGD("transpose " << transpose);
-   //transpose.transpose();
+   transpose.transpose();
    shader_.setMVP(transpose);
+}
+
+/*************************************************/
+void Character::move(float x, float y) {
+   Vector3 p = transform_.getTranslation();
+   setPosition(p.x + x, p.y + y);
 }
 
 } /* namespace bsk */
