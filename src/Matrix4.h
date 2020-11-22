@@ -39,11 +39,15 @@ public:
 
    Matrix4& operator =(const Matrix4& rhs);
 
+   Matrix4 operator *(const Matrix4& rhs);
+
    void setTranslation(const Vector3& position);
 
    void setTranslation(float x, float y, float z);
 
    void createLookAt(const Vector3& eye, const Vector3& target, const Vector3& upAxis);
+
+   static Matrix4& multiply( const Matrix4& a, const Matrix4& b, Matrix4& result );
 
    Matrix4& transpose();
 

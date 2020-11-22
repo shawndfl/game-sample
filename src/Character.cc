@@ -135,8 +135,8 @@ void Character::setPosition(float x, float y) {
    Matrix4 camera;
    camera.createLookAt(Vector3::ZERO, Vector3::FORWARD, Vector3::UP );
 
-   Matrix4 transpose = transform_;
-   LOGD("transpose " << transpose);
+   Matrix4 transpose = transform_ * camera;
+   //LOGD("transpose " << transpose);
    transpose.transpose();
    shader_.setMVP(transpose);
 }

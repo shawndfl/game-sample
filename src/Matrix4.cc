@@ -132,9 +132,52 @@ void Matrix4::createLookAt(const Vector3& eye, const Vector3& target, const Vect
 }
 
 /*************************************************/
+Matrix4 Matrix4::operator *(const Matrix4& rhs) {
+   Matrix4 result;
+   return Matrix4::multiply(*this, rhs, result);;
+}
+
+/*************************************************/
 void Matrix4::setUniform(int name) const {
    glUniformMatrix4fv(name, 1, false, m);
 }
+
+/*************************************************/
+Matrix4& Matrix4::multiply( const Matrix4& a, const Matrix4& b, Matrix4& result ) {
+
+      const float a11 = a.m[ 0 ], a12 = a.m[ 4 ], a13 = a.m[ 8 ], a14 = a.m[ 12 ];
+      const float a21 = a.m[ 1 ], a22 = a.m[ 5 ], a23 = a.m[ 9 ], a24 = a.m[ 13 ];
+      const float a31 = a.m[ 2 ], a32 = a.m[ 6 ], a33 = a.m[ 10 ], a34 = a.m[ 14 ];
+      const float a41 = a.m[ 3 ], a42 = a.m[ 7 ], a43 = a.m[ 11 ], a44 = a.m[ 15 ];
+
+      const float b11 = b.m[ 0 ], b12 = b.m[ 4 ], b13 = b.m[ 8 ], b14 = b.m[ 12 ];
+      const float b21 = b.m[ 1 ], b22 = b.m[ 5 ], b23 = b.m[ 9 ], b24 = b.m[ 13 ];
+      const float b31 = b.m[ 2 ], b32 = b.m[ 6 ], b33 = b.m[ 10 ], b34 = b.m[ 14 ];
+      const float b41 = b.m[ 3 ], b42 = b.m[ 7 ], b43 = b.m[ 11 ], b44 = b.m[ 15 ];
+
+      result.m[ 0 ] = a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41;
+      result.m[ 4 ] = a11 * b12 + a12 * b22 + a13 * b32 + a14 * b42;
+      result.m[ 8 ] = a11 * b13 + a12 * b23 + a13 * b33 + a14 * b43;
+      result.m[ 12 ] = a11 * b14 + a12 * b24 + a13 * b34 + a14 * b44;
+
+      result.m[ 1 ] = a21 * b11 + a22 * b21 + a23 * b31 + a24 * b41;
+      result.m[ 5 ] = a21 * b12 + a22 * b22 + a23 * b32 + a24 * b42;
+      result.m[ 9 ] = a21 * b13 + a22 * b23 + a23 * b33 + a24 * b43;
+      result.m[ 13 ] = a21 * b14 + a22 * b24 + a23 * b34 + a24 * b44;
+
+      result.m[ 2 ] = a31 * b11 + a32 * b21 + a33 * b31 + a34 * b41;
+      result.m[ 6 ] = a31 * b12 + a32 * b22 + a33 * b32 + a34 * b42;
+      result.m[ 10 ] = a31 * b13 + a32 * b23 + a33 * b33 + a34 * b43;
+      result.m[ 14 ] = a31 * b14 + a32 * b24 + a33 * b34 + a34 * b44;
+
+      result.m[ 3 ] = a41 * b11 + a42 * b21 + a43 * b31 + a44 * b41;
+      result.m[ 7 ] = a41 * b12 + a42 * b22 + a43 * b32 + a44 * b42;
+      result.m[ 11 ] = a41 * b13 + a42 * b23 + a43 * b33 + a44 * b43;
+      result.m[ 15 ] = a41 * b14 + a42 * b24 + a43 * b34 + a44 * b44;
+
+      return result;
+
+   }
 
 
 } /* namespace bsk */
