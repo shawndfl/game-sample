@@ -51,7 +51,7 @@ void Character::initialize() {
    std::vector<GLushort> indices;
 
    float characterSize = 32;
-   Vector2 pos(0, 0);
+   Vector2 pos(50, 20);
 
    // pos
    verts.push_back(pos.x - characterSize);
@@ -137,7 +137,7 @@ void Character::setPosition(float x, float y) {
 
    Matrix4 transpose = transform_ * camera;
    //LOGD("transpose " << transpose);
-   transpose.transpose();
+   //transpose.transpose();
    shader_.setMVP(transpose);
 }
 
