@@ -8,8 +8,11 @@
 #ifndef SRC_VECTOR3_H_
 #define SRC_VECTOR3_H_
 
+#include <ostream>
+
 namespace bsk {
 
+class Matrix4;
 /**
  * Vector3 class
  */
@@ -35,11 +38,16 @@ public:
 
    Vector3& crossVectors(const Vector3& a, const Vector3& b);
 
+   Vector3& transform(const Matrix4& mat);
+
    static const Vector3 ONE;
    static const Vector3 ZERO;
    static const Vector3 UP;
+   static const Vector3 DOWN;
    static const Vector3 RIGHT;
+   static const Vector3 LEFT;
    static const Vector3 FORWARD;
+   static const Vector3 BACKWARDS;
 
    float x;
    float y;
@@ -49,5 +57,7 @@ public:
 } /* namespace bsk */
 
 bsk::Vector3 operator-(const bsk::Vector3& lhs, const bsk::Vector3& rhs);
+
+std::ostream& operator<<(std::ostream& os, const bsk::Vector3& mat);
 
 #endif /* SRC_VECTOR3_H_ */

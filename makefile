@@ -1,16 +1,17 @@
 
+#
+# sudo apt install libx11-dev libepoxy-dev libunittest++-dev
+#
+
 APP:=BlockSimulatedKingdom
 
 SRC_CC := $(wildcard ./src/*.cc)
 SRC := $(notdir $(SRC_CC:%.cc=%))
 OBJ := $(SRC:%=bin/%.o)
 
-#sudo apt install libx11-dev libepoxy-dev libunittest++-dev
-
 CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD
-CFLAGS += -I /usr/include 
-
-LDFLAGS := -pthread -std=c++17
+CFLAGS += -I /usr/include
+LDFLAGS := -pthread
 LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng
 
 # Phony targets
@@ -48,7 +49,7 @@ $(APP): $(OBJ)
 #
 clean:
 	@echo cleaning
-	@rm -f bin/*
-	@rm -f $(APP)
+	rm -f bin/*
+	rm -f $(APP)
 
 -include $(OBJ:.o=.d)		

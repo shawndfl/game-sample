@@ -1,4 +1,8 @@
 
+#
+# sudo apt install libx11-dev libepoxy-dev libunittest++-dev
+#
+
 APP:=bin/unitTests
 
 SRC_CC := $(wildcard ../src/*.cc) $(wildcard ./*.cc)
@@ -10,8 +14,10 @@ SRC_CPP := $(notdir $(SRC_CPP:%.cpp=%))
 OBJ_CC := $(filter-out bin/main.o,$(SRC_CC:%=bin/%.o))
 OBJ_CPP := $(SRC_CPP:%=bin/%.o)
 
-CFLAGS := -Wall -O3 -std=c++17 -MMD -I../src
-LDLIBS := -lstdc++ -pthread
+CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD -I../src
+CFLAGS += -I /usr/include
+LDFLAGS := -pthread -std=c++17
+LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng
 
 vpath %.cc ../src/
 vpath %.cc ./
@@ -66,7 +72,7 @@ env:
 #
 clean:
 	@echo cleaning
-	@rm -f bin/*
-	@rm -f $(APP)
+	rm -f bin/*
+	rm -f $(APP)
 
 -include $(OBJ:.o=.d)		

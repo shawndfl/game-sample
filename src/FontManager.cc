@@ -26,6 +26,12 @@ void FontManager::update() {
    shader_.enableProgram();
    mat_.apply();
 
+   Matrix4 projection;
+   projection.createOrthographic(1, 600, 1, 500, 0, 10);
+
+   Matrix4 mvp = projection;
+   shader_.setMVP(mvp);
+
    for(auto pair: fonts_) {
 
       pair.second.render(shader_);

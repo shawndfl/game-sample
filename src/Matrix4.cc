@@ -7,7 +7,7 @@
 
 #include "Matrix4.h"
 #include <GLES2/gl2.h>
-#include <math.h>
+#include <iomanip>
 
 namespace bsk {
 
@@ -83,6 +83,65 @@ Matrix4& Matrix4::transpose() {
    tmp = m[ 11 ]; m[ 11 ] = m[ 14 ]; m[ 14 ] = tmp;
 
    return *this;
+}
+
+/*************************************************/
+void Matrix4::createPerspective(float left, float right, float top, float bottom, float near, float far) {
+   const float x = 2.0 * near / (right - left);
+   const float y = 2.0 * near / (top - bottom);
+
+   const float a = (right + left) / (right - left);
+   const float b = (top + bottom) / (top - bottom);
+   const float c = -(far + near) / (far - near);
+   const float d = -2.0 * far * near / (far - near);
+
+   m11 = x; m12 = 0;  m13 =  a;  m14 = 0;
+   m21 = 0; m22 = y;  m23 =  b;  m24 = 0;
+   m31 = 0; m32 = 0;  m33 =  c;  m34 = d;
+   m41 = 0; m42 = 0;  m43 = -1.0;  m44 = 0;
+
+}
+
+/*************************************************/
+void Matrix4::createOrthographic(float left, float right, float top, float bottom, float near, float far) {
+   const float w = 1.0 / ( right - left );
+   const float h = 1.0 / ( top - bottom );
+   const float p = 1.0 / ( far - near );
+
+   const float x = ( right + left ) * w;
+   const float y = ( top + bottom ) * h;
+   const float z = ( far + near ) * p;
+
+   m11 = 2.0*w; m12 = 0;    m13 =  0;      m14 = -x;
+   m21 = 0;     m22 = 2*h;  m23 =  0;      m24 = -y;
+   m21 = 0;     m32 = 0;    m33 =  -2.0*p; m34 = -z;
+   m31 = 0;     m42 = 0;    m43 = 0.0;     m44 =  1.0;
+}
+
+/*************************************************/
+void Matrix4::createProjection(float left, float right, float top, float bottom, float near, float far, float zoom) {
+   const float dx = ( right - left ) / ( 2.0   * zoom );
+   const float dy = ( top   - bottom ) / ( 2.0 * zoom );
+   const float cx = ( right + left ) / 2.0;
+   const float cy = ( top   + bottom ) / 2.0;
+
+   float left2 = cx - dx;
+   float right2 = cx + dx;
+   float top2 = cy + dy;
+   float bottom2 = cy - dy;
+
+   createOrthographic(left2, right2, top2, bottom2, near, far);
+}
+
+/*************************************************/
+void Matrix4::createProjection(float fov, float aspectRatio, float near, float far, float zoom) {
+   float angle = fov * TO_RADIANS;
+   float top = near * std::tan(angle/2.0) / zoom;
+   float height = 2.0 * top;
+   float width = aspectRatio * height;
+   float left = -.5 * width;
+
+   createPerspective(left, left + width, top, top - height, near, far);
 }
 
 /*************************************************/
@@ -184,10 +243,10 @@ Matrix4& Matrix4::multiply( const Matrix4& a, const Matrix4& b, Matrix4& result 
 
 /*************************************************/
 std::ostream& operator<<(std::ostream& os, const bsk::Matrix4& mat) {
-   os << "\n   "
-      << mat.m11 << ", " << mat.m21 << ", " << mat.m31 << ", " << mat.m41 << "\n   "
-      << mat.m12 << ", " << mat.m22 << ", " << mat.m32 << ", " << mat.m42 << "\n   "
-      << mat.m13 << ", " << mat.m23 << ", " << mat.m33 << ", " << mat.m43 << "\n   "
-      << mat.m14 << ", " << mat.m24 << ", " << mat.m34 << ", " << mat.m44;
+   os << "\n"
+      << std::setw(10) << mat.m11 << ", " << std::setw(10) << mat.m21 << ", " << std::setw(10) << mat.m31 << ", " << std::setw(10) << mat.m41 << "\n"
+      << std::setw(10) << mat.m12 << ", " << std::setw(10) << mat.m22 << ", " << std::setw(10) << mat.m32 << ", " << std::setw(10) << mat.m42 << "\n"
+      << std::setw(10) << mat.m13 << ", " << std::setw(10) << mat.m23 << ", " << std::setw(10) << mat.m33 << ", " << std::setw(10) << mat.m43 << "\n"
+      << std::setw(10) << mat.m14 << ", " << std::setw(10) << mat.m24 << ", " << std::setw(10) << mat.m34 << ", " << std::setw(10) << mat.m44;
    return os;
 }

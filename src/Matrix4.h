@@ -9,6 +9,7 @@
 #define SRC_MATRIX4_H_
 
 #include "math.h"
+#include <math.h>
 #include <ostream>
 
 namespace bsk {
@@ -46,6 +47,14 @@ public:
    void setTranslation(float x, float y, float z);
 
    void createLookAt(const Vector3& eye, const Vector3& target, const Vector3& upAxis);
+
+   void createProjection(float left, float right, float top, float bottom, float near, float far, float zoom = 1.0);
+
+   void createProjection(float fov, float aspectRatio, float near, float far, float zoom = 1.0);
+
+   void createPerspective(float left, float right, float top, float bottom, float near, float far);
+
+   void createOrthographic(float left, float right, float top, float bottom, float near, float far);
 
    static Matrix4& multiply( const Matrix4& a, const Matrix4& b, Matrix4& result );
 

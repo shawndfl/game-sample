@@ -39,6 +39,12 @@ private:
    Geometry          geometry_;
    Matrix4           transform_;
 
+   float             screenWidth_;
+   float             screenHeight_;
+
+   std::vector<float>      verts_;
+   std::vector<GLushort>   indices_;
+
 
 };
 
