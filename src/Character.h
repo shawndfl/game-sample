@@ -32,6 +32,11 @@ public:
    void move(float x, float y);
 
 private:
+   void updateTransform();
+
+private:
+   float const DEPTH = 1.0;
+   const float CHARACTER_SIZE = 128;
 
    ShaderProgram     shader_;
    Image             img_;
@@ -41,9 +46,13 @@ private:
 
    float             screenWidth_;
    float             screenHeight_;
+   Matrix4           projection_;
 
    std::vector<float>      verts_;
    std::vector<GLushort>   indices_;
+
+   Vector3            position_;
+
 
 
 };

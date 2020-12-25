@@ -58,13 +58,13 @@ void Level1::keyEvent(int key, int scancode, int action, int mods) {
    LOGD("key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods);
 
    // move right
-   if(key == 262 && action == 1) {
-      character_.setPosition(1, 1);
+   if(key == 262 && action == 2) {
+      character_.move(-1, 0);
    }
 
    // move left
-   if(key == 263 && action == 1) {
-      character_.move(.01, .01);
+   if(key == 263 && action == 2) {
+      character_.move(1, 0);
    }
 }
 

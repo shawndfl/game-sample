@@ -18,6 +18,8 @@ namespace bsk {
 Character::Character() {
    screenWidth_ = 800;
    screenHeight_ = 600;
+   projection_.createOrthographic(-32, screenWidth_, 0, screenHeight_, 0, 10);
+   position_ = Vector3(0,0,DEPTH);
 }
 
 /*************************************************/
@@ -47,41 +49,37 @@ void Character::initialize() {
 
    // create a quad for the character
    geometry_.initialize(4*5, 6, Geometry::APos | Geometry::ATex1);
-
-   float characterSize = 32;
-   Vector2 pos(50, 20);
-
    // pos
-   verts_.push_back(pos.x - characterSize);
-   verts_.push_back(pos.y - characterSize);
-   verts_.push_back(5);
+   verts_.push_back(CHARACTER_SIZE);
+   verts_.push_back(0);
+   verts_.push_back(DEPTH);
 
    //tex
    verts_.push_back(0);
    verts_.push_back(0);
 
    // pos
-   verts_.push_back(pos.x + characterSize);
-   verts_.push_back(pos.x - characterSize);
-   verts_.push_back(5);
+   verts_.push_back(0);
+   verts_.push_back(0);
+   verts_.push_back(DEPTH);
 
    //tex
    verts_.push_back(1);
    verts_.push_back(0);
 
    // pos
-   verts_.push_back(pos.x + characterSize);
-   verts_.push_back(pos.x + characterSize);
-   verts_.push_back(5);
+   verts_.push_back(0);
+   verts_.push_back(CHARACTER_SIZE);
+   verts_.push_back(DEPTH);
 
    //tex
    verts_.push_back(1);
    verts_.push_back(1);
 
    // pos
-   verts_.push_back(pos.x - characterSize);
-   verts_.push_back(pos.x + characterSize);
-   verts_.push_back(5);
+   verts_.push_back(CHARACTER_SIZE);
+   verts_.push_back(CHARACTER_SIZE);
+   verts_.push_back(DEPTH);
 
    //tex
    verts_.push_back(0);
@@ -103,7 +101,7 @@ void Character::initialize() {
 /*************************************************/
 void Character::update(Milliseconds dt) {
 
-   Vector4 color(1,1,1,1);
+   Vector4 color(1,0,0,1);
    color.setUniform(shader_.getColor());
 
    Joystick& joystick = GameEngine::get().getJoy();
@@ -123,25 +121,32 @@ void Character::update(Milliseconds dt) {
 }
 
 /*************************************************/
+void Character::updateTransform() {
+   projection_.createOrthographic(-CHARACTER_SIZE, screenWidth_, 0, screenHeight_, 0, 10);
+   transform_.setTranslation(position_);
+
+   Matrix4 view;
+   view.createLookAt(Vector3::ZERO, Vector3::FORWARD, Vector3::UP);
+
+   Matrix4 mvp = projection_ * view * transform_;
+
+
+   shader_.setMVP(mvp);
+}
+
+/*************************************************/
 void Character::resize(uint width, uint height) {
    screenWidth_ = width;
    screenHeight_ = height;
+   updateTransform();
    shader_.setScreenSize(width, height);
 }
 
 /*************************************************/
 void Character::setPosition(float x, float y) {
-   transform_.setTranslation(x, y, 0);
-   Matrix4 view;
-   view.createLookAt(Vector3::ZERO, Vector3::FORWARD, Vector3::UP );
-
-   Matrix4 projection;
-   //projection.createProjection(45, screenWidth_ / screenHeight_, 1, 1000);
-   projection.createOrthographic(-100, 100, -100, 100, .01, 1000);
-   
-   Matrix4 mvp = projection * view *  transform_;
-
-   shader_.setMVP(mvp);
+   position_.x = x;
+   position_.y = y;
+   updateTransform();
 }
 
 /*************************************************/
