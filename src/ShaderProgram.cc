@@ -31,9 +31,12 @@ static const GLchar *fragmentShaderSource =
         "precision mediump float;                  \n"
         "varying vec2 v_tex;                       \n"
         "uniform sampler2D u_diffused;             \n"
+        "uniform vec2 u_scale;                     \n"
+        "uniform vec2 u_offset;                    \n"
         "uniform vec4 u_color;                     \n"
         "void main() {                             \n"
-        "   gl_FragColor = texture2D(u_diffused, v_tex) * u_color; \n"
+        "   vec2 tex = u_offset + v_tex * u_scale; \n "
+        "   gl_FragColor = texture2D(u_diffused, tex) * u_color; \n"
         "}                                         \n"
         "                                          \n";
 
@@ -45,11 +48,9 @@ ShaderProgram::ShaderProgram() {
    diffused_ = -1;
    screen_ = -1;
    overlay_= -1;
-   color_= -1;
+   ucolor_= -1;
    uscale_= -1;
-   vscale_= -1;
    uoffset_= -1;
-   voffset_= -1;
 
    position_= -1;
    texture_= -1;
@@ -108,9 +109,11 @@ bool ShaderProgram::loadProgram() {
 
     // collect all the uniform variables
     diffused_     = getUniformLocation("u_diffused");
-    color_        = getUniformLocation("u_color");
-    screen_       = getUniformLocation("u_screen");
+    ucolor_       = getUniformLocation("u_color");
     mvp_          = getUniformLocation("u_mvp");
+    uscale_       = getUniformLocation("u_scale");
+    uoffset_      = getUniformLocation("u_offset");
+
 
     // setup attributes
     position_ = getAttributeLocation("a_pos");
@@ -122,8 +125,14 @@ bool ShaderProgram::loadProgram() {
     // set defaults
     glUseProgram(program_);
 
-    Vector4 colorValue(1,1,0,1);
-    colorValue.setUniform(color_);
+    Vector4 colorValue(1,1,1,1);
+    setColor(colorValue);
+
+    Vector2 offset(0,0);
+    setOffset(offset);
+
+    Vector2 scale(1,1);
+    setScale(scale);
 
     // set diffused map to texture channel 0
     glUniform1f(diffused_, 0);
@@ -191,7 +200,7 @@ int ShaderProgram::getByteStride() const {
 
 /*************************************************/
 int ShaderProgram::getColor() const {
-   return color_;
+   return ucolor_;
 }
 
 /*************************************************/
@@ -215,22 +224,27 @@ int ShaderProgram::getUscale() const {
 }
 
 /*************************************************/
-int ShaderProgram::getVoffset() const {
-   return voffset_;
-}
-
-/*************************************************/
-int ShaderProgram::getVscale() const {
-   return vscale_;
-}
-
-/*************************************************/
 void ShaderProgram::setScreenSize(uint width, uint height) {
    glUseProgram(program_);
 
    Vector2 size(width, height);
    size.setUniform(screen_);
 
+}
+
+/*************************************************/
+void ShaderProgram::setColor(const Vector4& color) {
+   color.setUniform(ucolor_);
+}
+
+/*************************************************/
+void ShaderProgram::setOffset(const Vector2& offset) {
+   offset.setUniform(uoffset_);
+}
+
+/*************************************************/
+void ShaderProgram::setScale(const Vector2& scale) {
+   scale.setUniform(uscale_);
 }
 
 /*************************************************/

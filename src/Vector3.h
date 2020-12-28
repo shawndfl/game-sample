@@ -22,7 +22,7 @@ public:
    Vector3(float x, float y, float z);
    virtual ~Vector3();
 
-   void setUniform(int name);
+   void setUniform(int name) const;
 
    Vector3 operator-(const Vector3& rhs);
    Vector3& operator/(float scalar);

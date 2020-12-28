@@ -37,6 +37,10 @@ public:
    void setScreenSize(uint width, uint height);
 
    void setMVP(const Matrix4& mvp);
+   void setColor(const Vector4& color);
+   void setOffset(const Vector2& offset);
+   void setScale(const Vector2& scale);
+
 
    int getNormal() const;
    int getPosition() const;
@@ -47,8 +51,6 @@ public:
    int getOverlay() const;
    int getUoffset() const;
    int getUscale() const;
-   int getVoffset() const;
-   int getVscale() const;
 
 private:
    int getUniformLocation(const std::string& name);
@@ -63,11 +65,9 @@ private:
    int          diffused_;
    int          screen_;
    int          overlay_;
-   int          color_;
+   int          ucolor_;
    int          uscale_;
-   int          vscale_;
    int          uoffset_;
-   int          voffset_;
 
    // attributes
    int          position_;

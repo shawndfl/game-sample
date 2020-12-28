@@ -26,7 +26,7 @@ Vector2::~Vector2() {
 }
 
 /*************************************************/
-void Vector2::setUniform(int name) {
+void Vector2::setUniform(int name) const {
    glUniform2f(name, x, y);
 }
 

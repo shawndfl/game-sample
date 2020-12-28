@@ -18,7 +18,7 @@ public:
    /**
     * Sets the uniform value
     */
-   void setUniform(int name);
+   void setUniform(int name) const;
 
    virtual ~Vector4();
 

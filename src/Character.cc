@@ -32,6 +32,8 @@ void Character::initialize() {
    LOGD("Initialize Character ");
 
    shader_.loadProgram();
+   shader_.setScale(Vector2(1.0/20.0,1.0));
+
    Texture diffused;
    ImageLoader::loadImage("assets/img/character.png", img_);
    diffused.setImage(img_);

@@ -16,7 +16,7 @@ public:
    Vector2(float x, float y);
    virtual ~Vector2();
 
-   void setUniform(int name);
+   void setUniform(int name) const;
 
 
    float x;

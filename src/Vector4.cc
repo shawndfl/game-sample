@@ -28,7 +28,7 @@ Vector4::Vector4(float x, float y, float z, float w) {
 }
 
 /*************************************************/
-void Vector4::setUniform(int name) {
+void Vector4::setUniform(int name) const {
    glUniform4f(name, x, y, z, w);
 }
 
