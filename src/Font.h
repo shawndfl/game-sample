@@ -12,13 +12,16 @@
 #include <string>
 #include <GLES2/gl2.h>
 #include "Geometry.h"
-#include "ShaderProgram.h"
 #include "ImageLoader.h"
 #include "Material.h"
+#include "ShaderSprite.h"
 #include "Vector4.h"
 
 namespace bsk {
 
+/**
+ * This class will be used by FontManager to render text on the screen using a ShaderSprite
+ */
 class Font {
 public:
    Font();
@@ -34,7 +37,7 @@ public:
     */
    void initialize(const std::string& text, uint x, uint y, uint pixelSize = 16, Vector4 color = Vector4(1,1,1,1));
 
-   void render(const ShaderProgram& shader);
+   void render(const ShaderSprite& shader);
 
    void dispose();
 

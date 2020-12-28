@@ -33,7 +33,7 @@ public:
 private:
    std::map<std::string, Font>    fonts_;
    Image                          fontImg_;
-   ShaderProgram                  shader_;
+   ShaderSprite                   shader_;
    Material                       mat_;
 
 };

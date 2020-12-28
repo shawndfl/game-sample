@@ -9,10 +9,10 @@
 #define SRC_CHARACTER_H_
 
 #include "Timer.h"
-#include "ShaderProgram.h"
 #include "math.h"
 
 #include <GLES2/gl2.h>
+#include "ShaderSprite.h"
 
 namespace bsk {
 
@@ -38,7 +38,7 @@ private:
    float const DEPTH = 1.0;
    const float CHARACTER_SIZE = 128;
 
-   ShaderProgram     shader_;
+   ShaderSprite      shader_;
    Image             img_;
    Material          mat_;
    Geometry          geometry_;

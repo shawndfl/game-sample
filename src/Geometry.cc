@@ -7,7 +7,7 @@
 
 #include "Geometry.h"
 #include "Logging.h"
-#include "ShaderProgram.h"
+#include "ShaderSprite.h"
 
 namespace bsk {
 

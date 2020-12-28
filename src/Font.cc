@@ -114,7 +114,7 @@ void Font::initialize(const std::string& text, uint x, uint y, uint pixelSize, V
 }
 
 /*************************************************/
-void Font::render(const ShaderProgram& shader) {
+void Font::render(const ShaderSprite& shader) {
 
    color_.setUniform(shader.getColor());
 
