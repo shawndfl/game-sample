@@ -57,15 +57,7 @@ void Level1::resize(uint width, uint height) {
 void Level1::keyEvent(int key, int scancode, int action, int mods) {
    LOGD("key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods);
 
-   // move right
-   if(key == 262 && action == 2) {
-      character_.move(-1, 0);
-   }
-
-   // move left
-   if(key == 263 && action == 2) {
-      character_.move(1, 0);
-   }
+   character_.onKey(key, scancode, action, mods);
 }
 
 /*************************************************/

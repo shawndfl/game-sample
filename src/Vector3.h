@@ -25,10 +25,13 @@ public:
    void setUniform(int name) const;
 
    Vector3 operator-(const Vector3& rhs);
-   Vector3& operator/(float scalar);
-   Vector3& operator*(float scalar);
+   Vector3 operator/(float scalar);
+   Vector3 operator*(float scalar);
 
-   Vector3& operator+(const Vector3& rhs);
+   Vector3& operator+=(const Vector3& rhs);
+   Vector3& operator-=(const Vector3& rhs);
+
+   Vector3 operator+(const Vector3& rhs);
 
    float length() const;
 

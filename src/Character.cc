@@ -106,6 +106,14 @@ void Character::update(Milliseconds dt) {
    Vector4 color(1,0,0,1);
    color.setUniform(shader_.getColor());
 
+   position_ += (inputVelocity_ + velocity_) * dt;
+
+
+   updateTransform();
+
+   // stop moving
+   move(0, 0);
+
    Joystick& joystick = GameEngine::get().getJoy();
    if (joystick.getState().type == JS_EVENT_BUTTON) {
       LOGD("Hit button " << (int)joystick.getState().number);
@@ -120,6 +128,23 @@ void Character::update(Milliseconds dt) {
    mat_.apply();
    geometry_.makeActive(shader_);
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
+}
+
+/*************************************************/
+bool Character::onKey(int key, int scancode, int action, int mods) {
+
+   // move right
+   if (key == 262 && action > 0) {
+      LOGD("Right");
+      move(-1, 0);
+   } else
+
+   // move left
+   if (key == 263 && action > 0) {
+      move(1, 0);
+   }
+
+   return true;
 }
 
 /*************************************************/
@@ -153,8 +178,10 @@ void Character::setPosition(float x, float y) {
 
 /*************************************************/
 void Character::move(float x, float y) {
-   Vector3 p = transform_.getTranslation();
-   setPosition(p.x + x, p.y + y);
+   //LOGD("Moving " << x << ", " << y);
+   inputVelocity_.x = x * CHARACTER_SPEED;
+   inputVelocity_.y = y * CHARACTER_SPEED;
+
 }
 
 } /* namespace bsk */

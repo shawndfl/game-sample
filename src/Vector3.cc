@@ -55,27 +55,53 @@ float Vector3::length() const {
 /*************************************************/
 Vector3& Vector3::normalize() {
    float len = (length() == 0.0) ? 1.0: length();
-   return operator /(len);
-}
-
-/*************************************************/
-Vector3& Vector3::operator /(float scalar) {
-   return operator *(1.0 / scalar);
-}
-
-/*************************************************/
-Vector3& Vector3::operator *(float scalar) {
-   x *= scalar;
-   y *= scalar;
-   z *= scalar;
+   x = x / len;
+   y = y / len;
+   z = z / len;
    return *this;
 }
 
 /*************************************************/
-Vector3& Vector3::operator +(const Vector3& rhs) {\
+Vector3 Vector3::operator /(float scalar) {
+   Vector3 value;
+   float inv = 1.0/ scalar;
+   value.x = x * inv;
+   value.y = y * inv;
+   value.z = z * inv;
+   return value;
+}
+
+/*************************************************/
+Vector3 Vector3::operator *(float scalar) {
+   Vector3 value;
+   value.x = x * scalar;
+   value.y = y * scalar;
+   value.z = z * scalar;
+   return value;
+}
+
+/*************************************************/
+Vector3 Vector3::operator +(const Vector3& rhs) {\
+   Vector3 value;
+   value.x = x + rhs.x;
+   value.y = y + rhs.y;
+   value.z = z + rhs.z;
+   return value;
+}
+
+/*************************************************/
+Vector3& Vector3::operator+=(const Vector3& rhs) {
    x += rhs.x;
    y += rhs.y;
    z += rhs.z;
+   return *this;
+}
+
+/*************************************************/
+Vector3& Vector3::operator-=(const Vector3& rhs) {
+   x -= rhs.x;
+   y -= rhs.y;
+   z -= rhs.z;
    return *this;
 }
 
