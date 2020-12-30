@@ -14,12 +14,22 @@
 
 namespace bsk {
 
+
+/*************************************************/
+bsk::Character::State operator|=(bsk::Character::State lhs, bsk::Character::State rhs) {
+   bsk::Character::State newState = (bsk::Character::State)((int)lhs |(int) rhs);
+   return newState;
+}
+
 /*************************************************/
 Character::Character() {
    screenWidth_ = 800;
    screenHeight_ = 600;
    projection_.createOrthographic(-32, screenWidth_, 0, screenHeight_, 0, 10);
    position_ = Vector3(0,0,DEPTH);
+
+   state_          = StIdle;
+   animationFrame_ = 0;
 }
 
 /*************************************************/
@@ -34,12 +44,12 @@ void Character::initialize() {
    shader_.loadProgram();
    shader_.setScale(Vector2(1.0/20.0,1.0));
 
-   Texture diffused;
+   Texture texture;
    ImageLoader::loadImage("assets/img/character.png", img_);
-   diffused.setImage(img_);
-   mat_.setDiffused(diffused);
+   texture.setImage(img_);
+   mat_.setDiffused(texture);
 
-   diffused.apply(1);
+   texture.apply(1);
 
    // set the texture wrapping/filtering options (on the currently bound texture object)
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -108,8 +118,26 @@ void Character::update(Milliseconds dt) {
 
    position_ += (inputVelocity_ + velocity_) * dt;
 
-
    updateTransform();
+
+   if(state_ == StMovingLeft || state_ == StMovingRight) {
+      if(animationTimer_.getDelta() > 200) {
+
+         // use animation frame
+         float offset = animationFrame_ * 32.0 / 640.0;
+         shader_.setOffset(Vector2(offset, 0));
+
+         // loop
+         animationFrame_++;
+         if(animationFrame_ > 2) {
+            animationFrame_ = 0;
+         }
+
+         // reset timeer
+         animationTimer_.reset();
+      }
+   }
+
 
    // stop moving
    move(0, 0);
@@ -181,6 +209,13 @@ void Character::move(float x, float y) {
    //LOGD("Moving " << x << ", " << y);
    inputVelocity_.x = x * CHARACTER_SPEED;
    inputVelocity_.y = y * CHARACTER_SPEED;
+   if(x < 0) {
+      state_ = StMovingLeft;
+   } else if(x > 0) {
+      state_ = StMovingRight;
+   } else {
+      state_ = StIdle;
+   }
 
 }
 

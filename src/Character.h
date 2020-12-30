@@ -18,6 +18,17 @@ namespace bsk {
 
 class Character {
 public:
+   enum State {
+        StIdle            = 0x00,     // 0
+        StMovingRight     = 0x01,     // 1     1        1b
+        StMovingLeft      = 0x02,     // 2     1<<1     10b
+        StJumping         = 0x04,     // 4     1<<2     100b
+        StFalling         = 0x08,     // 8     1<<3     1000b
+        StHit             = 0x10,     // 16    1<<4     10000b
+        StShoot           = 0x20,     // 32    1<<5     100000b
+
+     };
+
    Character();
    virtual ~Character();
 
@@ -47,16 +58,6 @@ private:
    const float CHARACTER_SIZE = 128;
    const float CHARACTER_SPEED = 0.50;
 
-   enum State {
-      StIdle            = 0x00,     // 0
-      StMovingRight     = 0x01,     // 1     1        1b
-      StMovingLeft      = 0x02,     // 2     1<<1     10b
-      StJumping         = 0x04,     // 4     1<<2     100b
-      StFalling         = 0x08,     // 8     1<<3     1000b
-      StHit             = 0x10,     // 16    1<<4     10000b
-      StShoot           = 0x20,     // 32    1<<5     100000b
-
-   };
 
    ShaderSprite      shader_;
    Image             img_;
@@ -75,7 +76,11 @@ private:
    Vector3            velocity_;         /// the total velocity of the character
    Vector3            inputVelocity_;    /// the velocity based on the input of the user.
 
-   State              state_;       /// The state of the character
+   State              state_;            /// The state of the character
+   Timer              animationTimer_;   /// Used to cycle animation frames for the character
+   int                animationFrame_;   /// Animation frame index. 0 is the left top most frame
+
+
 
 
 

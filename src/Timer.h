@@ -12,6 +12,9 @@ namespace bsk {
 
 typedef float Milliseconds;
 
+/**
+ * A simple timer
+ */
 class Timer {
 public:
    Timer();
