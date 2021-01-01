@@ -24,7 +24,7 @@ Image::Image() {
 
 /*************************************************/
 Image::~Image() {
-
+   dispose();
 }
 
 /*************************************************/
@@ -58,6 +58,7 @@ void Image::dispose() {
    if (data_ != nullptr) {
       delete data_;
       data_ = nullptr;
+      LOGD("Delete image " << this);
    }
 }
 

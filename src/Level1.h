@@ -11,6 +11,7 @@
 #include "Timer.h"
 #include "GameEngine.h"
 #include "Character.h"
+#include "Sprite.h"
 #include "math.h"
 
 namespace bsk {
@@ -32,6 +33,7 @@ public:
 private:
 
    Character  character_;
+   Sprite     sprite_;
 
 };
 

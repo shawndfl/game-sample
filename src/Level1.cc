@@ -35,6 +35,8 @@ bool Level1::start() {
    stream << "Hello2";
    GameEngine::get().getFontManager().setFont("title2", stream, 300, 300, 32);
 
+   sprite_.initialize();
+
    character_.initialize();
 
    character_.setPosition(0,0);
@@ -45,12 +47,14 @@ bool Level1::start() {
 void Level1::update(Milliseconds dt) {
 
    character_.update(dt);
+   sprite_.update(dt);
 
 }
 
 /*************************************************/
 void Level1::resize(uint width, uint height) {
    character_.resize(width, height);
+   sprite_.updateScreenSize(width, height);
 }
 
 /*************************************************/

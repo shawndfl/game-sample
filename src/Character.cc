@@ -42,10 +42,10 @@ void Character::initialize() {
    LOGD("Initialize Character ");
 
    shader_.loadProgram();
-   shader_.setScale(Vector2(1.0/20.0,1.0));
+   shader_.setScale(Vector2(1.0/32.0,1.0/32.0));
 
    Texture texture;
-   ImageLoader::loadImage("assets/img/character.png", img_);
+   ImageLoader::loadImage("assets/img/game.png", img_);
    texture.setImage(img_);
    mat_.setDiffused(texture);
 
@@ -124,13 +124,13 @@ void Character::update(Milliseconds dt) {
       if(animationTimer_.getDelta() > 200) {
 
          // use animation frame
-         float offset = animationFrame_ * 32.0 / 640.0;
+         float offset = animationFrame_ * 32.0 / 1024.0;
          shader_.setOffset(Vector2(offset, 0));
 
          // loop
          animationFrame_++;
-         if(animationFrame_ > 2) {
-            animationFrame_ = 0;
+         if(animationFrame_ > 7) {
+            animationFrame_ = 5;
          }
 
          // reset timeer

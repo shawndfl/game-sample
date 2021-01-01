@@ -1,20 +1,20 @@
 /*
- * AnimationTexture.cc
+ * Coins.cc
  *
  *  Created on: Dec 29, 2020
  *      Author: sdady
  */
 
-#include "AnimationTexture.h"
+#include "Coins.h"
 
 namespace bsk {
 
-AnimationTexture::AnimationTexture() {
+Coins::Coins() {
    // TODO Auto-generated constructor stub
 
 }
 
-AnimationTexture::~AnimationTexture() {
+Coins::~Coins() {
    // TODO Auto-generated destructor stub
 }
 

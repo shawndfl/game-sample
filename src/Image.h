@@ -33,6 +33,7 @@ public:
    };
 
    Image();
+
    virtual ~Image();
 
    void Initialize(int width, int height, BitDepth bitDepth, ColorType colorType, int rowBytes);
