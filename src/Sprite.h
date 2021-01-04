@@ -16,12 +16,16 @@
 
 namespace bsk {
 
+/**
+ * A sprite image that renders in screen space.
+ *
+ */
 class Sprite {
 public:
    Sprite();
    virtual ~Sprite();
 
-   void initialize(const std::string& imageFile = "assets/img/game.png");
+   void initialize(const Texture& spriteTexture);
 
    void updateScreenSize(uint width, uint height);
 
@@ -31,6 +35,8 @@ public:
 
    void setImagePosition( uint x, uint y);
 
+   void dispose();
+
 private:
 
    static constexpr float QUAD_SIZE = 128;     /// A number that fits nice into our projection and view. This is scaled by the transform later
@@ -39,16 +45,15 @@ private:
    static constexpr uint IMAGE_HEIGHT = 1024;
 
    ShaderSprite      shader_;
-   Material          mat_;
+   Texture           spriteTexture_;
    Geometry          geometry_;
    Matrix4           transform_;
 
    float             screenWidth_;
    float             screenHeight_;
-   Matrix4           projection_;
    float             imageDepth_;
 
-   Vector3            position_;         /// Current position on the screen
+   Vector3           position_;         /// Current position on the screen
 };
 
 } /* namespace bsk */

@@ -31,7 +31,10 @@ public:
 
    void dispose();
 private:
+   void loadMainTexture();
+private:
 
+   Texture    mainTexture_;
    Character  character_;
    Sprite     sprite_;
 

@@ -14,15 +14,22 @@
 #include <sstream>
 #include <sys/types.h>
 #include "Vector4.h"
+#include "NoCopy.h"
 
 namespace bsk {
 
-class FontManager {
+/**
+ * Manages displaying font on the screen. Initialize should be called once from the game engine.
+ * If the level want to change the font texture call Initialize with a new imageFile path.
+ *
+ * Use setFont to draw and update text on the screen
+ */
+class FontManager: public NoCopy {
 public:
    FontManager();
    virtual ~FontManager();
 
-   bool initialize();
+   bool initialize(const std::string& imageFile = "assets/img/font.png");
 
    void update();
 
@@ -32,9 +39,8 @@ public:
 
 private:
    std::map<std::string, Font>    fonts_;
-   Image                          fontImg_;
+   Texture                        fontTexture_;
    ShaderSprite                   shader_;
-   Material                       mat_;
 
 };
 

@@ -6,6 +6,7 @@
  */
 
 #include "Texture.h"
+#include "Logging.h"
 #include <GLES2/gl2.h>
 
 namespace bsk {
@@ -17,10 +18,16 @@ Texture::Texture() {
 
 /*************************************************/
 Texture::~Texture() {
+   // not calling dispose here because texture gets passed around by value
+   // and we might not want to dispose the texture each time.
+
+   // Textures should be managed at a higher lever like a "Level" class
 }
 
 /*************************************************/
 void Texture::setImage(const Image& img) {
+
+   dispose();
 
    glGenTextures(1, &texture_);
    glBindTexture(GL_TEXTURE_2D, texture_);
@@ -40,12 +47,16 @@ void Texture::setImage(const Image& img) {
            img.getImageData());
    glGenerateMipmap(GL_TEXTURE_2D);
    glBindTexture(GL_TEXTURE_2D, 0);
+
+   LOGD("Creating Texture");
 }
 
 /*************************************************/
 void Texture::dispose() {
    if(texture_ != 0) {
+      LOGD("Disposing: " << texture_);
 	   glDeleteTextures(1, &texture_);
+	   texture_ = 0;
    }
 }
 

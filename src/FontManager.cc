@@ -17,14 +17,14 @@ FontManager::FontManager() {
 
 /*************************************************/
 FontManager::~FontManager() {
-
+   fontTexture_.dispose();
 }
 
 /*************************************************/
 void FontManager::update() {
 
    shader_.enableProgram();
-   mat_.apply();
+   fontTexture_.apply();
 
    Matrix4 projection;
    projection.createOrthographic(1, 600, 1, 500, 0, 10);
@@ -39,14 +39,13 @@ void FontManager::update() {
 }
 
 /*************************************************/
-bool FontManager::initialize() {
+bool FontManager::initialize(const std::string& imageFile) {
     shader_.loadProgram();
-    Texture diffused;
-    ImageLoader::loadImage("assets/img/font.png", fontImg_);
-    diffused.setImage(fontImg_);
-    mat_.setDiffused(diffused);
+    Image img;
+    ImageLoader::loadImage(imageFile, img);
+    fontTexture_.setImage(img);
 
-    diffused.apply(1);
+    fontTexture_.apply();
     // set the texture wrapping/filtering options (on the currently bound texture object)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -61,10 +61,23 @@ ShaderSprite::ShaderSprite() {
 
 /*************************************************/
 ShaderSprite::~ShaderSprite() {
+   dispose();
+}
+
+/*************************************************/
+void ShaderSprite::dispose() {
+   if(program_ != 0) {
+      LOGD("Disposing program: " << program_);
+      glDeleteProgram(program_);
+      program_ = 0;
+   }
 }
 
 /*************************************************/
 bool ShaderSprite::loadProgram() {
+
+    dispose();
+
     const uint LOG_LEN = 1024;
     GLchar infoLog[LOG_LEN];
     GLint success;
@@ -92,6 +105,8 @@ bool ShaderSprite::loadProgram() {
     }
 
     program_ = glCreateProgram();
+    LOGD("Creating program: " << program_);
+
     glAttachShader(program_, vertex);
     glAttachShader(program_, fragment);
     glLinkProgram(program_);
@@ -141,6 +156,7 @@ bool ShaderSprite::loadProgram() {
     Matrix4 mat;
     setMVP(mat);
 
+    LOGD("Creating Shader");
 
     return true;
 }

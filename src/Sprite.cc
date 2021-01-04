@@ -22,21 +22,18 @@ Sprite::~Sprite() {
 }
 
 /*************************************************/
-void Sprite::initialize(const std::string& imageFile) {
+void Sprite::dispose() {
+   spriteTexture_.dispose();
+   shader_.dispose();
+}
+
+/*************************************************/
+void Sprite::initialize(const Texture& spriteTexture) {
    shader_.loadProgram();
    shader_.setScale(Vector2(1.0 /FRAME_SIZE, 1.0 / FRAME_SIZE));
 
-   Texture texture;
-   Image img;
-   ImageLoader::loadImage(imageFile, img);
-
-   // once this is done the img can be disposed because the image is
-   // now in video memory
-   texture.setImage(img);
-
-   mat_.setDiffused(texture);
-
-   texture.apply(0);
+   spriteTexture_ = spriteTexture;
+   spriteTexture_.apply();
 
    // set the texture wrapping/filtering options (on the currently bound texture object)
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -116,18 +113,19 @@ void Sprite::update(Milliseconds dt) {
    Vector4 color(1, 1, 1, 1);
    color.setUniform(shader_.getColor());
 
-   projection_.createOrthographic(-QUAD_SIZE, screenWidth_, 0,  screenHeight_, 0, 10);
+   Matrix4 projection;
+   projection.createOrthographic(-QUAD_SIZE, screenWidth_, 0,  screenHeight_, 0, 10);
    transform_.setTranslation(position_);
 
    Matrix4 view;
    view.createLookAt(Vector3::ZERO, Vector3::FORWARD, Vector3::UP);
 
-   Matrix4 mvp = projection_ * view * transform_;
+   Matrix4 mvp = projection * view * transform_;
 
    shader_.setMVP(mvp);
 
    shader_.enableProgram();
-   mat_.apply();
+   spriteTexture_.apply();
    geometry_.makeActive(shader_);
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT,  NULL);
 }

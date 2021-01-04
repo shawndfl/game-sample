@@ -51,6 +51,8 @@ public:
    int getUoffset() const;
    int getUscale() const;
 
+   void dispose();
+
 private:
    int getUniformLocation(const std::string& name);
 

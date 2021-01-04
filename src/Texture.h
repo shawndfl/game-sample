@@ -24,7 +24,7 @@ public:
    /**
     * Texture unit is between 0 and 32
     */
-   void apply(uint textureUnit) const;
+   void apply(uint textureUnit = 0) const;
 
 private:
    uint 	texture_;
