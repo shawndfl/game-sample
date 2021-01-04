@@ -7,8 +7,8 @@
 
 #ifndef SRC_IMAGE_H_
 #define SRC_IMAGE_H_
-#include "sys/types.h"
-#include "NoCopy.h"
+#include <sys/types.h>
+#include "core/NoCopy.h"
 
 namespace bsk {
 

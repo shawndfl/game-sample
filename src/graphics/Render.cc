@@ -6,7 +6,7 @@
  */
 
 #include "Render.h"
-#include "Logging.h"
+#include "core/Logging.h"
 
 namespace bsk {
 

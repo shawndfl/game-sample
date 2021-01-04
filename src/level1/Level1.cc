@@ -6,12 +6,13 @@
  */
 
 #include "Level1.h"
+
 #include <sstream>
 
-#include "GameEngine.h"
-#include "Joystick.h"
-#include "FontManager.h"
-#include "Logging.h"
+#include "core/GameEngine.h"
+#include "core/Joystick.h"
+#include "graphics/FontManager.h"
+#include "core/Logging.h"
 
 namespace bsk {
 

@@ -6,12 +6,11 @@
  */
 
 #include "GameEngine.h"
-#include "Render.h"
-#include "FontManager.h"
-#include "Logging.h"
-#include "Joystick.h"
-#include "Level1.h"
-#include "Keyboard.h"
+#include "graphics/Render.h"
+#include "graphics/FontManager.h"
+#include "core/Logging.h"
+#include "core/Joystick.h"
+#include "core/Keyboard.h"
 
 #include <unistd.h>
 
@@ -22,7 +21,6 @@ GameEngine::GameEngine()  {
    render_        = std::make_unique<Render>();
    fontManager_   = std::make_unique<FontManager>();
    joy_           = std::make_unique<Joystick>();
-   level1_        = std::make_unique<Level1>();
    keyboard_      = std::make_unique<Keyboard>();
 
    width_ = 1024;
@@ -31,6 +29,11 @@ GameEngine::GameEngine()  {
 
 /*************************************************/
 GameEngine::~GameEngine() {
+}
+
+/*************************************************/
+void GameEngine::setScene(std::shared_ptr<bsk::IScene>& scene) {
+   scene_ = std::shared_ptr<IScene>(scene);
 }
 
 /*************************************************/
@@ -51,7 +54,9 @@ GameEngine& GameEngine::get() {
 
 /*************************************************/
 void GameEngine::keyEvent(int key, int scancode, int action, int mods) {
-   level1_->keyEvent(key, scancode, action, mods);
+   if(scene_) {
+      scene_->keyEvent(key, scancode, action, mods);
+   }
 }
 
 /*************************************************/
@@ -66,7 +71,7 @@ bool GameEngine::start(uint width, uint height) {
    if(!fontManager_->initialize()) {
       return false;
    }
-   if(!level1_->start()){
+   if(scene_ && !scene_->start()){
       return false;
    }
 
@@ -83,7 +88,10 @@ bool bsk::GameEngine::update() {
 
    Milliseconds dt =  timer_.getDelta();
    timer_.reset();
-   level1_->update(dt);
+
+   if(scene_) {
+      scene_->update(dt);
+   }
 
    return true;
 }
@@ -99,7 +107,9 @@ void bsk::GameEngine::dispose() {
 void GameEngine::resize(uint width, uint height) {
    render_->resize(width, height);
    fontManager_->resize(width, height);
-   level1_ ->resize(width, height);
+   if(scene_) {
+      scene_ ->resize(width, height);
+   }
 }
 
 /*************************************************/

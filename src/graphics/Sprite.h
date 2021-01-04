@@ -8,11 +8,11 @@
 #ifndef SRC_SPRITE_H_
 #define SRC_SPRITE_H_
 
-#include "Timer.h"
-#include "math.h"
+#include "math/Timer.h"
+#include "math/math.h"
 
 #include <GLES2/gl2.h>
-#include "ShaderSprite.h"
+#include "graphics/ShaderSprite.h"
 
 namespace bsk {
 

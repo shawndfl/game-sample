@@ -8,10 +8,10 @@
 #ifndef SRC_CHARACTER_H_
 #define SRC_CHARACTER_H_
 
-#include "Timer.h"
-#include "math.h"
+#include "math/Timer.h"
+#include "math/math.h"
 
-#include "ShaderSprite.h"
+#include "graphics/ShaderSprite.h"
 
 namespace bsk {
 

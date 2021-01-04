@@ -9,14 +9,14 @@
 #define SRC_GAMEENGINE_H_
 
 #include <memory>
-#include "Timer.h"
+#include "math/Timer.h"
+#include "core/IScene.h"
 
 namespace bsk {
 
 class Render;
 class FontManager;
 class Joystick;
-class Level1;
 class Keyboard;
 
 /**
@@ -27,6 +27,8 @@ class GameEngine {
 public:
 
    virtual ~GameEngine();
+
+   void setScene(std::shared_ptr<bsk::IScene>& scene);
 
    bool start(uint width, uint height);
 
@@ -60,7 +62,7 @@ private:
    std::unique_ptr<FontManager>   fontManager_;
    std::unique_ptr<Joystick>      joy_;
    std::unique_ptr<Keyboard>      keyboard_;
-   std::unique_ptr<Level1>        level1_;
+   std::shared_ptr<IScene>        scene_;
 
    uint         height_;
    uint         width_;

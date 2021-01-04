@@ -8,15 +8,16 @@
 #ifndef SRC_LEVEL1_H_
 #define SRC_LEVEL1_H_
 
-#include "Timer.h"
-#include "GameEngine.h"
+#include "math/Timer.h"
+#include "core/GameEngine.h"
+#include "graphics/Sprite.h"
+#include "math/math.h"
+#include "core/IScene.h"
 #include "Character.h"
-#include "Sprite.h"
-#include "math.h"
 
 namespace bsk {
 
-class Level1 {
+class Level1: public IScene {
 public:
    Level1();
    virtual ~Level1();

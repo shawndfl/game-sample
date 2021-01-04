@@ -11,11 +11,11 @@
 #include <sys/types.h>
 #include <string>
 #include <GLES2/gl2.h>
-#include "Geometry.h"
-#include "ImageLoader.h"
-#include "Material.h"
-#include "ShaderSprite.h"
-#include "Vector4.h"
+#include "graphics/Geometry.h"
+#include "graphics/ImageLoader.h"
+#include "graphics/Material.h"
+#include "graphics/ShaderSprite.h"
+#include "math/Vector4.h"
 
 namespace bsk {
 

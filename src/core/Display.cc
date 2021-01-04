@@ -8,7 +8,7 @@
 #include "Display.h"
 
 #include "Logging.h"
-#include "Render.h"
+#include "graphics/Render.h"
 
 #define GLFW_INCLUDE_ES2
 #include <GLFW/glfw3.h>

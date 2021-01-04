@@ -6,7 +6,7 @@
  */
 
 #include "Texture.h"
-#include "Logging.h"
+#include "core/Logging.h"
 #include <GLES2/gl2.h>
 
 namespace bsk {

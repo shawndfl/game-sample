@@ -12,10 +12,10 @@
 #include <vector>
 #include <GLES2/gl2.h>
 
-#include "ShaderProgram.h"
-#include "Geometry.h"
-#include "Material.h"
-#include "math.h"
+#include "graphics/ShaderProgram.h"
+#include "graphics/Geometry.h"
+#include "graphics/Material.h"
+#include "math/math.h"
 
 namespace bsk {
 

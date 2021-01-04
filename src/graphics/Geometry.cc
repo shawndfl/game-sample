@@ -6,8 +6,8 @@
  */
 
 #include "Geometry.h"
-#include "Logging.h"
-#include "ShaderSprite.h"
+#include "core/Logging.h"
+#include "graphics/ShaderSprite.h"
 
 namespace bsk {
 

@@ -5,17 +5,22 @@
 
 APP:=BlockSimulatedKingdom
 
-SRC_CC := $(wildcard ./src/*.cc)
+SRC_CC := $(wildcard ./src/*/*.cc)
 SRC := $(notdir $(SRC_CC:%.cc=%))
 OBJ := $(SRC:%=bin/%.o)
 
 CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD
-CFLAGS += -I /usr/include
+CFLAGS += -I /usr/include -I src/
 LDFLAGS := -pthread
 LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng
 
 # Phony targets
 .PHONY: all clean debug
+
+vpath *.cc core/
+vpath *.cc graphics/
+vpath *.cc level1/
+vpath *.cc math/
 
 #
 # Bulid app
@@ -32,7 +37,7 @@ debug: all
 #
 # Compile
 #
-bin/%.o: src/%.cc
+bin/%.o: src/*/%.cc
 	@mkdir -p bin/
 	@echo compiling $<
 	@$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 

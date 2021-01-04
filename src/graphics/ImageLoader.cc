@@ -5,8 +5,8 @@
  *      Author: sdady
  */
 
-#include "ImageLoader.h"
-#include "Logging.h"
+#include "graphics/ImageLoader.h"
+#include "core/Logging.h"
 
 #define PNG_DEBUG 3
 #include <png.h>

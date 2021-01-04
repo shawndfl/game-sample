@@ -1,14 +1,14 @@
 /*
- * ShaderSprite.cc
+ * ShaderBlinnPhong.cc
  *
  *  Created on: Jul 31, 2020
  *      Author: sdady
  */
 
-#include "ShaderSprite.h"
+#include "ShaderBlinnPhong.h"
 
-#include "Logging.h"
-#include "math.h"
+#include "core/Logging.h"
+#include "math/math.h"
 
 namespace bsk {
 
@@ -42,7 +42,7 @@ static const GLchar *fragmentShaderSource =
         "                                          \n";
 
 /*************************************************/
-ShaderSprite::ShaderSprite() {
+ShaderBlinnPhong::ShaderBlinnPhong() {
    program_ = 0;
 
    mvp_ = -1;
@@ -53,31 +53,19 @@ ShaderSprite::ShaderSprite() {
    uscale_= -1;
    uoffset_= -1;
 
-   aPosition_= -1;
-   aTexture_= -1;
+   position_= -1;
+   texture_= -1;
+   normal_= -1;
 
    byteStride_ = 0;
 }
 
 /*************************************************/
-ShaderSprite::~ShaderSprite() {
-   dispose();
+ShaderBlinnPhong::~ShaderBlinnPhong() {
 }
 
 /*************************************************/
-void ShaderSprite::dispose() {
-   if(program_ != 0) {
-      LOGD("Disposing program: " << program_);
-      glDeleteProgram(program_);
-      program_ = 0;
-   }
-}
-
-/*************************************************/
-bool ShaderSprite::loadProgram() {
-
-    dispose();
-
+bool ShaderBlinnPhong::loadProgram() {
     const uint LOG_LEN = 1024;
     GLchar infoLog[LOG_LEN];
     GLint success;
@@ -105,8 +93,6 @@ bool ShaderSprite::loadProgram() {
     }
 
     program_ = glCreateProgram();
-    LOGD("Creating program: " << program_);
-
     glAttachShader(program_, vertex);
     glAttachShader(program_, fragment);
     glLinkProgram(program_);
@@ -131,8 +117,8 @@ bool ShaderSprite::loadProgram() {
 
 
     // setup attributes
-    aPosition_ = getAttributeLocation("a_pos");
-    aTexture_ = getAttributeLocation("a_tex");
+    position_ = getAttributeLocation("a_pos");
+    texture_ = getAttributeLocation("a_tex");
 
     // pos + tex * float size
     byteStride_ = (3 + 2) * sizeof(float);
@@ -156,13 +142,12 @@ bool ShaderSprite::loadProgram() {
     Matrix4 mat;
     setMVP(mat);
 
-    LOGD("Creating Shader");
 
     return true;
 }
 
 /*************************************************/
-int ShaderSprite::getUniformLocation(const std::string& name) {
+int ShaderBlinnPhong::getUniformLocation(const std::string& name) {
    int id = glGetUniformLocation(program_, name.c_str());
    if(id == -1) {
       LOGD("Cannot find uniform: " << name);
@@ -171,7 +156,7 @@ int ShaderSprite::getUniformLocation(const std::string& name) {
 }
 
 /*************************************************/
-int ShaderSprite::getAttributeLocation(const std::string& name) {
+int ShaderBlinnPhong::getAttributeLocation(const std::string& name) {
    int id = glGetAttribLocation(program_, name.c_str());
    if(id == -1) {
       LOGD("Cannot find attribute: " << name);
@@ -180,58 +165,67 @@ int ShaderSprite::getAttributeLocation(const std::string& name) {
 }
 
 /*************************************************/
-void ShaderSprite::enableProgram() {
+void ShaderBlinnPhong::enableProgram() {
     // enable our shader program
     glUseProgram(program_);
     glEnable(GL_BLEND);
-    texture_.apply(0);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /*************************************************/
-bool ShaderSprite::setTexture(const Texture& texture) {
+bool ShaderBlinnPhong::bindMaterial(const Material &material) {
 
-    texture_ = texture;
+    material.apply();
     return true;
 }
 
 /*************************************************/
-int ShaderSprite::getPosition() const {
-   return aPosition_;
+int ShaderBlinnPhong::getNormal() const {
+   return normal_;
 }
 
 /*************************************************/
-int ShaderSprite::getTexture() const {
-   return aTexture_;
+int ShaderBlinnPhong::getPosition() const {
+   return position_;
 }
 
 /*************************************************/
-int ShaderSprite::getByteStride() const {
+int ShaderBlinnPhong::getTexture() const {
+   return texture_;
+}
+
+/*************************************************/
+int ShaderBlinnPhong::getByteStride() const {
    return byteStride_;
 }
 
 /*************************************************/
-int ShaderSprite::getColor() const {
+int ShaderBlinnPhong::getColor() const {
    return ucolor_;
 }
 
 /*************************************************/
-int ShaderSprite::getDiffused() const {
+int ShaderBlinnPhong::getDiffused() const {
    return diffused_;
 }
 
 /*************************************************/
-int ShaderSprite::getUoffset() const {
+int ShaderBlinnPhong::getOverlay() const {
+   return overlay_;
+}
+
+/*************************************************/
+int ShaderBlinnPhong::getUoffset() const {
    return uoffset_;
 }
 
 /*************************************************/
-int ShaderSprite::getUscale() const {
+int ShaderBlinnPhong::getUscale() const {
    return uscale_;
 }
 
 /*************************************************/
-void ShaderSprite::setScreenSize(uint width, uint height) {
+void ShaderBlinnPhong::setScreenSize(uint width, uint height) {
    glUseProgram(program_);
 
    Vector2 size(width, height);
@@ -240,22 +234,22 @@ void ShaderSprite::setScreenSize(uint width, uint height) {
 }
 
 /*************************************************/
-void ShaderSprite::setColor(const Vector4& color) {
+void ShaderBlinnPhong::setColor(const Vector4& color) {
    color.setUniform(ucolor_);
 }
 
 /*************************************************/
-void ShaderSprite::setOffset(const Vector2& offset) {
+void ShaderBlinnPhong::setOffset(const Vector2& offset) {
    offset.setUniform(uoffset_);
 }
 
 /*************************************************/
-void ShaderSprite::setScale(const Vector2& scale) {
+void ShaderBlinnPhong::setScale(const Vector2& scale) {
    scale.setUniform(uscale_);
 }
 
 /*************************************************/
-void ShaderSprite::setMVP(const Matrix4& mvp) {
+void ShaderBlinnPhong::setMVP(const Matrix4& mvp) {
    glUseProgram(program_);
    mvp.setUniform(mvp_);
 }

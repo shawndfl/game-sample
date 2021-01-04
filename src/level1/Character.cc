@@ -5,12 +5,13 @@
  *      Author: sdady
  */
 
-#include "Character.h"
-#include "GameEngine.h"
-#include "Joystick.h"
-#include "Logging.h"
-#include "ImageLoader.h"
-#include "math.h"
+#include "../level1/Character.h"
+
+#include "core/GameEngine.h"
+#include "core/Joystick.h"
+#include "core/Logging.h"
+#include "graphics/ImageLoader.h"
+#include "math/math.h"
 
 namespace bsk {
 

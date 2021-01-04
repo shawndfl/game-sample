@@ -8,13 +8,13 @@
 #ifndef SRC_FONTMANAGER_H_
 #define SRC_FONTMANAGER_H_
 
-#include "Font.h"
+#include "graphics/Font.h"
 #include <map>
 #include <string>
 #include <sstream>
 #include <sys/types.h>
-#include "Vector4.h"
-#include "NoCopy.h"
+#include "math/Vector4.h"
+#include "core/NoCopy.h"
 
 namespace bsk {
 

@@ -5,9 +5,9 @@
  *      Author: sdady
  */
 
-#include "FontManager.h"
-#include "ImageLoader.h"
-#include "Logging.h"
+#include "graphics/FontManager.h"
+#include "graphics/ImageLoader.h"
+#include "core/Logging.h"
 
 namespace bsk {
 

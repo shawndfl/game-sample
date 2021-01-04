@@ -8,8 +8,8 @@
 #ifndef SRC_MATERIAL_H_
 #define SRC_MATERIAL_H_
 
-#include "Texture.h"
-#include "Vector4.h"
+#include "graphics/Texture.h"
+#include "math/Vector4.h"
 
 namespace bsk {
 

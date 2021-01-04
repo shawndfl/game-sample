@@ -1,20 +1,20 @@
 /*
- * Coins.cc
+ * IScene.cc
  *
- *  Created on: Dec 29, 2020
+ *  Created on: Jan 3, 2021
  *      Author: sdady
  */
 
-#include "Coins.h"
+#include "IScene.h"
 
 namespace bsk {
 
-Coins::Coins() {
+IScene::IScene() {
    // TODO Auto-generated constructor stub
 
 }
 
-Coins::~Coins() {
+IScene::~IScene() {
    // TODO Auto-generated destructor stub
 }
 
