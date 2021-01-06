@@ -7,13 +7,12 @@
 
 #include "Sprite.h"
 #include "ImageLoader.h"
+#include "core/GameEngine.h"
 
 namespace bsk {
 
 /*************************************************/
 Sprite::Sprite() {
-   screenWidth_ = 600;
-   screenHeight_ = 800;
    imageDepth_ = 1.0;
 }
 
@@ -103,18 +102,18 @@ void Sprite::initialize(const Texture& spriteTexture) {
 }
 
 /*************************************************/
-void Sprite::updateScreenSize(uint width, uint height) {
-   screenWidth_ = width;
-   screenHeight_ = height;
-}
-
-/*************************************************/
 void Sprite::update(Milliseconds dt) {
    Vector4 color(1, 1, 1, 1);
    color.setUniform(shader_.getColor());
 
    Matrix4 projection;
-   projection.createOrthographic(-QUAD_SIZE, screenWidth_, 0,  screenHeight_, 0, 10);
+   projection.createOrthographic(
+         -QUAD_SIZE,
+         GameEngine::get().getWidth(),
+         0,
+         GameEngine::get().getHeight(),
+         0,
+         10);
    transform_.setTranslation(position_);
 
    Matrix4 view;

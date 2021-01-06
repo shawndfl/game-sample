@@ -14,6 +14,7 @@
 #include "math/math.h"
 #include "core/IScene.h"
 #include "Character.h"
+#include "core/AnimationClip.h"
 
 namespace bsk {
 
@@ -38,6 +39,11 @@ private:
    Texture    mainTexture_;
    Character  character_;
    Sprite     sprite_;
+
+   Timer      timer_;
+   uint       frameCount_;
+
+   AnimationClip clip_;
 
 };
 

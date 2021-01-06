@@ -18,7 +18,7 @@ namespace bsk {
 
 /*************************************************/
 Level1::Level1() {
-
+   frameCount_ = 0;
 }
 
 /*************************************************/
@@ -31,11 +31,7 @@ bool Level1::start() {
 
    std::stringstream stream;
    stream << "Hello!\nTest";
-   GameEngine::get().getFontManager().setFont("title", stream, 0, 0, 32);
-
-   stream.str("");
-   stream << "Hello2";
-   GameEngine::get().getFontManager().setFont("title2", stream, 300, 300, 32);
+   GameEngine::get().getFontManager().setFont("title", stream, 0, 45, 32);
 
    loadMainTexture();
 
@@ -50,20 +46,33 @@ bool Level1::start() {
 /*************************************************/
 void Level1::update(Milliseconds dt) {
 
+   if(timer_.getDelta() > 1000) {
+      double fps = frameCount_;
+      std::stringstream stream;
+      stream << "FPS: " << fps;
+
+      // show frame rate
+      GameEngine::get().getFontManager().setFont("fps", stream, 0, 0, 32);
+
+      frameCount_ = 0;
+      timer_.reset();
+   }
+
    character_.update(dt);
    sprite_.update(dt);
+
+   frameCount_++;
 
 }
 
 /*************************************************/
 void Level1::resize(uint width, uint height) {
    character_.resize(width, height);
-   sprite_.updateScreenSize(width, height);
 }
 
 /*************************************************/
 void Level1::keyEvent(int key, int scancode, int action, int mods) {
-   LOGD("key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods);
+   //LOGD("key: " << key << " scancode: " << scancode << " action: " << action << " mods: " << mods);
 
    character_.onKey(key, scancode, action, mods);
 }

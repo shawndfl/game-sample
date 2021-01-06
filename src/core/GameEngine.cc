@@ -105,6 +105,8 @@ void bsk::GameEngine::dispose() {
 
 /*************************************************/
 void GameEngine::resize(uint width, uint height) {
+   width_ = width;
+   height_ = height;
    render_->resize(width, height);
    fontManager_->resize(width, height);
    if(scene_) {

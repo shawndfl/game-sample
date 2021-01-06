@@ -8,6 +8,7 @@
 #include "graphics/FontManager.h"
 #include "graphics/ImageLoader.h"
 #include "core/Logging.h"
+#include "core/GameEngine.h"
 
 namespace bsk {
 
@@ -27,7 +28,7 @@ void FontManager::update() {
    fontTexture_.apply();
 
    Matrix4 projection;
-   projection.createOrthographic(1, 600, 1, 500, 0, 10);
+   projection.createOrthographic(0, GameEngine::get().getWidth(), 1, GameEngine::get().getHeight(), 0, 10);
 
    Matrix4 mvp = projection;
    shader_.setMVP(mvp);
@@ -59,6 +60,7 @@ bool FontManager::initialize(const std::string& imageFile) {
 
 /*************************************************/
 void FontManager::resize(uint width, uint height) {
+
    shader_.setScreenSize(width, height);
 }
 

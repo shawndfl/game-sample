@@ -46,9 +46,9 @@ public:
 
    uint getHeight();
 
-    FontManager& getFontManager();
-    Joystick& getJoy();
-    Render& getRender();
+   FontManager& getFontManager();
+   Joystick& getJoy();
+   Render& getRender();
 
     /**
      * Called to raise a key event

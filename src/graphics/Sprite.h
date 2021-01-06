@@ -27,8 +27,6 @@ public:
 
    void initialize(const Texture& spriteTexture);
 
-   void updateScreenSize(uint width, uint height);
-
    void update(Milliseconds dt);
 
    void setImageIndex(uint imageIndex);
@@ -49,8 +47,6 @@ private:
    Geometry          geometry_;
    Matrix4           transform_;
 
-   float             screenWidth_;
-   float             screenHeight_;
    float             imageDepth_;
 
    Vector3           position_;         /// Current position on the screen
