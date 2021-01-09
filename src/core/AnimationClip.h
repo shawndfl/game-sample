@@ -9,6 +9,7 @@
 #define SRC_ANIMATIONCLIP_H_
 
 #include "math/Timer.h"
+#include <vector>
 #include <map>
 
 namespace bsk {
@@ -24,6 +25,13 @@ public:
       Ac_PingPong   = 0x02,
       Ac_Loop       = 0x04,
       Ac_Descreet   = 0x08,
+   };
+   /**
+    * the key for the animation frame
+    */
+   struct key {
+      uint ms;
+      float value;
    };
 
    AnimationClip();
@@ -41,8 +49,14 @@ public:
 
    void setFlags(Flags animationFlags);
 
+   /**
+    * Used to find something in a list
+    */
+   static uint find(const std::vector<uint>& list, float value);
+
 private:
-   std::map<uint, float>   timeMap_;
+   std::vector<uint>       times_;
+   std::vector<double>     values_;
    Timer                   timer_;
    Flags                   flags_;
 };

@@ -29,11 +29,19 @@ Level1::~Level1() {
 /*************************************************/
 bool Level1::start() {
 
+   // show some text
    std::stringstream stream;
    stream << "Hello!\nTest";
    GameEngine::get().getFontManager().setFont("title", stream, 0, 45, 32);
 
+   // load the main texture that will
+   // be shared between all sprites
    loadMainTexture();
+
+   clip_.addKey(0, 1);
+   clip_.addKey(100, 2);
+   clip_.addKey(200, 3);
+
 
    sprite_.initialize(mainTexture_);
 

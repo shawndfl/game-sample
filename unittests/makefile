@@ -5,7 +5,7 @@
 
 APP:=bin/unitTests
 
-SRC_CC := $(wildcard ../src/*.cc) $(wildcard ./*.cc)
+SRC_CC := $(wildcard ../src/*/*.cc) $(wildcard ./*.cc)
 SRC_CPP := $(wildcard ./UnitTest++/*.cpp) $(wildcard ./UnitTest++/Posix/*.cpp)
 
 SRC_CC := $(notdir $(SRC_CC:%.cc=%))
@@ -14,12 +14,15 @@ SRC_CPP := $(notdir $(SRC_CPP:%.cpp=%))
 OBJ_CC := $(filter-out bin/main.o,$(SRC_CC:%=bin/%.o))
 OBJ_CPP := $(SRC_CPP:%=bin/%.o)
 
-CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD -I../src
+CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD -I ../src
 CFLAGS += -I /usr/include
 LDFLAGS := -pthread -std=c++17
 LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng
 
-vpath %.cc ../src/
+vpath %.cc ../src/core/
+vpath %.cc ../src/graphics/
+vpath %.cc ../src/level1/
+vpath %.cc ../src/math
 vpath %.cc ./
 vpath %.cpp ./UnitTest++/
 vpath %.cpp ./UnitTest++/Posix

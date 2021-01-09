@@ -3,7 +3,7 @@
 # sudo apt install libx11-dev libepoxy-dev libunittest++-dev
 #
 
-APP:=BlockSimulatedKingdom
+APP:=bin/BlockSimulatedKingdom
 
 SRC_CC := $(wildcard ./src/*/*.cc)
 SRC := $(notdir $(SRC_CC:%.cc=%))

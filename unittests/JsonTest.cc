@@ -1,7 +1,7 @@
 #include "UnitTest++/UnitTest++.h"
-#include "Logging.h"
-#include "JsonNode.h"
-#include "JsonParser.h"
+#include "core/Logging.h"
+#include "core/JsonNode.h"
+#include "core/JsonParser.h"
 
 SUITE(Json) {
 
@@ -11,7 +11,6 @@ TEST(ToString) {
    value.set(12);
    node.set("test", value);
    CHECK_EQUAL("{\"test\":12.000000}", node.toString());
-
 }
 
 TEST(Array) {
@@ -45,7 +44,7 @@ TEST(DeepObjects) {
    object2["item2"] = "testing";
    object2["item3"] = "testing";
 
-   JsonNode& array2 = object2["item4"];
+   bsk::JsonNode& array2 = object2["item4"];
    array2[3] = 9;
 
    //LOG(object.toString());
@@ -54,9 +53,9 @@ TEST(DeepObjects) {
 }
 
 TEST(ParseCompare) {
-   JsonNode object;
+   bsk::JsonNode object;
 
-   JsonNode& array = object["array"];
+   bsk::JsonNode& array = object["array"];
    array.append() = "testing1";
    array.append() = "testing2";
    array.append() = "testing3";
@@ -102,9 +101,9 @@ TEST(Parse) {
 
 
 TEST(ParseError) {
-   JsonParser parser;
+   bsk::JsonParser parser;
 
-   JsonNode data = parser.parse("{\n \"key\":2,\n\"key2\"\n  : 7,  }");
+   bsk::JsonNode data = parser.parse("{\n \"key\":2,\n\"key2\"\n  : 7,  }");
 
    CHECK_EQUAL(true, parser.hasError());
 
@@ -112,9 +111,9 @@ TEST(ParseError) {
 }
 
 TEST(ParseErrorAssigment) {
-   JsonParser parser;
+   bsk::JsonParser parser;
 
-   JsonNode data = parser.parse("{\n \"key\" 2,\n\"key2\"\n  : 7,  }");
+   bsk::JsonNode data = parser.parse("{\n \"key\" 2,\n\"key2\"\n  : 7,  }");
 
    CHECK_EQUAL(true, parser.hasError());
 

@@ -1,7 +1,7 @@
 #include "UnitTest++/UnitTest++.h"
-#include "Logging.h"
-#include "JsonNode.h"
-#include "JsonParser.h"
+#include "core/Logging.h"
+#include "core/JsonNode.h"
+#include "core/JsonParser.h"
 
 SUITE(Math) {
 
