@@ -29,8 +29,12 @@ public:
    /**
     * the key for the animation frame
     */
-   struct key {
-      uint ms;
+   struct Key {
+      Key(float ms, float value) : ms(ms), value(value) { }
+
+      Key() : ms(0), value(0) { }
+
+      float ms;
       float value;
    };
 
@@ -39,7 +43,7 @@ public:
 
    void addKey(uint ms, float value);
 
-   float evaluate(uint ms, bool descreet ) const;
+   float evaluate(uint ms, bool discrete = false ) const;
 
    uint getMax() const;
 
@@ -52,11 +56,16 @@ public:
    /**
     * Used to find something in a list
     */
-   static uint find(const std::vector<uint>& list, float value);
+   static uint find(const std::vector<Key>& list, float value);
+
+   bool operator() (const Key& a, const Key& b) const;
+
+   Flags getFlags() const;
+
+   const std::vector<Key>& getKeys() const;
 
 private:
-   std::vector<uint>       times_;
-   std::vector<double>     values_;
+   std::vector<Key>        keys_;
    Timer                   timer_;
    Flags                   flags_;
 };
