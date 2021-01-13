@@ -131,6 +131,8 @@ void Sprite::update(Milliseconds dt) {
 
 /*************************************************/
 void Sprite::setImageIndex(uint imageIndex) {
+   float offset = imageIndex * 32.0 / 1024.0;
+   shader_.setOffset(Vector2(offset, 0));
 }
 
 /*************************************************/

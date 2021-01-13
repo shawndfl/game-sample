@@ -19,13 +19,6 @@ namespace bsk {
  */
 class AnimationClip {
 public:
-   enum Flags {
-      Ac_None       = 0x00,
-      Ac_Running    = 0x01,
-      Ac_PingPong   = 0x02,
-      Ac_Loop       = 0x04,
-      Ac_Descreet   = 0x08,
-   };
    /**
     * the key for the animation frame
     */
@@ -34,24 +27,32 @@ public:
 
       Key() : ms(0), value(0) { }
 
-      float ms;
-      float value;
+      Milliseconds   ms;
+      float          value;
    };
 
    AnimationClip();
+
    virtual ~AnimationClip();
 
    void addKey(uint ms, float value);
 
-   float evaluate(uint ms, bool discrete = false ) const;
+   float evaluate(bool discrete = false ) const;
 
-   uint getMax() const;
+   float evaluate(Milliseconds ms, bool discrete = false ) const;
+
+   /**
+    * Update the animation time
+    */
+   void update(Milliseconds dt);
+
+   Milliseconds getMax() const;
 
    void play();
 
    void pause();
 
-   void setFlags(Flags animationFlags);
+   void setLoop(bool loop);
 
    /**
     * Used to find something in a list
@@ -60,14 +61,13 @@ public:
 
    bool operator() (const Key& a, const Key& b) const;
 
-   Flags getFlags() const;
-
    const std::vector<Key>& getKeys() const;
 
 private:
    std::vector<Key>        keys_;
-   Timer                   timer_;
-   Flags                   flags_;
+   Milliseconds            milliseconds_;
+   bool                    looping_;
+   bool                    playing_;
 };
 
 } /* namespace bsk */

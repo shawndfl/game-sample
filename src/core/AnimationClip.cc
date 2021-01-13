@@ -14,7 +14,9 @@ namespace bsk {
 
 /*************************************************/
 AnimationClip::AnimationClip() {
-   flags_ = Ac_None;
+   playing_ = false;
+   looping_ = false;
+   milliseconds_ = 0;
 }
 
 /*************************************************/
@@ -85,7 +87,28 @@ void AnimationClip::addKey(uint ms, float value) {
 }
 
 /*************************************************/
-float AnimationClip::evaluate(uint ms, bool discrete) const {
+float AnimationClip::evaluate(bool discrete) const {
+   return evaluate(milliseconds_, discrete);
+}
+
+/*************************************************/
+void AnimationClip::update(Milliseconds dt) {
+   // if we are running
+   if(playing_) {
+
+      // if we hit a the limit
+      if (milliseconds_ > getMax()) {
+         if (looping_) {
+            milliseconds_ = 0;
+         }
+      } else {
+         milliseconds_ += dt;
+      }
+   }
+}
+
+/*************************************************/
+float AnimationClip::evaluate(Milliseconds ms, bool discrete) const {
    uint index = find(keys_, ms);
 
    // no items
@@ -116,7 +139,7 @@ float AnimationClip::evaluate(uint ms, bool discrete) const {
 }
 
 /*************************************************/
-uint AnimationClip::getMax() const {
+Milliseconds AnimationClip::getMax() const {
    if(keys_.size() > 0) {
       return keys_[keys_.size()-1].ms;
    } else {
@@ -126,19 +149,17 @@ uint AnimationClip::getMax() const {
 
 /*************************************************/
 void AnimationClip::play() {
+   playing_ = true;
 }
 
 /*************************************************/
 void AnimationClip::pause() {
+   playing_ = false;
 }
 
 /*************************************************/
-void AnimationClip::setFlags(Flags animationFlags) {
-}
-
-/*************************************************/
-AnimationClip::Flags AnimationClip::getFlags() const {
-   return flags_;
+void AnimationClip::setLoop(bool loop) {
+  looping_ = loop;
 }
 
 /*************************************************/

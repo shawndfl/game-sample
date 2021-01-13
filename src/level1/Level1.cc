@@ -38,10 +38,13 @@ bool Level1::start() {
    // be shared between all sprites
    loadMainTexture();
 
-   clip_.addKey(0, 1);
-   clip_.addKey(100, 2);
-   clip_.addKey(200, 3);
+   clip_.addKey(100, 0);
+   clip_.addKey(500, 1);
+   clip_.addKey(1000, 2);
+   clip_.addKey(1200, 0);
 
+   clip_.setLoop(true);
+   clip_.play();
 
    sprite_.initialize(mainTexture_);
 
@@ -53,6 +56,8 @@ bool Level1::start() {
 
 /*************************************************/
 void Level1::update(Milliseconds dt) {
+
+   clip_.update(dt);
 
    if(timer_.getDelta() > 1000) {
       double fps = frameCount_;
@@ -68,6 +73,8 @@ void Level1::update(Milliseconds dt) {
 
    character_.update(dt);
    sprite_.update(dt);
+
+   sprite_.setImageIndex(clip_.evaluate(true));
 
    frameCount_++;
 
