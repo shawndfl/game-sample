@@ -39,18 +39,17 @@ bool Level1::start() {
    loadMainTexture();
 
    clip_.addKey(100, 0);
-   clip_.addKey(500, 1);
-   clip_.addKey(1000, 2);
-   clip_.addKey(1200, 0);
+   clip_.addKey(200, 1);
+   clip_.addKey(300, 2);
+   clip_.addKey(400, 0);
 
-   clip_.setLoop(true);
-   clip_.play();
+   clip_.play(true);
 
    sprite_.initialize(mainTexture_);
 
    character_.initialize();
 
-   character_.setPosition(0,0);
+   character_.setPosition(20,0);
    return true;
 }
 

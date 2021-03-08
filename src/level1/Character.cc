@@ -30,7 +30,13 @@ Character::Character() {
    position_ = Vector3(0,0,DEPTH);
 
    state_          = StIdle;
-   animationFrame_ = 0;
+
+   // set animationClips
+   clip_.addKey(0, 5);
+   clip_.addKey(100, 6);
+   clip_.addKey(200, 7);
+   clip_.addKey(300, 8);
+   clip_.addKey(400, 5);
 }
 
 /*************************************************/
@@ -108,6 +114,7 @@ void Character::initialize() {
 
    geometry_.setBuffers(verts_, indices_);
 
+
    setPosition(0, 0);
 }
 
@@ -121,24 +128,18 @@ void Character::update(Milliseconds dt) {
 
    updateTransform();
 
+   clip_.update(dt);
+
    if(state_ == StMovingLeft || state_ == StMovingRight) {
-      if(animationTimer_.getDelta() > 200) {
-
-         // use animation frame
-         float offset = animationFrame_ * 32.0 / 1024.0;
-         shader_.setOffset(Vector2(offset, 0));
-
-         // loop
-         animationFrame_++;
-         if(animationFrame_ > 7) {
-            animationFrame_ = 5;
-         }
-
-         // reset timeer
-         animationTimer_.reset();
-      }
+      clip_.play(true);
+   } else {
+      clip_.setLoop(false);
    }
 
+   // use animation frame
+   int frame = clip_.evaluate(true);
+   float offset = frame * 32.0 / 1024.0;
+   shader_.setOffset(Vector2(offset, 0));
 
    // stop moving
    move(0, 0);

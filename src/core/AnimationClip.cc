@@ -148,8 +148,9 @@ Milliseconds AnimationClip::getMax() const {
 }
 
 /*************************************************/
-void AnimationClip::play() {
+void AnimationClip::play(bool looping) {
    playing_ = true;
+   looping_ = looping;
 }
 
 /*************************************************/
@@ -167,5 +168,19 @@ const std::vector<AnimationClip::Key>& AnimationClip::getKeys() const {
    return keys_;
 }
 
-} /* namespace bsk */
+/*************************************************/
+bool AnimationClip::isLooping() const {
+   return looping_;
+}
 
+/*************************************************/
+Milliseconds AnimationClip::getMilliseconds() const {
+   return milliseconds_;
+}
+
+/*************************************************/
+bool AnimationClip::isPlaying() const {
+   return playing_;
+}
+
+} /* namespace bsk */

@@ -10,6 +10,7 @@
 
 #include "math/Timer.h"
 #include "math/math.h"
+#include "core/AnimationClip.h"
 
 #include "graphics/ShaderSprite.h"
 
@@ -78,8 +79,8 @@ private:
 
    // used for animations
    State              state_;            /// The state of the character
-   Timer              animationTimer_;   /// Used to cycle animation frames for the character
-   int                animationFrame_;   /// Animation frame index. 0 is the left top most frame
+
+   AnimationClip      clip_;
 
 
 

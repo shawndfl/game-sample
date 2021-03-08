@@ -37,8 +37,15 @@ public:
 
    void addKey(uint ms, float value);
 
+   /**
+    * this function should be used the update(dt);
+    */
    float evaluate(bool discrete = false ) const;
 
+   /**
+    * This evaluate function will ignore what update(dt)
+    * has calculated for milliseconds_
+    */
    float evaluate(Milliseconds ms, bool discrete = false ) const;
 
    /**
@@ -48,10 +55,19 @@ public:
 
    Milliseconds getMax() const;
 
-   void play();
+   /**
+    * play the animation
+    */
+   void play(bool looping = false);
 
+   /**
+    * pause the animation
+    */
    void pause();
 
+   /**
+    * Set if the animation should loop
+    */
    void setLoop(bool loop);
 
    /**
@@ -59,9 +75,31 @@ public:
     */
    static uint find(const std::vector<Key>& list, float value);
 
+   /**
+    * Used for sorting keys
+    */
    bool operator() (const Key& a, const Key& b) const;
 
+   /**
+    * Get the keys
+    */
    const std::vector<Key>& getKeys() const;
+
+   /**
+    * is the animatoin looping
+    */
+   bool isLooping() const;
+
+   /**
+    * Get the current value of milliseconds from the update function
+    */
+   Milliseconds getMilliseconds() const;
+
+   /**
+    * is the animation playing. This will always be true if
+    * looping is true
+    */
+   bool isPlaying() const;
 
 private:
    std::vector<Key>        keys_;
