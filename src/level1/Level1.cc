@@ -50,6 +50,8 @@ bool Level1::start() {
    character_.initialize();
 
    character_.setPosition(20,0);
+
+   cube_.initialize();
    return true;
 }
 
@@ -69,6 +71,8 @@ void Level1::update(Milliseconds dt) {
       frameCount_ = 0;
       timer_.reset();
    }
+
+   cube_.render();
 
    character_.update(dt);
    sprite_.update(dt);

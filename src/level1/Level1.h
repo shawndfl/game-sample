@@ -15,6 +15,7 @@
 #include "core/IScene.h"
 #include "Character.h"
 #include "core/AnimationClip.h"
+#include "graphics/Cube.h"
 
 namespace bsk {
 
@@ -45,6 +46,7 @@ private:
 
    AnimationClip clip_;
 
+   Cube        cube_;
 };
 
 } /* namespace bsk */
