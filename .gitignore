@@ -43,3 +43,10 @@ unittests/tests
 *.project
 *.cproject
 .settings/
+
+# windows
+*.vs
+Debug/
+*.user
+*.filters
+

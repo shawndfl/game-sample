@@ -35,7 +35,7 @@ public:
 
    virtual ~AnimationClip();
 
-   void addKey(uint ms, float value);
+   void addKey(float ms, float value);
 
    /**
     * this function should be used the update(dt);

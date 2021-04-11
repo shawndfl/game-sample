@@ -79,9 +79,9 @@ public:
 
    JsonNode& operator=(int value);
 
-   JsonNode& operator=(uint value);
+   JsonNode& operator=(unsigned int value);
 
-   JsonNode& operator=(ulong value);
+   JsonNode& operator=(unsigned long value);
 
    JsonNode& operator=(long value);
 

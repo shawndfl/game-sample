@@ -213,7 +213,7 @@ JsonNode& JsonNode::operator [](const std::string& key) {
 }
 
 /*************************************************/
-JsonNode& JsonNode::operator =(ulong value) {
+JsonNode& JsonNode::operator =(unsigned long value) {
    type_= JsonNumber;
    valueNum_ = value;
    return *this;
@@ -227,7 +227,7 @@ JsonNode& JsonNode::operator =(int value) {
 }
 
 /*************************************************/
-JsonNode& JsonNode::operator =(uint value) {
+JsonNode& JsonNode::operator =(unsigned int value) {
    type_= JsonNumber;
    valueNum_ = value;
    return *this;

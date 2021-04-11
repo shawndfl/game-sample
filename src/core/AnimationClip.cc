@@ -80,7 +80,7 @@ bool AnimationClip::operator() (const Key& a, const Key& b) const {
 }
 
 /*************************************************/
-void AnimationClip::addKey(uint ms, float value) {
+void AnimationClip::addKey(float ms, float value) {
    Key key(ms, value);
    keys_.push_back(key);
    std::sort (keys_.begin(), keys_.end(), *this);

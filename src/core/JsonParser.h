@@ -69,13 +69,13 @@ private:
    bool parseNumber(const std::string& token, double& value) const;
 
 private:
-   std::string json_;
-   std::string token_;
-   uint        index_;     /// The current char
-   uint        line_;      /// The current line
-   std::string error_;     /// The error message
-   JsonNode    node_;      /// Root node
-   std::string file_;      /// Json filename
+   std::string  json_;
+   std::string  token_;
+   unsigned int index_;     /// The current char
+   unsigned int line_;      /// The current line
+   std::string  error_;     /// The error message
+   JsonNode     node_;      /// Root node
+   std::string  file_;      /// Json filename
 };
 
 }

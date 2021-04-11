@@ -8,6 +8,8 @@
 #ifndef SRC_IMAGE_H_
 #define SRC_IMAGE_H_
 #include <sys/types.h>
+#include "platform/platform.h"
+
 #include "core/NoCopy.h"
 
 namespace bsk {
