@@ -74,6 +74,11 @@ void ShaderSprite::dispose() {
 }
 
 /*************************************************/
+VertexAttributes ShaderSprite::getAttribute() const {
+   return APos | ATex1;
+}
+
+/*************************************************/
 bool ShaderSprite::loadProgram() {
 
     dispose();

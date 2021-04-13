@@ -26,7 +26,7 @@ Geometry::~Geometry() {
 }
 
 /*************************************************/
-void Geometry::initialize(uint vertexCount, uint indexCount, Attributes attribute, bool dynamic) {
+void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic) {
 
    dispose();
 
@@ -107,20 +107,24 @@ void Geometry::makeActive(const ShaderProgram& shader) const {
       // set our attributes
    long offset = 0;
    unsigned short stride = shader.getByteStride();
+   if(shader.getAttribute() != getAttribute()) {
+      LOGE("Miss match vertex attribute " << shader.getAttribute() << " != " <<   getAttribute());
+      return;
+   }
 
-   if ((getAttribute() & Geometry::APos) > 0) {
+   if ((getAttribute() & APos) > 0) {
       glVertexAttribPointer(shader.getPosition(), 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
       glEnableVertexAttribArray(0);
    }
 
    offset += 3 * sizeof(float);
-   if ((getAttribute() & Geometry::ATex1) > 0) {
+   if ((getAttribute() & ATex1) > 0) {
       glVertexAttribPointer(shader.getTexture(), 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
       glEnableVertexAttribArray(1);
    }
 
    offset += 2 * sizeof(float);
-   if ((getAttribute() & Geometry::ANorm) > 0) {
+   if ((getAttribute() & ANorm) > 0) {
       glVertexAttribPointer(shader.getNormal(), 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
       glEnableVertexAttribArray(2);
    }
@@ -135,7 +139,7 @@ GLuint Geometry::IndexCount() const {
 }
 
 /*************************************************/
-Geometry::Attributes Geometry::getAttribute() const {
+VertexAttributes Geometry::getAttribute() const {
    return attribute_;
 }
 

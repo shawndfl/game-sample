@@ -8,6 +8,8 @@
 #ifndef SRC_SHADERPROGRAM_H_
 #define SRC_SHADERPROGRAM_H_
 
+#include "graphics/VertexAttribute.h"
+
 namespace bsk {
 
 /**
@@ -22,6 +24,8 @@ public:
    virtual int getPosition() const;
    virtual int getTexture() const;
    virtual int getByteStride() const;
+
+   virtual VertexAttributes getAttribute() const;
 
 };
 

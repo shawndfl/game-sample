@@ -18,7 +18,7 @@ Font::Font() {
    screenY_  = 0;
    const uint MAX_CH = 50;
 
-   geometry_.initialize(MAX_CH * 4 * 5, MAX_CH * 6, Geometry::APos | Geometry::ATex1);
+   geometry_.initialize(MAX_CH * 4 * 5, MAX_CH * 6, APos | ATex1);
 }
 
 /*************************************************/

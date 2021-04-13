@@ -46,6 +46,8 @@ public:
    virtual int getTexture() const;
    virtual int getByteStride() const;
 
+   VertexAttributes getAttribute() const;
+
    int getColor() const;
    int getDiffused() const;
    int getUoffset() const;

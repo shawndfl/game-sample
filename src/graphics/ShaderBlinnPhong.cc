@@ -65,6 +65,11 @@ ShaderBlinnPhong::~ShaderBlinnPhong() {
 }
 
 /*************************************************/
+VertexAttributes ShaderBlinnPhong::getAttribute() const {
+   return APos | ANorm | ATex1;
+}
+
+/*************************************************/
 bool ShaderBlinnPhong::loadProgram() {
     const uint LOG_LEN = 1024;
     GLchar infoLog[LOG_LEN];

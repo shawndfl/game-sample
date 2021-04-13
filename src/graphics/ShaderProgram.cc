@@ -37,4 +37,9 @@ int ShaderProgram::getByteStride() const {
    return 0;
 }
 
+/*************************************************/
+VertexAttributes ShaderProgram::getAttribute() const {
+   return ANone;
+}
+
 } /* namespace bsk */

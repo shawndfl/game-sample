@@ -11,6 +11,7 @@
 #include <GLES2/gl2.h>
 #include <vector>
 #include <sys/types.h>
+#include "graphics/VertexAttribute.h"
 
 namespace bsk {
 
@@ -18,19 +19,12 @@ class ShaderProgram;
 
 class Geometry {
 public:
-   enum Attributes: char {
-         APos     = 0x01,
-         ATex1    = 0x02,
-         ANorm    = 0x04,
-         ATex2    = 0x08,
-         ASkin    = 0x10,
-   };
 
    Geometry();
 
    virtual ~Geometry();
 
-   void initialize(uint vertexCount, uint indexCount, Attributes attribute, bool dynamic = false);
+   void initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic = false);
 
    void setBuffers(const std::vector<float>& verts, const std::vector<GLushort>& indice);
 
@@ -40,7 +34,7 @@ public:
 
    GLuint IndexCount() const;
 
-   Attributes getAttribute() const;
+   VertexAttributes getAttribute() const;
 
 protected:
 
@@ -51,16 +45,12 @@ protected:
    uint       indexCount_;
    uint       vertexCount_;
 
-   Attributes             attribute_;
+   VertexAttributes             attribute_;
    std::vector<GLuint>    attributeIndex_;
 
 };
 
 } /* namespace bsk */
 
-inline bsk::Geometry::Attributes operator|(bsk::Geometry::Attributes a, bsk::Geometry::Attributes b)
-{
-    return static_cast<bsk::Geometry::Attributes>(static_cast<char>(a) | static_cast<char>(b));
-}
 
 #endif /* SRC_GEOMETRY_H_ */

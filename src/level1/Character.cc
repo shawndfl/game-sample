@@ -67,7 +67,7 @@ void Character::initialize() {
    glBindTexture(GL_TEXTURE0, 0);
 
    // create a quad for the character
-   geometry_.initialize(4*5, 6, Geometry::APos | Geometry::ATex1);
+   geometry_.initialize(4*5, 6, APos | ATex1);
    // pos
    verts_.push_back(CHARACTER_SIZE);
    verts_.push_back(0);

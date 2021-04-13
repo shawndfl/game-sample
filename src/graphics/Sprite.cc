@@ -48,7 +48,7 @@ void Sprite::initialize(const Texture& spriteTexture) {
    const int indexCount = 6;        // 6 index for 2 triangles
 
    // create a quad for the character
-   geometry_.initialize(floatCount, indexCount, Geometry::APos | Geometry::ATex1);
+   geometry_.initialize(floatCount, indexCount, APos | ATex1);
    std::vector<float>      verts;
    std::vector<GLushort>   indices;
 

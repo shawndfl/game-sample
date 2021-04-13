@@ -54,6 +54,8 @@ public:
    int getUoffset() const;
    int getUscale() const;
 
+   VertexAttributes getAttribute() const;
+
 private:
    int getUniformLocation(const std::string& name);
 
