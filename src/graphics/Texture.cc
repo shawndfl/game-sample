@@ -7,7 +7,7 @@
 
 #include "Texture.h"
 #include "core/Logging.h"
-#include <GLES2/gl2.h>
+#include "glad/glad.h"
 
 namespace bsk {
 

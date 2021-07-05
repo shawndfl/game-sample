@@ -8,6 +8,11 @@ This is a sample game with opengl es graphics
 sudo apt install  libglfw3-dev libpng-dev
 ```
 
+```Bash
+sudo dnf install  glfw-devel libpng-devel
+```
+
+Use [glad](https://glad.dav1d.de/) 
 # Build 
 
 ```

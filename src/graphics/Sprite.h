@@ -10,8 +10,6 @@
 
 #include "math/Timer.h"
 #include "math/math.h"
-
-#include <GLES2/gl2.h>
 #include "graphics/ShaderSprite.h"
 
 namespace bsk {

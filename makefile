@@ -5,22 +5,17 @@
 
 APP:=bin/BlockSimulatedKingdom
 
-SRC_CC := $(wildcard ./src/*/*.cc)
-SRC := $(notdir $(SRC_CC:%.cc=%))
-OBJ := $(SRC:%=bin/%.o)
+SRC_CC := $(notdir $(wildcard ./src/*/*.cc))
+SRC_C  := $(notdir $(wildcard ./src/*/*.c ))
+OBJ    := $(SRC_CC:%.cc=bin/%.o) $(SRC_C:%.c=bin/%.o)
 
-CFLAGS := -Wall -O3 -pthread -std=c++17 -MMD
-CFLAGS += -I /usr/include -I src/
+CFLAGS := -Wall -O3 -pthread -MMD
+CFLAGS += -I src/
 LDFLAGS := -pthread
-LDLIBS := -lstdc++ -lGLESv2 -lglfw -lpng
+LDLIBS := -lstdc++ -lpng -ldl /usr/local/lib64/libglfw3.a
 
 # Phony targets
 .PHONY: all clean debug
-
-vpath *.cc core/
-vpath *.cc graphics/
-vpath *.cc level1/
-vpath *.cc math/
 
 #
 # Bulid app
@@ -35,13 +30,21 @@ debug: CFLAGS += -g3
 debug: all
 
 #
-# Compile
+# Compile C++
 #
 bin/%.o: src/*/%.cc
 	@mkdir -p bin/
 	@echo compiling $<
-	@$(CXX) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 
-
+	@$(CXX) -c $(CFLAGS) -std=c++17 $(CPPFLAGS) -o $@ $<
+	 
+#
+# Compile C
+#
+bin/%.o: src/*/%.c
+	@mkdir -p bin/
+	@echo compiling $<
+	@$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< 
+	
 #
 # Link
 #

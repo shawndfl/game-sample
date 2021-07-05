@@ -10,7 +10,8 @@
 #include "Logging.h"
 #include "graphics/Render.h"
 
-#define GLFW_INCLUDE_ES2
+//#define GLFW_INCLUDE_ES2
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
 namespace bsk {
@@ -45,6 +46,11 @@ Display::~Display() {
 }
 
 /*************************************************/
+void errorCallback(int error, const char* description) {
+    LOGE("Glfw Error (" << error << "): " <<  description);
+}
+
+/*************************************************/
 void Display::resizeEvent(uint width, uint height) {
    game_.resize(width, height);
 }
@@ -69,13 +75,19 @@ void Display::runDisplay(uint width, uint height) {
 
    GLFWwindow* window;
 
-   glfwInit();
-   glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+   glfwSetErrorCallback(errorCallback);
+
+   if(!glfwInit()) {
+	   LOGE("Error glfwInit()");
+   }
+   //glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+   //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+   //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
    window = glfwCreateWindow(width, height, "Block Simulated Kingdom", NULL, NULL);
    glfwMakeContextCurrent(window);
+
+   gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
    if(!game_.start(width, height)) {
       LOGD("Error with start.");

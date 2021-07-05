@@ -10,7 +10,6 @@
 
 #include <string>
 #include <vector>
-#include <GLES2/gl2.h>
 
 #include "graphics/ShaderProgram.h"
 #include "graphics/Geometry.h"

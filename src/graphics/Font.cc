@@ -8,7 +8,6 @@
 #include "Font.h"
 #include "core/Logging.h"
 #include "core/GameEngine.h"
-#include <GLES2/gl2.h>
 
 namespace bsk {
 

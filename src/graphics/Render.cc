@@ -7,6 +7,7 @@
 
 #include "Render.h"
 #include "core/Logging.h"
+#include "glad/glad.h"
 
 namespace bsk {
 

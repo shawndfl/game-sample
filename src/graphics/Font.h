@@ -10,7 +10,6 @@
 
 #include <sys/types.h>
 #include <string>
-#include <GLES2/gl2.h>
 #include "graphics/Geometry.h"
 #include "graphics/ImageLoader.h"
 #include "graphics/Material.h"

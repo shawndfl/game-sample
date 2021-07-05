@@ -13,8 +13,9 @@
 #include "math/Vector2.h"
 #include "math/Vector3.h"
 #include "math/Vector4.h"
-
 #include "math/Matrix4.h"
+
+typedef unsigned int uint;
 
 namespace bsk {
    constexpr double PI = 3.14159265359;

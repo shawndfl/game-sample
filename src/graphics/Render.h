@@ -8,7 +8,6 @@
 #ifndef SRC_BSKRENDER_H_
 #define SRC_BSKRENDER_H_
 
-#include <GLES2/gl2.h>
 #include <sys/types.h>
 
 namespace bsk {

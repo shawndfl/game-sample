@@ -8,10 +8,10 @@
 #ifndef SRC_GEOMETRY_H_
 #define SRC_GEOMETRY_H_
 
-#include <GLES2/gl2.h>
 #include <vector>
 #include <sys/types.h>
 #include "graphics/VertexAttribute.h"
+#include "glad/glad.h"
 
 namespace bsk {
 
