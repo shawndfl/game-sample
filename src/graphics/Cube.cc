@@ -51,12 +51,14 @@ void Cube::initialize() {
    std::vector<float> verts(v, v+ sizeof(v) / sizeof(float));
    std::vector<ushort> faces(f, f+ sizeof(f) / sizeof(ushort));
 
-//   geometry_.initialize(8, )
+   geometry_.initialize(8, 24, VertexAttributes::APos, false);
 
+   transform_.setTranslation(0,0,0);
 }
 
 /*************************************************/
-void Cube::render() {
+void Cube::render(const Camera& camera) {
+	//TODO render cube
 }
 
 }

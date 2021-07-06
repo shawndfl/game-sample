@@ -52,6 +52,8 @@ bool Level1::start() {
    character_.setPosition(20,0);
 
    cube_.initialize();
+
+   //TODO initialize camera
    return true;
 }
 
@@ -72,7 +74,7 @@ void Level1::update(Milliseconds dt) {
       timer_.reset();
    }
 
-   cube_.render();
+   cube_.render(camera_);
 
    character_.update(dt);
    sprite_.update(dt);

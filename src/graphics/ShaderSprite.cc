@@ -8,7 +8,7 @@
 #include "ShaderSprite.h"
 
 #include "core/Logging.h"
-#include "math/math.h"
+#include "math/mathCore.h"
 
 namespace bsk {
 

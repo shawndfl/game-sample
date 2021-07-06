@@ -8,7 +8,6 @@
 #include "ShaderBlinnPhong.h"
 
 #include "core/Logging.h"
-#include "math/math.h"
 
 namespace bsk {
 

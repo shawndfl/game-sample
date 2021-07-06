@@ -9,7 +9,7 @@
 #define SRC_SPRITE_H_
 
 #include "math/Timer.h"
-#include "math/math.h"
+#include "math/mathCore.h"
 #include "graphics/ShaderSprite.h"
 
 namespace bsk {

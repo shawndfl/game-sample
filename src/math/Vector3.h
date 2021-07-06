@@ -13,6 +13,7 @@
 namespace bsk {
 
 class Matrix4;
+
 /**
  * Vector3 class
  */

@@ -14,7 +14,11 @@
 #include "ShaderProgram.h"
 #include "Geometry.h"
 #include "Material.h"
-#include "math/math.h"
+#include "math/mathCore.h"
+#include "math/Matrix4.h"
+#include "math/Vector4.h"
+#include "math/Vector2.h"
+#include "math/Vector3.h"
 
 namespace bsk {
 

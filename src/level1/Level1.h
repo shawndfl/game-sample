@@ -8,10 +8,11 @@
 #ifndef SRC_LEVEL1_H_
 #define SRC_LEVEL1_H_
 
+
+#include "../math/mathCore.h"
 #include "math/Timer.h"
 #include "core/GameEngine.h"
 #include "graphics/Sprite.h"
-#include "math/math.h"
 #include "core/IScene.h"
 #include "Character.h"
 #include "core/AnimationClip.h"
@@ -47,6 +48,8 @@ private:
    AnimationClip clip_;
 
    Cube        cube_;
+
+   Camera      camera_;
 };
 
 } /* namespace bsk */

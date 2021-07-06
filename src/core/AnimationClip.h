@@ -9,7 +9,7 @@
 #define SRC_ANIMATIONCLIP_H_
 
 #include "math/Timer.h"
-#include "math/math.h"
+#include "math/mathCore.h"
 #include <vector>
 #include <map>
 

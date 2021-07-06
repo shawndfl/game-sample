@@ -9,11 +9,12 @@
 #define SRC_MATH_H_
 
 #include <math.h>
-
 #include "math/Vector2.h"
 #include "math/Vector3.h"
 #include "math/Vector4.h"
 #include "math/Matrix4.h"
+#include "math/Quaternion.h"
+
 
 typedef unsigned int uint;
 

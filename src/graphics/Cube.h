@@ -9,6 +9,7 @@
 #define SRC_GRAPHICS_CUBE_H_
 
 #include "graphics/ShaderBlinnPhong.h"
+#include "graphics/Camera.h"
 
 namespace bsk {
 
@@ -19,7 +20,7 @@ public:
 
    void initialize();
 
-   void render();
+   void render(const Camera& camera);
 
 private:
 

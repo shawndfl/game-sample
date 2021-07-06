@@ -7,11 +7,11 @@
 
 #include "../level1/Character.h"
 
+#include "../math/mathCore.h"
 #include "core/GameEngine.h"
 #include "core/Joystick.h"
 #include "core/Logging.h"
 #include "graphics/ImageLoader.h"
-#include "math/math.h"
 
 namespace bsk {
 
@@ -186,7 +186,6 @@ void Character::updateTransform() {
    view.createLookAt(Vector3::ZERO, Vector3::FORWARD, Vector3::UP);
 
    Matrix4 mvp = projection_ * view * transform_;
-
 
    shader_.setMVP(mvp);
 }

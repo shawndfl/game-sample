@@ -8,7 +8,8 @@
 #ifndef SRC_MATRIX4_H_
 #define SRC_MATRIX4_H_
 
-#include "math.h"
+#include "math/mathCore.h"
+#include "math/Vector3.h"
 #include <math.h>
 #include <ostream>
 
