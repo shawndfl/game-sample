@@ -14,6 +14,9 @@
 
 namespace bsk {
 
+/**
+ * TODO implement this...
+ */
 class Object3D {
 public:
 	Object3D();

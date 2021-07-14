@@ -94,7 +94,6 @@ void Display::runDisplay(uint width, uint height) {
       exit(1);
    }
 
-   game_.resize(width, height);
    glfwSetKeyCallback(window, &keyboard);
    glfwSetWindowSizeCallback(window, &resize);
 

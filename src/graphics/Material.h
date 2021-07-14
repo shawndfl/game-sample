@@ -38,10 +38,10 @@ private:
 	bool 		transparent_;	/// If this material is transparent
 
    Vector4        color_;
-   float          uscale;
-   float          vscale;
-   float          uoffset;
-   float          voffset;
+   float          uscale_;
+   float          vscale_;
+   float          uoffset_;
+   float          voffset_;
 };
 
 } /* namespace bsk */

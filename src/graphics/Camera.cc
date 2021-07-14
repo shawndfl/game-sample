@@ -19,8 +19,28 @@ Camera::~Camera() {
 }
 
 /*************************************************/
-void Camera::initialize(const Vector3 &eye, const Vector3 &lookat, const Vector3 &up) {
-	//TODO implement this.
+void Camera::initializeView(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& upAxis) {
+    view_ = glm::lookAt(eye, target, upAxis);
+}
+
+/*************************************************/
+void Camera::initializeProj(float fov, float aspectRatio, float near, float far) {
+    projection_ = glm::perspective(glm::radians(fov), aspectRatio, near, far);
+}
+
+/*************************************************/
+void Camera::update() {
+
+}
+
+/*************************************************/
+const glm::mat4x4& Camera::getView() const {
+    return view_;
+}
+
+/*************************************************/
+const glm::mat4x4& Camera::getProjection() const {
+    return projection_;
 }
 
 } /* namespace bsk */

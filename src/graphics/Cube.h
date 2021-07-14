@@ -10,6 +10,8 @@
 
 #include "graphics/ShaderBlinnPhong.h"
 #include "graphics/Camera.h"
+#include "graphics/Material.h"
+#include "math/Timer.h"
 
 namespace bsk {
 
@@ -27,7 +29,13 @@ private:
    ShaderBlinnPhong  shader_;
    Texture           diffusedTexture_;
    Geometry          geometry_;
-   Matrix4           transform_;
+
+   Material          material_;
+   Image             img_;
+   Timer             debugTimer_;
+
+   unsigned int shaderProgram;
+   unsigned int VAO;
 };
 
 } /* namespace bsk */

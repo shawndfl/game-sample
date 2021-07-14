@@ -8,8 +8,9 @@
 #ifndef SRC_GRAPHICS_CAMERA_H_
 #define SRC_GRAPHICS_CAMERA_H_
 
-#include "math/Vector3.h"
-#include "math/Matrix4.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace bsk {
 
@@ -18,11 +19,18 @@ public:
 	Camera();
 	virtual ~Camera();
 
-	void initialize(const Vector3& eye, const Vector3& lookat, const Vector3& up);
+	void initializeView(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& upAxis);
+	void initializeProj(float fov, float aspectRatio, float near, float far);
+
+	void update();
+
+	const glm::mat4x4& getView() const;
+
+	const glm::mat4x4& getProjection() const;
 
 private:
-	Matrix4   view_;
-	Matrix4   projection_;
+	glm::mat4x4   view_;
+	glm::mat4x4   projection_;
 };
 
 } /* namespace bsk */

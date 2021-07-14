@@ -24,9 +24,9 @@ bool Render::initialize(uint width, uint height) {
 
    LOGD("GL_VERSION: " << glGetString(GL_VERSION));
    LOGD("GL_RENDERER: " << glGetString(GL_RENDERER));
+   resize(width, height);
 
-   glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-   glViewport(0, 0, width, height);
+   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
    return true;
 }
@@ -48,6 +48,7 @@ void Render::dispose() {
 /*************************************************/
 void Render::resize(uint width, uint height) {
    glViewport(0, 0, width, height);
+   LOGD("window size: " << width << "X" << height);
 
 }
 

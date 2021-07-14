@@ -12,31 +12,30 @@
 namespace bsk {
 
 static const GLchar *vertexShaderSource =
-        "#version 100                                 \n"
-        "precision mediump float;                     \n"
-        "uniform vec4 u_color;                        \n"
-        "uniform mat4 u_mvp;                          \n"
-        "attribute vec3 a_pos;							   \n"
-        "attribute vec2 a_tex;                        \n"
-        "varying vec2 v_tex;                          \n"
-        "                                             \n"
-        "void main() {                                \n"
-        "   gl_Position = u_mvp  * vec4(a_pos, 1.0);  \n"
-        "   v_tex = a_tex;                            \n"
-        "}                                            \n"
-        "                                             \n";
+        "#version 330 core\n"
+        "layout (location = 0) in vec3 a_pos;\n"
+        "uniform vec4 u_color;\n"
+        //"uniform mat4 u_mvp;\n"
+        //"attribute vec2 a_tex;\n"
+        //"varying vec2 v_tex;\n"
+        "\n"
+        "void main() {\n"
+        "   gl_Position = vec4(a_pos, 1.0);\n"
+        //"   v_tex = a_tex;\n"
+        "}\n"
+        "\n";
 
 static const GLchar *fragmentShaderSource =
-        "#version 100 						            \n"
-        "precision mediump float;                  \n"
-        "varying vec2 v_tex;                       \n"
-        "uniform sampler2D u_diffused;             \n"
-        "uniform vec2 u_scale;                     \n"
-        "uniform vec2 u_offset;                    \n"
+        "#version 330 core   			            \n"
+        "out vec4 FragColor;\n"
+        //"varying vec2 v_tex;                       \n"
+        //"uniform sampler2D u_diffused;             \n"
+        //"uniform vec2 u_scale;                     \n"
+        //"uniform vec2 u_offset;                    \n"
         "uniform vec4 u_color;                     \n"
         "void main() {                             \n"
-        "   vec2 tex = u_offset + v_tex * u_scale; \n "
-        "   gl_FragColor = texture2D(u_diffused, tex) * u_color; \n"
+        //"   vec2 tex = u_offset + v_tex * u_scale; \n "
+        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n"
         "}                                         \n"
         "                                          \n";
 
@@ -44,17 +43,17 @@ static const GLchar *fragmentShaderSource =
 ShaderBlinnPhong::ShaderBlinnPhong() {
    program_ = 0;
 
-   mvp_ = -1;
-   diffused_ = -1;
-   screen_ = -1;
-   overlay_= -1;
+   //mvp_ = -1;
+   //diffused_ = -1;
+   //screen_ = -1;
+   //overlay_= -1;
    ucolor_= -1;
-   uscale_= -1;
-   uoffset_= -1;
+   //uscale_= -1;
+   //uoffset_= -1;
 
    position_= -1;
-   texture_= -1;
-   normal_= -1;
+   //texture_= -1;
+   //normal_= -1;
 
    byteStride_ = 0;
 }
@@ -65,7 +64,7 @@ ShaderBlinnPhong::~ShaderBlinnPhong() {
 
 /*************************************************/
 VertexAttributes ShaderBlinnPhong::getAttribute() const {
-   return APos | ANorm | ATex1;
+   return APos;
 }
 
 /*************************************************/
@@ -113,19 +112,20 @@ bool ShaderBlinnPhong::loadProgram() {
     glDeleteShader(fragment);
 
     // collect all the uniform variables
-    diffused_     = getUniformLocation("u_diffused");
+    //diffused_     = getUniformLocation("u_diffused");
     ucolor_       = getUniformLocation("u_color");
-    mvp_          = getUniformLocation("u_mvp");
-    uscale_       = getUniformLocation("u_scale");
-    uoffset_      = getUniformLocation("u_offset");
-
+    //mvp_          = getUniformLocation("u_mvp");
+    //uscale_       = getUniformLocation("u_scale");
+    //uoffset_      = getUniformLocation("u_offset");
+    LOGGL();
 
     // setup attributes
     position_ = getAttributeLocation("a_pos");
-    texture_ = getAttributeLocation("a_tex");
+    //texture_ = getAttributeLocation("a_tex");
+    LOGGL();
 
     // pos + tex * float size
-    byteStride_ = (3 + 2) * sizeof(float);
+    byteStride_ = (3) * sizeof(float);
 
     // set defaults
     glUseProgram(program_);
@@ -135,16 +135,20 @@ bool ShaderBlinnPhong::loadProgram() {
 
     Vector2 offset(0,0);
     setOffset(offset);
+    LOGGL();
 
     Vector2 scale(1,1);
     setScale(scale);
+    LOGGL();
 
     // set diffused map to texture channel 0
-    glUniform1f(diffused_, 0);
+    //glUniform1f(diffused_, 0);
+    LOGGL();
 
     // set the mvp to identity
     Matrix4 mat;
     setMVP(mat);
+    LOGGL();
 
 
     return true;
@@ -172,8 +176,8 @@ int ShaderBlinnPhong::getAttributeLocation(const std::string& name) {
 void ShaderBlinnPhong::enableProgram() {
     // enable our shader program
     glUseProgram(program_);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 /*************************************************/
@@ -185,7 +189,7 @@ bool ShaderBlinnPhong::bindMaterial(const Material &material) {
 
 /*************************************************/
 int ShaderBlinnPhong::getNormal() const {
-   return normal_;
+   return -1;//normal_;
 }
 
 /*************************************************/
@@ -195,7 +199,7 @@ int ShaderBlinnPhong::getPosition() const {
 
 /*************************************************/
 int ShaderBlinnPhong::getTexture() const {
-   return texture_;
+   return -2;//texture_;
 }
 
 /*************************************************/
@@ -210,22 +214,22 @@ int ShaderBlinnPhong::getColor() const {
 
 /*************************************************/
 int ShaderBlinnPhong::getDiffused() const {
-   return diffused_;
+   return -1;//diffused_;
 }
 
 /*************************************************/
 int ShaderBlinnPhong::getOverlay() const {
-   return overlay_;
+   return -1;//overlay_;
 }
 
 /*************************************************/
 int ShaderBlinnPhong::getUoffset() const {
-   return uoffset_;
+   return -1;//uoffset_;
 }
 
 /*************************************************/
 int ShaderBlinnPhong::getUscale() const {
-   return uscale_;
+   return -1;//uscale_;
 }
 
 /*************************************************/
@@ -233,7 +237,7 @@ void ShaderBlinnPhong::setScreenSize(uint width, uint height) {
    glUseProgram(program_);
 
    Vector2 size(width, height);
-   size.setUniform(screen_);
+   //size.setUniform(screen_);
 
 }
 
@@ -244,18 +248,18 @@ void ShaderBlinnPhong::setColor(const Vector4& color) {
 
 /*************************************************/
 void ShaderBlinnPhong::setOffset(const Vector2& offset) {
-   offset.setUniform(uoffset_);
+   //offset.setUniform(uoffset_);
 }
 
 /*************************************************/
 void ShaderBlinnPhong::setScale(const Vector2& scale) {
-   scale.setUniform(uscale_);
+   //scale.setUniform(uscale_);
 }
 
 /*************************************************/
 void ShaderBlinnPhong::setMVP(const Matrix4& mvp) {
    glUseProgram(program_);
-   mvp.setUniform(mvp_);
+   //mvp.setUniform(mvp_);
 }
 
 

@@ -12,6 +12,7 @@
 #include <time.h>
 #include <iomanip>
 #include <chrono>
+#include "glad/glad.h"
 
 namespace bsk {
 
@@ -38,6 +39,44 @@ void Logging::timestamp(char* outTimestamp, int len)
     sprintf(outTimestamp, "%d:%d:%d", time->tm_hour, time->tm_min, time->tm_sec );
 }
 
+/*************************************************/
+void Logging::openGlLog(const char* file, int line) {
+
+    GLenum error;
+    do {
+        GLenum error = glGetError();
+        std::stringstream errorString;
+        switch (error) {
+        case GL_NO_ERROR:
+            break;
+        case GL_INVALID_ENUM:
+            errorString << "GL_INVALID_ENUM";
+            break;
+        case GL_INVALID_VALUE:
+            errorString << "GL_INVALID_VALUE";
+            break;
+        case GL_INVALID_OPERATION:
+            errorString << "GL_INVALID_OPERATION";
+            break;
+        case GL_INVALID_FRAMEBUFFER_OPERATION:
+            errorString << "GL_INVALID_FRAMEBUFFER_OPERATION";
+            break;
+        case GL_OUT_OF_MEMORY:
+            errorString << "GL_OUT_OF_MEMORY";
+            break;
+        case GL_STACK_UNDERFLOW:
+            errorString << "GL_STACK_UNDERFLOW";
+            break;
+        case GL_STACK_OVERFLOW:
+            errorString << "GL_STACK_OVERFLOW";
+            break;
+        }
+
+        if (error != 0) {
+            logit('E', file, line, errorString);
+        }
+    } while (error != GL_NO_ERROR);
+}
 
 /*************************************************/
 void Logging::logit(char type, const char* file, int line, const std::stringstream& text) {
@@ -60,13 +99,13 @@ void Logging::logit(char type, const char* file, int line, const std::stringstre
    tm* local_tm = localtime(&tt);
 
    std::cout << type << " "
-         << std::setw(MAX_LEN) << std::setfill(' ') << filename
-         << "(" << std::setw(3) << std::setfill('0')  << line << ") "
-         << std::setw(2) << std::setfill('0')  << local_tm->tm_hour
-         << ":" << std::setw(2) << std::setfill('0')  << local_tm->tm_min
-         << ":" << std::setw(2) << std::setfill('0')  << local_tm->tm_sec
-         << "." << std::setw(6) << std::setfill('0') << millis
-         << " " << text.str() << std::endl;
+        << std::setw(2) << std::setfill('0')  << local_tm->tm_hour
+        << ":" << std::setw(2) << std::setfill('0')  << local_tm->tm_min
+        << ":" << std::setw(2) << std::setfill('0')  << local_tm->tm_sec
+        << "." << std::setw(6) << std::setfill('0') << millis << " "
+        << std::setw(MAX_LEN) << std::setfill(' ') << filename
+        << "(" << std::setw(3) << std::setfill('0')  << line << ") "
+        << " " << text.str() << std::endl;
 }
 
 } //namespace bsk

@@ -9,13 +9,14 @@
 
 namespace bsk {
 
+/*************************************************/
 IScene::IScene() {
-   // TODO Auto-generated constructor stub
 
 }
 
+/*************************************************/
 IScene::~IScene() {
-   // TODO Auto-generated destructor stub
+
 }
 
 } /* namespace bsk */

@@ -22,6 +22,7 @@ public:
    static Logging* get();
 
    void logit(char type, const char* file, int line, const std::stringstream& text);
+   void openGlLog(const char* file, int line);
    void timestamp(char* outTimestamp, int len);
 private:
    Logging();
@@ -53,6 +54,10 @@ private:
       std::stringstream MY_STREAM;        \
       MY_STREAM  << STREAM;              \
       bsk::Logging::get()->logit('E', __FILE__, __LINE__, MY_STREAM); \
+} while(0)
+
+#define LOGGL() do { \
+      bsk::Logging::get()->openGlLog( __FILE__, __LINE__); \
 } while(0)
 
 #endif /* SRC_BSKLOGGING_H_ */

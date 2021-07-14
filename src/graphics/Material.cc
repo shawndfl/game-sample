@@ -11,8 +11,14 @@ namespace bsk {
 
 /*************************************************/
 Material::Material() {
-    opacity_ = 1.0;
-    transparent_ = false;
+    opacity_        = 1.0;
+    transparent_    = false;
+
+    color_          = Vector4(0,0,0,1);
+    uscale_         = 1.0;
+    vscale_         = 1.0;
+    uoffset_        = 0.0;
+    voffset_        = 0.0;
 }
 
 /*************************************************/

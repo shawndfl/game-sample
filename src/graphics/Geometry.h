@@ -34,6 +34,8 @@ public:
 
    GLuint IndexCount() const;
 
+   GLuint vertexCount() const;
+
    VertexAttributes getAttribute() const;
 
 protected:

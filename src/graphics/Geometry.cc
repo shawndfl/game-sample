@@ -29,13 +29,18 @@ Geometry::~Geometry() {
 void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic) {
 
    dispose();
+   LOGGL();
 
    attribute_ = attribute;
    indexCount_ = indexCount;
    vertexCount_ = vertexCount;
 
+   glGenVertexArrays(1, &vao_);
    glGenBuffers(1, &vb_);
    glGenBuffers(1, &ib_);
+
+   glBindVertexArray(vb_);
+   LOGGL();
 
     GLint size;
     GLint byteSize;
@@ -46,25 +51,28 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     glBindBuffer(GL_ARRAY_BUFFER, vb_);
     glBufferData(GL_ARRAY_BUFFER, byteSize, nullptr, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
     glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+    LOGGL();
     if (byteSize != size) {
         glDeleteBuffers(1, &vb_);
         LOGD("Error creating vertex buffer with size of: " << byteSize);
     }
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    LOGGL();
 
     // setup index buffer
     byteSize = indexCount_ * sizeof(GLushort);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteSize, nullptr, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    LOGGL();
 
     glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+    LOGGL();
     if (byteSize != size) {
         glDeleteBuffers(1, &ib_);
         LOGD("Error creating index buffer with size of: " << byteSize);
     }
+    LOGGL();
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
 }
 
@@ -77,13 +85,18 @@ void Geometry::setBuffers(const std::vector<float> &verts, const std::vector<GLu
     uint vertBytes = vertCount * sizeof(float);
     uint indexBytes = indexCount * sizeof(GLushort);
 
+    glBindVertexArray(vao_);
+
     glBindBuffer(GL_ARRAY_BUFFER, vb_);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, vertBytes, verts.data());
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vertBytes, &verts[0]);
+    LOGGL();
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
-    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexBytes, indices.data());
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indexBytes, &indices[0]);
+
+    glBindVertexArray(0);
+
+    LOGGL();
 }
 
 /*************************************************/
@@ -97,14 +110,22 @@ void Geometry::dispose() {
       glDeleteBuffers(1, &ib_);
       ib_ = 0;
    }
+
+   if(vao_ != 0) {
+       glDeleteBuffers(1, &vao_);
+       vao_ = 0;
+   }
 }
 
 /*************************************************/
 void Geometry::makeActive(const ShaderProgram& shader) const {
+
+   glBindVertexArray(vao_);
+
    glBindBuffer(GL_ARRAY_BUFFER, vb_);
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
 
-      // set our attributes
+   // set our attributes
    long offset = 0;
    unsigned short stride = shader.getByteStride();
    if(shader.getAttribute() != getAttribute()) {
@@ -130,7 +151,11 @@ void Geometry::makeActive(const ShaderProgram& shader) const {
    }
 
    offset += 3 * sizeof(float);
+}
 
+/*************************************************/
+GLuint Geometry::vertexCount() const {
+    return vertexCount_;
 }
 
 /*************************************************/

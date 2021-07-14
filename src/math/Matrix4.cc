@@ -135,7 +135,7 @@ void Matrix4::createProjection(float left, float right, float top, float bottom,
 
 /*************************************************/
 void Matrix4::createProjection(float fov, float aspectRatio, float near, float far, float zoom) {
-   float angle = fov * TO_RADIANS;
+   float angle = glm::radians(fov);
    float top = near * std::tan(angle/2.0) / zoom;
    float height = 2.0 * top;
    float width = aspectRatio * height;

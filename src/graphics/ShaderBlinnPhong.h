@@ -64,18 +64,18 @@ private:
    GLuint         program_;
 
    // uniforms
-   int          mvp_;
-   int          diffused_;
-   int          screen_;
-   int          overlay_;
+   //int          mvp_;
+   //int          diffused_;
+   //int          screen_;
+   //int          overlay_;
    int          ucolor_;
-   int          uscale_;
-   int          uoffset_;
+   //int          uscale_;
+   //int          uoffset_;
 
    // attributes
    int          position_;
-   int          texture_;
-   int          normal_;
+   //int          texture_;
+   //int          normal_;
 
    int          byteStride_;
 
