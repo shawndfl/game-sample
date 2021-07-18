@@ -1,20 +1,21 @@
 /*
- * Level3DCube.h
+ * LevelSquare.h
  *
  *  Created on: Jul 6, 2021
  *      Author: shawn
  */
 
-#ifndef SRC_LEVELS_LEVEL3DCUBE_H_
-#define SRC_LEVELS_LEVEL3DCUBE_H_
+#ifndef SRC_LEVELS_LEVELSQUARE_H_
+#define SRC_LEVELS_LEVELSQUARE_H_
+
 #include "core/IScene.h"
 #include "graphics/Camera.h"
 #include "graphics/Cube.h"
 
-class Level3DCube : public bsk::IScene {
+class LevelSquare : public bsk::IScene {
 public:
-    Level3DCube();
-    virtual ~Level3DCube();
+    LevelSquare();
+    virtual ~LevelSquare();
 
     virtual bool start();
 
@@ -26,9 +27,10 @@ public:
 
     virtual void dispose();
 private:
-    bsk::Camera   camera_;
-    bsk::Cube     cube_;
-    bsk::ShaderBlinnPhong shader_;
+
+    unsigned int shaderProgram;
+    unsigned int VAO;
+    unsigned int texture;
 };
 
-#endif /* SRC_LEVELS_LEVEL3DCUBE_H_ */
+#endif /* SRC_LEVELS_LEVELSQUARE_H_ */

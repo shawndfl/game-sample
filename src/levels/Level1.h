@@ -9,8 +9,8 @@
 #define SRC_LEVEL1_H_
 
 
-#include "../levels/Character.h"
-#include "../math/mathCore.h"
+#include "game/Character.h"
+#include "math/mathCore.h"
 #include "math/Timer.h"
 #include "core/GameEngine.h"
 #include "graphics/Sprite.h"
@@ -18,16 +18,14 @@
 #include "core/AnimationClip.h"
 #include "graphics/Cube.h"
 
-namespace bsk {
-
-class Level1: public IScene {
+class Level1: public bsk::IScene {
 public:
    Level1();
    virtual ~Level1();
 
    bool start();
 
-   void update(Milliseconds dt);
+   void update(bsk::Milliseconds dt);
 
    void resize(uint width, uint height);
 
@@ -38,20 +36,18 @@ private:
    void loadMainTexture();
 private:
 
-   Texture    mainTexture_;
-   Character  character_;
-   Sprite     sprite_;
+   bsk::Texture    mainTexture_;
+   bsk::Character  character_;
+   bsk::Sprite     sprite_;
 
-   Timer      timer_;
+   bsk::Timer      timer_;
    uint       frameCount_;
 
-   AnimationClip clip_;
+   bsk::AnimationClip clip_;
 
-   Cube        cube_;
+   bsk::Cube        cube_;
 
-   Camera      camera_;
+   bsk::Camera      camera_;
 };
-
-} /* namespace bsk */
 
 #endif /* SRC_LEVEL1_H_ */

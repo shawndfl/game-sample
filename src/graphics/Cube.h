@@ -34,8 +34,7 @@ private:
    Image             img_;
    Timer             debugTimer_;
 
-   unsigned int shaderProgram;
-   unsigned int VAO;
+
 };
 
 } /* namespace bsk */

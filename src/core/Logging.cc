@@ -42,9 +42,9 @@ void Logging::timestamp(char* outTimestamp, int len)
 /*************************************************/
 void Logging::openGlLog(const char* file, int line) {
 
-    GLenum error;
+    GLenum error = GL_NO_ERROR;
     do {
-        GLenum error = glGetError();
+        error = glGetError();
         std::stringstream errorString;
         switch (error) {
         case GL_NO_ERROR:

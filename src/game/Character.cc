@@ -5,9 +5,9 @@
  *      Author: sdady
  */
 
-#include "../levels/Character.h"
+#include "Character.h"
 
-#include "../math/mathCore.h"
+#include "math/mathCore.h"
 #include "core/GameEngine.h"
 #include "core/Joystick.h"
 #include "core/Logging.h"

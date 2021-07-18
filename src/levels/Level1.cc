@@ -14,8 +14,6 @@
 #include "graphics/FontManager.h"
 #include "core/Logging.h"
 
-namespace bsk {
-
 /*************************************************/
 Level1::Level1() {
    frameCount_ = 0;
@@ -32,7 +30,7 @@ bool Level1::start() {
    // show some text
    std::stringstream stream;
    stream << "Hello!\nTest";
-   GameEngine::get().getFontManager().setFont("title", stream, 0, 45, 32);
+   bsk::GameEngine::get().getFontManager().setFont("title", stream, 0, 45, 32);
 
    // load the main texture that will
    // be shared between all sprites
@@ -58,7 +56,7 @@ bool Level1::start() {
 }
 
 /*************************************************/
-void Level1::update(Milliseconds dt) {
+void Level1::update(bsk::Milliseconds dt) {
 
    clip_.update(dt);
 
@@ -68,7 +66,7 @@ void Level1::update(Milliseconds dt) {
       stream << "FPS: " << fps;
 
       // show frame rate
-      GameEngine::get().getFontManager().setFont("fps", stream, 0, 0, 32);
+      bsk::GameEngine::get().getFontManager().setFont("fps", stream, 0, 0, 32);
 
       frameCount_ = 0;
       timer_.reset();
@@ -104,8 +102,8 @@ void Level1::dispose() {
 
 /*************************************************/
 void Level1::loadMainTexture() {
-   Image img;
-   ImageLoader::loadImage("assets/img/game.png", img);
+    bsk::Image img;
+    bsk::ImageLoader::loadImage("assets/img/game.png", img);
    // once this is done the img can be disposed because the image is
    // now in video memory
    mainTexture_.setImage(img);
@@ -120,4 +118,3 @@ void Level1::loadMainTexture() {
    glBindTexture(GL_TEXTURE0, 0);
 }
 
-} /* namespace bsk */

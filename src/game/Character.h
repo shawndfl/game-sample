@@ -8,7 +8,7 @@
 #ifndef SRC_CHARACTER_H_
 #define SRC_CHARACTER_H_
 
-#include "../math/mathCore.h"
+#include "math/mathCore.h"
 #include "math/Timer.h"
 #include "core/AnimationClip.h"
 
