@@ -1,13 +1,14 @@
 
-#include <levels/LevelSquare.h>
-#include "Level1.h"
+#include "scenes/Level1.h"
+#include "scenes/LevelSquare.h"
+#include "scenes/LevelLight.h"
 #include "core/Logging.h"
 #include "core/GameEngine.h"
 #include "core/Display.h"
 
 int main(int argc, char *argv[]) {
 
-   std::shared_ptr<bsk::IScene> scene = std::make_shared<LevelSquare>();
+   std::shared_ptr<bsk::IScene> scene = std::make_shared<LevelLight>();
    bsk::GameEngine::get().setScene(scene);
 
    bsk::Display::create(bsk::GameEngine::get());

@@ -5,7 +5,7 @@
  *      Author: shawn
  */
 
-#include "LevelSquare.h"
+#include <scenes/LevelSquare.h>
 #include "core/Logging.h"
 #include "glad/glad.h"
 #include "graphics/Image.h"
@@ -23,6 +23,8 @@ const char *vertexShaderSource = "#version 330 core\n"
         "ourColor = aColor;\n"
         "TexCoord = aTexCoord;\n"
     "}";
+
+/*************************************************/
 const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "in vec3 ourColor;\n"
@@ -101,6 +103,12 @@ bool LevelSquare::start() {
             0, 1, 3,  // first Triangle
             1, 2, 3   // second Triangle
             };
+    unsigned int vertexCount = sizeof(vertices) /sizeof(float);
+    unsigned int indexCount = sizeof(indices) /sizeof(unsigned int);
+
+    bsk::VertexAttributes attributes = bsk::VertexAttributes::APos | bsk::VertexAttributes::AColor | bsk::VertexAttributes::ATex1;
+    geometry_.initialize(vertexCount, indexCount, attributes, false);
+
     unsigned int VBO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);

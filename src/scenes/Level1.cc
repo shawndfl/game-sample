@@ -5,8 +5,7 @@
  *      Author: sdady
  */
 
-#include "../levels/Level1.h"
-
+#include <scenes/Level1.h>
 #include <sstream>
 
 #include "core/GameEngine.h"

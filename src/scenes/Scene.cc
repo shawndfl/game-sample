@@ -5,7 +5,7 @@
  *      Author: sdady
  */
 
-#include "../levels/Scene.h"
+#include <scenes/Scene.h>
 
 namespace bsk {
 

@@ -9,8 +9,7 @@
 #define SRC_LEVELS_LEVELSQUARE_H_
 
 #include "core/IScene.h"
-#include "graphics/Camera.h"
-#include "graphics/Cube.h"
+#include "graphics/Geometry.h"
 
 class LevelSquare : public bsk::IScene {
 public:
@@ -31,6 +30,8 @@ private:
     unsigned int shaderProgram;
     unsigned int VAO;
     unsigned int texture;
+
+    bsk::Geometry    geometry_;
 };
 
 #endif /* SRC_LEVELS_LEVELSQUARE_H_ */

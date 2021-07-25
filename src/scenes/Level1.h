@@ -8,8 +8,7 @@
 #ifndef SRC_LEVEL1_H_
 #define SRC_LEVEL1_H_
 
-
-#include "game/Character.h"
+#include "core/Character.h"
 #include "math/mathCore.h"
 #include "math/Timer.h"
 #include "core/GameEngine.h"
@@ -37,6 +36,7 @@ private:
 private:
 
    bsk::Texture    mainTexture_;
+
    bsk::Character  character_;
    bsk::Sprite     sprite_;
 
