@@ -71,7 +71,7 @@ private:
    Matrix4           projection_;
 
    std::vector<float>      verts_;
-   std::vector<GLushort>   indices_;
+   std::vector<GLuint>   indices_;
 
    Vector3            position_;         /// Current position on the screen
    Vector3            velocity_;         /// the total velocity of the character

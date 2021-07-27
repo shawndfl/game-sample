@@ -50,7 +50,7 @@ void Sprite::initialize(const Texture& spriteTexture) {
    // create a quad for the character
    geometry_.initialize(floatCount, indexCount, APos | ATex1);
    std::vector<float>      verts;
-   std::vector<GLushort>   indices;
+   std::vector<GLuint>     indices;
 
    // pos
    verts.push_back(QUAD_SIZE);
@@ -125,7 +125,7 @@ void Sprite::update(Milliseconds dt) {
 
    shader_.enableProgram();
    spriteTexture_.apply();
-   geometry_.makeActive(shader_);
+   geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT,  NULL);
 }
 

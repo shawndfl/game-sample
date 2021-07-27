@@ -28,19 +28,19 @@ Geometry::~Geometry() {
 /*************************************************/
 void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic) {
 
-   dispose();
-   LOGGL();
+    dispose();
+    LOGGL();
 
-   attribute_ = attribute;
-   indexCount_ = indexCount;
-   vertexCount_ = vertexCount;
+    attribute_ = attribute;
+    indexCount_ = indexCount;
+    vertexCount_ = vertexCount;
 
-   glGenVertexArrays(1, &vao_);
-   glGenBuffers(1, &vb_);
-   glGenBuffers(1, &ib_);
+    glGenVertexArrays(1, &vao_);
+    glGenBuffers(1, &vb_);
+    glGenBuffers(1, &ib_);
 
-   glBindVertexArray(vb_);
-   LOGGL();
+    glBindVertexArray(vb_);
+    LOGGL();
 
     GLint size;
     GLint byteSize;
@@ -59,7 +59,7 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     LOGGL();
 
     // setup index buffer
-    byteSize = indexCount_ * sizeof(GLushort);
+    byteSize = indexCount_ * sizeof(GLuint);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, byteSize, nullptr, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
     LOGGL();
@@ -72,18 +72,75 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     }
     LOGGL();
 
-    glBindVertexArray(0);
+    // set our attributes
+    long offset = 0;
+    unsigned short stride = getStride();
 
+    // the shader must have a attribute position order of pos, color, texture, normal
+    // the combinations are:
+    //  pos, color
+    //  pos, color, texture
+    //  pos, color, texture, normal
+    //  pos, color, texture, normal, biNormal
+    //  pos, color, texture, normal, biNormal
+    //  pos, color, texture, normal, biNormal, weight, index
+
+    if ((getAttribute() & APos) > 0) {
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+        glEnableVertexAttribArray(0);
+        offset += 3 * sizeof(float);
+    }
+
+    if ((getAttribute() & AColor) > 0) {
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+        glEnableVertexAttribArray(1);
+        offset += 3 * sizeof(float);
+    }
+
+    if ((getAttribute() & ATex1) > 0) {
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+        glEnableVertexAttribArray(2);
+        offset += 2 * sizeof(float);
+    }
+
+    if ((getAttribute() & ANorm) > 0) {
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+        glEnableVertexAttribArray(3);
+        offset += 3 * sizeof(float);
+    }
 }
 
 /*************************************************/
-void Geometry::setBuffers(const std::vector<float> &verts, const std::vector<GLushort> &indices) {
+GLuint Geometry::getStride() const {
+    int stride = 0;
+    if ((getAttribute() & APos) > 0) {
+        stride += 3;
+    }
+    if ((getAttribute() & ATex1) > 0) {
+        stride += 2;
+    }
+    if ((getAttribute() & AColor) > 0) {
+        stride += 3;
+    }
+    if ((getAttribute() & ANorm) > 0) {
+        stride += 3;
+    }
+    return stride* sizeof(float);
+}
 
-    uint vertCount = verts.size() > vertexCount_? vertexCount_ :  verts.size();
-    uint indexCount = indices.size() > indexCount_? indexCount_ :  indices.size();
+/*************************************************/
+void Geometry::setBuffers(std::vector<float>& verts, std::vector<GLuint>& indices) {
+    setBuffers(&verts[0], verts.size(), &indices[0], indices.size());
+}
 
-    uint vertBytes = vertCount * sizeof(float);
-    uint indexBytes = indexCount * sizeof(GLushort);
+/*************************************************/
+void Geometry::setBuffers(float* verts, uint vertexCount, GLuint* indices, uint indexCount) {
+
+    uint vCount = vertexCount > vertexCount_? vertexCount_ :  vertexCount;
+    uint iCount = indexCount > indexCount_? indexCount_ :  indexCount;
+
+    uint vertBytes = vCount * sizeof(float);
+    uint indexBytes = iCount * sizeof(GLuint);
 
     glBindVertexArray(vao_);
 
@@ -118,39 +175,9 @@ void Geometry::dispose() {
 }
 
 /*************************************************/
-void Geometry::makeActive(const ShaderProgram& shader) const {
+void Geometry::makeActive() const {
 
    glBindVertexArray(vao_);
-
-   glBindBuffer(GL_ARRAY_BUFFER, vb_);
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib_);
-
-   // set our attributes
-   long offset = 0;
-   unsigned short stride = shader.getByteStride();
-   if(shader.getAttribute() != getAttribute()) {
-      LOGE("Miss match vertex attribute " << shader.getAttribute() << " != " <<   getAttribute());
-      return;
-   }
-
-   if ((getAttribute() & APos) > 0) {
-      glVertexAttribPointer(shader.getPosition(), 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
-      glEnableVertexAttribArray(0);
-   }
-
-   offset += 3 * sizeof(float);
-   if ((getAttribute() & ATex1) > 0) {
-      glVertexAttribPointer(shader.getTexture(), 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
-      glEnableVertexAttribArray(1);
-   }
-
-   offset += 2 * sizeof(float);
-   if ((getAttribute() & ANorm) > 0) {
-      glVertexAttribPointer(shader.getNormal(), 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
-      glEnableVertexAttribArray(2);
-   }
-
-   offset += 3 * sizeof(float);
 }
 
 /*************************************************/

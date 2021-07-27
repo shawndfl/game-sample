@@ -112,7 +112,7 @@ void Character::initialize() {
    indices_.push_back(2);
    indices_.push_back(3);
 
-   geometry_.setBuffers(verts_, indices_);
+   geometry_.setBuffers(&verts_[0], verts_.size(), &indices_[0], indices_.size() );
 
 
    setPosition(0, 0);
@@ -156,7 +156,7 @@ void Character::update(Milliseconds dt) {
 
    shader_.enableProgram();
    mat_.apply();
-   geometry_.makeActive(shader_);
+   geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
 }
 

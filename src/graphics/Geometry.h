@@ -26,17 +26,21 @@ public:
 
    void initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic = false);
 
-   void setBuffers(const std::vector<float>& verts, const std::vector<GLushort>& indice);
+   void setBuffers(std::vector<float>& verts, std::vector<GLuint>& indices);
+
+   void setBuffers(float* verts, uint vertexCount, GLuint* indices, uint indexCount);
 
    void dispose();
 
-   void makeActive(const ShaderProgram& shader) const;
+   void makeActive() const;
 
    GLuint IndexCount() const;
 
    GLuint vertexCount() const;
 
    VertexAttributes getAttribute() const;
+
+   GLuint getStride() const;
 
 protected:
 

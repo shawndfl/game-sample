@@ -9,6 +9,8 @@
 #define SRC_SHADERPROGRAM_H_
 
 #include "graphics/VertexAttribute.h"
+#include <string>
+#include "glm/glm.hpp"
 
 namespace bsk {
 
@@ -17,16 +19,29 @@ namespace bsk {
  */
 class ShaderProgram {
 public:
-   ShaderProgram();
-   virtual ~ShaderProgram();
+    ShaderProgram();
+    virtual ~ShaderProgram();
 
-   virtual int getNormal() const;
-   virtual int getPosition() const;
-   virtual int getTexture() const;
-   virtual int getByteStride() const;
+    void use() const;
 
-   virtual VertexAttributes getAttribute() const;
+    void setBool(const std::string& name, bool value) const;
 
+    void setInt(const std::string& name, int value) const;
+
+    void setFloat(const std::string& name, float value) const;
+
+    void setMatrix4(const std::string& name, const glm::mat4& value) const;
+
+    void setVec3(const std::string& name, const glm::vec3& value) const;
+
+    void setVec4(const std::string& name, const glm::vec4& value) const;
+
+    bool loadSheder(const std::string& vertexPath, const std::string& fragmentPath);
+
+private:
+   unsigned int program_;
+   std::string vertexPath_;
+   std::string fragmentPath_;
 };
 
 } /* namespace bsk */

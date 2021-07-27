@@ -16,9 +16,10 @@ namespace bsk {
 enum VertexAttributes: char {
          ANone    = 0x00,
          APos     = 0x01,
-         ATex1    = 0x02,
-         ANorm    = 0x04,
-         ASkin    = 0x08,
+         AColor   = 0x02,
+         ATex1    = 0x04,
+         ANorm    = 0x08,
+         ASkin    = 0x10,
    };
 
 }

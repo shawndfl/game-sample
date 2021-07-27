@@ -41,7 +41,6 @@ public:
    void setOffset(const Vector2& offset);
    void setScale(const Vector2& scale);
 
-
    int getNormal() const;
    int getPosition() const;
    int getTexture() const;

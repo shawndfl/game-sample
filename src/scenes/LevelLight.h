@@ -10,6 +10,7 @@
 
 #include "core/IScene.h"
 #include "graphics/Geometry.h"
+#include "graphics/Texture.h"
 
 class LevelLight : public bsk::IScene {
 public:
@@ -27,6 +28,9 @@ public:
     virtual void dispose();
 private:
     bsk::Geometry    geometry_;
+    unsigned int     shaderProgram_;
+    bsk::Texture     texture_;
+
 };
 
 #endif /* SCENES_LEVELLIGHT_H_ */

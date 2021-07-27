@@ -37,7 +37,7 @@ void Font::initialize(const std::string& text, uint x, uint y, uint pixelSize, V
     const float chStep = pixelSize;
 
     std::vector<float> verts;
-    std::vector<GLushort> indices;
+    std::vector<GLuint> indices;
     uint xpos = x;
     uint ypos = y;
     float zpos = 0;
@@ -117,7 +117,7 @@ void Font::render(const ShaderSprite& shader) {
 
    color_.setUniform(shader.getColor());
 
-   geometry_.makeActive(shader);
+   geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
 }
 
