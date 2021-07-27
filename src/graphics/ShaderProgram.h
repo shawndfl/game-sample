@@ -36,7 +36,8 @@ public:
 
     void setVec4(const std::string& name, const glm::vec4& value) const;
 
-    bool loadSheder(const std::string& vertexPath, const std::string& fragmentPath);
+    bool loadShaderFromMemory(const std::string& vertexCode, const std::string& fragmentCode);
+    bool loadShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath);
 
 private:
    unsigned int program_;

@@ -89,7 +89,7 @@ void ShaderProgram::setVec4(const std::string& name, const glm::vec4& value) con
 }
 
 /*************************************************/
-bool ShaderProgram::loadSheder(const std::string& vertexPath, const std::string& fragmentPath) {
+bool ShaderProgram::loadShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath) {
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
@@ -115,9 +115,16 @@ bool ShaderProgram::loadSheder(const std::string& vertexPath, const std::string&
         // convert stream into string
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-    } catch (std::ifstream::failure &e) {
+    } catch (std::ifstream::failure& e) {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
+
+    return loadShaderFromMemory(vertexCode, fragmentCode);
+}
+
+/*************************************************/
+bool ShaderProgram::loadShaderFromMemory(const std::string& vertexCode, const std::string& fragmentCode) {
+
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 

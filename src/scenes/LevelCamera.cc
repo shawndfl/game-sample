@@ -1,50 +1,45 @@
 /*
- * LevelLight.cc
+ * LevelCamera.cc
  *
- *  Created on: Jul 14, 2021
+ *  Created on: Jul 26, 2021
  *      Author: shawn
  */
 
-#include "LevelLight.h"
+#include "LevelCamera.h"
 #include "core/Logging.h"
 #include "graphics/Image.h"
 #include "graphics/ImageLoader.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-const char *vertexShaderSource1 = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "layout (location = 1) in vec3 aColor;\n"
-    "layout (location = 2) in vec2 aTexCoord;\n"
-    "out vec3 ourColor;\n"
-    "out vec2 TexCoord;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "ourColor = aColor;\n"
-        "TexCoord = aTexCoord;\n"
-    "}";
-const char *fragmentShaderSource1 = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "in vec3 ourColor;\n"
-    "in vec2 TexCoord;\n"
 
-    "uniform sampler2D ourTexture;\n"
-
-    "void main()\n"
-    "{\n"
-    "   FragColor = texture(ourTexture, TexCoord) * vec4(ourColor,1.0) ;\n"
-    "}\n";
-
-LevelLight::LevelLight() {
+/*************************************************/
+LevelCamera::LevelCamera() {
 
 }
 
 /*************************************************/
-LevelLight::~LevelLight() {
+LevelCamera::~LevelCamera() {
+
 }
 
 /*************************************************/
-bool LevelLight::start() {
-    shader_.loadShaderFromMemory(vertexShaderSource1, fragmentShaderSource1);
+bool LevelCamera::start() {
+    shader_.loadShaderFromFile("assets/shaders/texture.vert", "assets/shaders/texture.frag");
+
+    glm::mat4 model(1);
+    glm::mat4 view(1);
+    glm::mat4 proj(1);
+
+    // note that we're translating the scene in the reverse direction of where we want to move
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+    shader_.use();
+    shader_.setMatrix4("model", model);
+    shader_.setMatrix4("view", view);
+    shader_.setMatrix4("proj", proj);
 
     float vertices[] = {
             // positions          // colors           // texture coords
@@ -74,7 +69,7 @@ bool LevelLight::start() {
 }
 
 /*************************************************/
-void LevelLight::update(bsk::Milliseconds dt) {
+void LevelCamera::update(bsk::Milliseconds dt) {
     // render
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -91,14 +86,13 @@ void LevelLight::update(bsk::Milliseconds dt) {
 }
 
 /*************************************************/
-void LevelLight::resize(uint width, uint height) {
+void LevelCamera::resize(uint width, uint height) {
 }
 
 /*************************************************/
-void LevelLight::keyEvent(int key, int scancode, int action, int mods) {
+void LevelCamera::keyEvent(int key, int scancode, int action, int mods) {
 }
 
 /*************************************************/
-void LevelLight::dispose() {
-
+void LevelCamera::dispose() {
 }

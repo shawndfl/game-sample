@@ -1,22 +1,21 @@
 /*
- * LevelLight.h
+ * LevelCamera.h
  *
- *  Created on: Jul 14, 2021
+ *  Created on: Jul 26, 2021
  *      Author: shawn
  */
 
-#ifndef SCENES_LEVELLIGHT_H_
-#define SCENES_LEVELLIGHT_H_
-
+#ifndef SCENES_LEVELCAMERA_H_
+#define SCENES_LEVELCAMERA_H_
 #include "core/IScene.h"
 #include "graphics/Geometry.h"
 #include "graphics/Texture.h"
 #include "graphics/ShaderProgram.h"
 
-class LevelLight : public bsk::IScene {
+class LevelCamera : public bsk::IScene  {
 public:
-    LevelLight();
-    virtual ~LevelLight();
+    LevelCamera();
+    virtual ~LevelCamera();
 
     virtual bool start();
 
@@ -28,10 +27,9 @@ public:
 
     virtual void dispose();
 private:
-    bsk::Geometry       geometry_;
-    bsk::Texture        texture_;
-    bsk::ShaderProgram  shader_;
-
+    bsk::Geometry geometry_;
+    bsk::Texture texture_;
+    bsk::ShaderProgram shader_;
 };
 
-#endif /* SCENES_LEVELLIGHT_H_ */
+#endif /* SCENES_LEVELCAMERA_H_ */
