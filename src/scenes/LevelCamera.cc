@@ -65,6 +65,11 @@ bool LevelCamera::start() {
         texture_.setImage(img);
     }
 
+    // ping pong
+    clip_.addKey(0, 0);
+    clip_.addKey(1000, 180);
+    clip_.addKey(2000, 0);
+    clip_.play(true);
     return true;
 }
 
@@ -75,8 +80,13 @@ void LevelCamera::update(bsk::Milliseconds dt) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    clip_.update(dt);
+
     // draw our first triangle
     shader_.use();
+    glm::mat4 model(1);
+    model = glm::rotate(model, glm::radians(clip_.evaluate()) , glm::vec3(1.0f, 0.0f, 0.0f));
+    shader_.setMatrix4("model", model);
 
     texture_.apply();
     geometry_.makeActive();

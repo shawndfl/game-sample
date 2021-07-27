@@ -11,6 +11,7 @@
 #include "graphics/Geometry.h"
 #include "graphics/Texture.h"
 #include "graphics/ShaderProgram.h"
+#include "core/AnimationClip.h"
 
 class LevelCamera : public bsk::IScene  {
 public:
@@ -30,6 +31,8 @@ private:
     bsk::Geometry geometry_;
     bsk::Texture texture_;
     bsk::ShaderProgram shader_;
+
+    bsk::AnimationClip clip_;
 };
 
 #endif /* SCENES_LEVELCAMERA_H_ */

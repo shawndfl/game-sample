@@ -39,7 +39,7 @@ public:
    void addKey(uint ms, float value);
 
    /**
-    * this function should be used the update(dt);
+    * this function only works if \ref update() is being called.
     */
    float evaluate(bool discrete = false ) const;
 
@@ -54,6 +54,9 @@ public:
     */
    void update(Milliseconds dt);
 
+   /**
+    * Gets the max time
+    */
    Milliseconds getMax() const;
 
    /**
