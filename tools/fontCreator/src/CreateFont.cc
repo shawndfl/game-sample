@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <png.h>
 #include <ft2build.h>
@@ -24,62 +25,16 @@ struct Character {
     float        v2;          ///  bottom right uv coordinates
 };
 
-void write_png_file(const char* filename, unsigned char* image, int width, int height) {
-
-    FILE* fp = fopen(filename, "wb");
-    if (!fp) {
-        return;
-    }
-
-    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png) {
-        return;
-    }
-
-    png_infop info = png_create_info_struct(png);
-    if (!info) {
-        return;
-    }
-
-    if (setjmp(png_jmpbuf(png))) {
-        return;
-    }
-
-    png_init_io(png, fp);
-
-    // Output is 8bit depth, RGBA format.
-    png_set_IHDR(png, info, width, height, 8,
-    PNG_COLOR_TYPE_GRAY,
-    PNG_INTERLACE_NONE,
-    PNG_COMPRESSION_TYPE_DEFAULT,
-    PNG_FILTER_TYPE_DEFAULT);
-    png_write_info(png, info);
-
-    // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
-    // Use png_set_filler().
-    //png_set_filler(png, 0, PNG_FILLER_AFTER);
-    for(int i =0; i < height; i++) {
-        unsigned char* row = (image + (width * i));
-        png_write_row(png, row);
-    }
-
-    //png_write_image(png, &image);
-    png_write_end(png, NULL);
-
-    fclose(fp);
-
-    png_destroy_write_struct(&png, &info);
-}
-
 int main(int argc, char *argv[]) {
 
-    std::string     filename = "font.png";
+    std::string     filenameImage = "font.png";
+    std::string     filenameData = "font.txt";
     int             imageWidth = 1024;
     int             imageHeight = 1024;
 
     // open a png file
-    FILE* fp = fopen(filename.c_str(), "wb");
-    if (!fp) {
+    FILE* fileImage = fopen(filenameImage.c_str(), "wb");
+    if (!fileImage) {
         return 1;
     }
 
@@ -97,7 +52,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    png_init_io(png, fp);
+    png_init_io(png, fileImage);
 
     // Output is 8bit depth, RGBA format.
     png_set_IHDR(png, info, imageWidth, imageHeight, 8,
@@ -126,7 +81,7 @@ int main(int argc, char *argv[]) {
     int yCurrentMax = 0;
 
     // set font scale
-    int scale = 64;
+    int scale = 128;
     FT_Set_Pixel_Sizes(face, 0, scale);
 
     // the raw image data with all the glyph
@@ -138,9 +93,16 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // loop over all characters from ' ' to 128
+    // open the data file
+    std::ofstream fileData;
+    fileData.open(filenameData.c_str());
+    if (!fileData) {
+        return 1;
+    }
+
+    // loop over all characters from ' ' to 127
     std::vector<Character> characters;
-    for(unsigned char ch = ' '; ch < 128; ch++) {
+    for(unsigned char ch = 32; ch < 127; ch++) {
 
         // get the character data and bitmap
         if (FT_Load_Char(face, ch, FT_LOAD_RENDER)) {
@@ -160,7 +122,14 @@ int main(int argc, char *argv[]) {
         data.u1         = (float) xOffset / imageWidth;
         data.v1         = (float) yOffset / imageHeight;
         data.u2         = (float) (xOffset + data.sizeX) / imageWidth;
-        data.v1         = (float) (yOffset + data.sizeY) / imageHeight;
+        data.v2         = (float) (yOffset + data.sizeY) / imageHeight;
+
+        fileData << (int) ch    << ",'" << ch                << "'," <<
+                data.sizeX      << ","  << data.sizeX        << "," <<
+                data.bearingX   << ","  << data.bearingY     << "," <<
+                data.advance    << ","  <<
+                data.u1         << ","  << data.v1           << "," <<
+                data.u2         << ","  << data.v2           << "\n";
 
         // save the character
         characters.push_back(data);
@@ -187,13 +156,13 @@ int main(int argc, char *argv[]) {
         // copy glyph to the final image
         int x = 0;
         int y = 0;
-        for (int j = yOffset; j < yOffset + data.sizeY; j++) {
-            for (int i = xOffset; i < xOffset + data.sizeX; i++) {
-                std::cout <<" offset " << i << ", " << j << "\n";
-                imageData[j][i] = data.bitmap[x + data.sizeX * y];
+        for (int i = yOffset; i < yOffset + data.sizeY; i++) {
+            for (int j = xOffset; j < xOffset + data.sizeX; j++) {
+                imageData[i][j] = data.bitmap[x + data.sizeX * y];
                 x++;
             }
             y++;
+            x = 0;
         }
 
         yCurrentMax = data.sizeY > yCurrentMax ? data.sizeY : yCurrentMax;
@@ -203,26 +172,11 @@ int main(int argc, char *argv[]) {
     }
 
     png_write_image(png, imageData);
-/*
 
-    // space and null are not images we save
-           if( data.sizeX != 0) {
-               // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
-               // Use png_set_filler().
-               //png_set_filler(png, 0, PNG_FILLER_AFTER);
-               for (int i = 0; i < height; i++) {
-                   unsigned char* row = (image + (width * i));
-                   png_write_row(png, row);
-               }
-               // debug
-               std::string filename = "image_" + std::to_string((int)ch) + ".png";
-               write_png_file(filename.c_str(), data.bitmap, data.sizeX, data.sizeY);
-           }
-*/
     // clean up image
-    //for (int i = 0; i < imageHeight; i++) {
-    //    delete imageData[i];
-    //}
+    for (int i = 0; i < imageHeight; i++) {
+        delete imageData[i];
+    }
 
     // clean up freetype
     FT_Done_Face(face);
@@ -230,7 +184,7 @@ int main(int argc, char *argv[]) {
 
     // clean up png
     png_write_end(png, NULL);
-    fclose(fp);
+    fclose(fileImage);
     png_destroy_write_struct(&png, &info);
 
 }
