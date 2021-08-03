@@ -9,6 +9,8 @@
 #include "graphics/ImageLoader.h"
 #include "core/Logging.h"
 #include "core/GameEngine.h"
+#include "core/StringUtility.h"
+#include <fstream>
 
 namespace bsk {
 
@@ -40,10 +42,10 @@ void FontManager::update() {
 }
 
 /*************************************************/
-bool FontManager::initialize(const std::string& imageFile) {
+bool FontManager::initialize(const std::string& fontImage, const std::string& fontData ) {
     shader_.loadProgram();
     Image img;
-    ImageLoader::loadImage(imageFile, img);
+    ImageLoader::loadImage(fontImage, img);
     fontTexture_.setImage(img);
 
     fontTexture_.apply();
@@ -55,6 +57,57 @@ bool FontManager::initialize(const std::string& imageFile) {
 
     glBindTexture(GL_TEXTURE0, 0);
 
+    std::ifstream in;
+    in.open(fontData.c_str());
+
+    // open the file
+    if(in.is_open()) {
+        std::string line;
+        fontData_.clear();
+
+        // get each line
+        while(std::getline(in, line)) {
+            FontData data;
+            LOGD("Line: " << line);
+            if(line.size() < 4) {
+                LOGW("Invalid line: " << line);
+            } else {
+                // parse the line. the first char characters are the char '<char>'
+                std::vector<std::string> parts = StringUtility::split(line.substr(3), " ");
+                for(std::string part: parts) {
+                    LOGD(" " << part);
+                }
+
+                if(parts.size() != 10) {
+                    LOGW("Expecting 10 columns after the character");
+                } else {
+                    try{
+                        data.character  = std::stoi(parts[0]);
+                        data.sizeX      = std::stoi(parts[1]);
+                        data.sizeY      = std::stoi(parts[2]);
+                        data.bearingX   = std::stoi(parts[3]);
+                        data.bearingY   = std::stoi(parts[4]);
+                        data.advance    = std::stoi(parts[5]);
+
+                        data.u1         = std::stod(parts[6]);
+                        data.v1         = std::stod(parts[7]);
+                        data.u2         = std::stod(parts[8]);
+                        data.v2         = std::stod(parts[9]);
+
+                        // save the data
+                        fontData_[data.character] = data;
+
+                    } catch(std::exception& e) {
+                        LOGE("Invalid number");
+                    }
+
+                }
+            }
+        }
+    } else {
+        LOGE("Cannot open "<< fontData);
+    }
+
     return true;
 }
 
@@ -65,8 +118,8 @@ void FontManager::resize(uint width, uint height) {
 }
 
 /*************************************************/
-void FontManager::setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize, Vector4 color) {
-   fonts_[id].initialize(text.str(), x, y, pixelSize, color);
+void FontManager::setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize, const glm::vec4& color) {
+   fonts_[id].initialize(fontData_, text.str(), x, y, pixelSize, color);
 }
 
 } /* namespace bsk */

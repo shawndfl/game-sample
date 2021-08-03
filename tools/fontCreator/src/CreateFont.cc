@@ -27,10 +27,13 @@ struct Character {
 
 int main(int argc, char *argv[]) {
 
-    std::string     filenameImage = "font.png";
-    std::string     filenameData = "font.txt";
-    int             imageWidth = 1024;
-    int             imageHeight = 1024;
+    // inputs
+    std::string     filenameImage   = "font.png";
+    std::string     filenameData    = "font.dat";
+    int             imageWidth      = 1024;
+    int             imageHeight     = 1024;
+    std::string     fontFile        = "fonts/LiberationSerif-Regular.ttf";
+    int             scale           = 128;
 
     // open a png file
     FILE* fileImage = fopen(filenameImage.c_str(), "wb");
@@ -81,7 +84,6 @@ int main(int argc, char *argv[]) {
     int yCurrentMax = 0;
 
     // set font scale
-    int scale = 128;
     FT_Set_Pixel_Sizes(face, 0, scale);
 
     // the raw image data with all the glyph
@@ -124,12 +126,12 @@ int main(int argc, char *argv[]) {
         data.u2         = (float) (xOffset + data.sizeX) / imageWidth;
         data.v2         = (float) (yOffset + data.sizeY) / imageHeight;
 
-        fileData << (int) ch    << ",'" << ch                << "'," <<
-                data.sizeX      << ","  << data.sizeX        << "," <<
-                data.bearingX   << ","  << data.bearingY     << "," <<
-                data.advance    << ","  <<
-                data.u1         << ","  << data.v1           << "," <<
-                data.u2         << ","  << data.v2           << "\n";
+        fileData << "'" << ch  << "' "  << (int) ch          << " " <<
+                data.sizeX      << " "  << data.sizeX        << " " <<
+                data.bearingX   << " "  << data.bearingY     << " " <<
+                data.advance    << " "  <<
+                data.u1         << " "  << data.v1           << " " <<
+                data.u2         << " "  << data.v2           << "\n";
 
         // save the character
         characters.push_back(data);

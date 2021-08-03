@@ -70,6 +70,12 @@ bool LevelCamera::start() {
     clip_.addKey(1000, 180);
     clip_.addKey(2000, 0);
     clip_.play(true);
+
+
+    // font manager
+    fontManager_.initialize();
+    //fontManager_.setFont("txt1", "hello", 0,0, 64);
+
     return true;
 }
 

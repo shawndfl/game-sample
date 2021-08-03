@@ -25,7 +25,7 @@ Font::~Font() {
 }
 
 /*************************************************/
-void Font::initialize(const std::string& text, uint x, uint y, uint pixelSize, Vector4 color) {
+void Font::initialize(std::map<char, FontData>& charData, const std::string& text, uint x, uint y, uint pixelSize, const glm::vec4& color) {
 
     color_ = color;
 
@@ -115,7 +115,7 @@ void Font::initialize(const std::string& text, uint x, uint y, uint pixelSize, V
 /*************************************************/
 void Font::render(const ShaderSprite& shader) {
 
-   color_.setUniform(shader.getColor());
+
 
    geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);

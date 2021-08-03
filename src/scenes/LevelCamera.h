@@ -12,6 +12,7 @@
 #include "graphics/Texture.h"
 #include "graphics/ShaderProgram.h"
 #include "core/AnimationClip.h"
+#include "graphics/FontManager.h"
 
 class LevelCamera : public bsk::IScene  {
 public:
@@ -28,11 +29,12 @@ public:
 
     virtual void dispose();
 private:
-    bsk::Geometry geometry_;
-    bsk::Texture texture_;
-    bsk::ShaderProgram shader_;
+    bsk::Geometry       geometry_;
+    bsk::Texture        texture_;
+    bsk::ShaderProgram  shader_;
 
-    bsk::AnimationClip clip_;
+    bsk::AnimationClip  clip_;
+    bsk::FontManager    fontManager_;
 };
 
 #endif /* SCENES_LEVELCAMERA_H_ */

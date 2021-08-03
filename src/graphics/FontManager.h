@@ -13,8 +13,9 @@
 #include <string>
 #include <sstream>
 #include <sys/types.h>
-#include "math/Vector4.h"
+#include "glm/glm.hpp"
 #include "core/NoCopy.h"
+#include "graphics/FontData.h"
 
 namespace bsk {
 
@@ -29,15 +30,17 @@ public:
    FontManager();
    virtual ~FontManager();
 
-   bool initialize(const std::string& imageFile = "assets/img/font.png");
+   bool initialize(const std::string& fontImage= "assets/fonts/font.png", const std::string& fontData = "assets/fonts/font.dat");
 
    void update();
 
    void resize(uint width, uint height);
 
-   void setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize = 16, Vector4 color = Vector4(1,1,1,1));
+   void setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
+
 
 private:
+   std::map<char, FontData>       fontData_;
    std::map<std::string, Font>    fonts_;
    Texture                        fontTexture_;
    ShaderSprite                   shader_;

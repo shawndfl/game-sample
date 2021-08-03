@@ -10,11 +10,14 @@
 
 #include <sys/types.h>
 #include <string>
+#include <map>
 #include "graphics/Geometry.h"
 #include "graphics/ImageLoader.h"
 #include "graphics/Material.h"
 #include "graphics/ShaderSprite.h"
 #include "math/Vector4.h"
+
+#include "graphics/FontData.h"
 
 namespace bsk {
 
@@ -34,7 +37,7 @@ public:
     * screenY - the offset in screen space (-1, 1)
     *
     */
-   void initialize(const std::string& text, uint x, uint y, uint pixelSize = 16, Vector4 color = Vector4(1,1,1,1));
+   void initialize(std::map<char, FontData>& charData, const std::string& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
 
    void render(const ShaderSprite& shader);
 
@@ -49,7 +52,7 @@ private:
 
    Geometry      geometry_;
 
-   Vector4       color_;
+   glm::vec4     color_;
 
 };
 

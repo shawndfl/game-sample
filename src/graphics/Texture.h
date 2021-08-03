@@ -12,13 +12,24 @@
 
 namespace bsk {
 
+/**
+ * Holds a reference to a single texture.
+ * This class can load the image and apply the texture.
+ * Remember to call dispose when done with this.
+ */
 class Texture {
 public:
    Texture();
    virtual ~Texture();
 
+   /**
+    * Sets the image. \ref Image
+    */
    void setImage(const Image& img);
 
+   /**
+    * Frees the opengl texture buffer
+    */
    void dispose();
 
    /**
@@ -27,7 +38,7 @@ public:
    void apply(uint textureUnit = 0) const;
 
 private:
-   uint 	texture_;
+   uint 	texture_;       /// The texture id
 };
 
 } /* namespace bsk */
