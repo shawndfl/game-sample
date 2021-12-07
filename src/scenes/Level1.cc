@@ -29,7 +29,7 @@ bool Level1::start() {
    // show some text
    std::stringstream stream;
    stream << "Hello!\nTest";
-   bsk::GameEngine::get().getFontManager().setFont("title", stream, 0, 45, 32);
+   bsk::GameEngine::get().getFontManager().setFont("title", stream.str(), 0, 45, 32);
 
    // load the main texture that will
    // be shared between all sprites
@@ -65,7 +65,7 @@ void Level1::update(bsk::Milliseconds dt) {
       stream << "FPS: " << fps;
 
       // show frame rate
-      bsk::GameEngine::get().getFontManager().setFont("fps", stream, 0, 0, 32);
+      bsk::GameEngine::get().getFontManager().setFont("fps", stream.str(), 0, 0, 32);
 
       frameCount_ = 0;
       timer_.reset();

@@ -6,6 +6,7 @@
  */
 
 #include "StringUtility.h"
+#include "core/Logging.h"
 
 namespace bsk {
 
@@ -22,9 +23,9 @@ StringUtility::~StringUtility() {
 std::vector<std::string> StringUtility::split(const std::string& str, const std::string& delimiters, bool removeEmpty) {
     std::vector<std::string> parts;
     std::string token;
+
     for(size_t i = 0; i< str.size(); i++) {
         char ch = str[i];
-
         bool foundDelimter = false;
         for(size_t j =0; j < delimiters.size(); j++) {
             if(ch == delimiters[j]){
@@ -43,6 +44,11 @@ std::vector<std::string> StringUtility::split(const std::string& str, const std:
             // build up the token
             token += ch;
         }
+    }
+
+    // save the last one
+    if (!(removeEmpty && token.size() == 0)) {
+        parts.push_back(token);
     }
     return parts;
 }

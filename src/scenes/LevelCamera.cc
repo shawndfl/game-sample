@@ -74,7 +74,7 @@ bool LevelCamera::start() {
 
     // font manager
     fontManager_.initialize();
-    //fontManager_.setFont("txt1", "hello", 0,0, 64);
+    fontManager_.setFont("txt1", "hello", 0,0, 64);
 
     return true;
 }
@@ -98,6 +98,8 @@ void LevelCamera::update(bsk::Milliseconds dt) {
     geometry_.makeActive();
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    fontManager_.update();
 
 }
 

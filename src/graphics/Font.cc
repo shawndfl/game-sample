@@ -113,9 +113,7 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 }
 
 /*************************************************/
-void Font::render(const ShaderSprite& shader) {
-
-
+void Font::render(const ShaderFont& shader) {
 
    geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);

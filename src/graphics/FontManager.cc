@@ -32,11 +32,9 @@ void FontManager::update() {
    Matrix4 projection;
    projection.createOrthographic(0, GameEngine::get().getWidth(), 1, GameEngine::get().getHeight(), 0, 10);
 
-   Matrix4 mvp = projection;
-   shader_.setMVP(mvp);
+   shader_.setProjection(projection);
 
    for(auto pair: fonts_) {
-
       pair.second.render(shader_);
    }
 }
@@ -68,18 +66,14 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
         // get each line
         while(std::getline(in, line)) {
             FontData data;
-            LOGD("Line: " << line);
             if(line.size() < 4) {
                 LOGW("Invalid line: " << line);
             } else {
                 // parse the line. the first char characters are the char '<char>'
                 std::vector<std::string> parts = StringUtility::split(line.substr(3), " ");
-                for(std::string part: parts) {
-                    LOGD(" " << part);
-                }
 
                 if(parts.size() != 10) {
-                    LOGW("Expecting 10 columns after the character");
+                    LOGW("Expecting 10 columns after the character " << line);
                 } else {
                     try{
                         data.character  = std::stoi(parts[0]);
@@ -114,12 +108,11 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
 /*************************************************/
 void FontManager::resize(uint width, uint height) {
 
-   shader_.setScreenSize(width, height);
 }
 
 /*************************************************/
-void FontManager::setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize, const glm::vec4& color) {
-   fonts_[id].initialize(fontData_, text.str(), x, y, pixelSize, color);
+void FontManager::setFont(const std::string& id, const std::string& text, uint x, uint y, uint pixelSize, const glm::vec4& color) {
+   fonts_[id].initialize(fontData_, text, x, y, pixelSize, color);
 }
 
 } /* namespace bsk */

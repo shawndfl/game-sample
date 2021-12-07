@@ -9,6 +9,7 @@
 #define SRC_FONTMANAGER_H_
 
 #include "graphics/Font.h"
+#include "graphics/ShaderFont.h"
 #include <map>
 #include <string>
 #include <sstream>
@@ -36,14 +37,14 @@ public:
 
    void resize(uint width, uint height);
 
-   void setFont(const std::string& id, const std::stringstream& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
+   void setFont(const std::string& id, const std::string& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
 
 
 private:
    std::map<char, FontData>       fontData_;
    std::map<std::string, Font>    fonts_;
    Texture                        fontTexture_;
-   ShaderSprite                   shader_;
+   ShaderFont                     shader_;
 
 };
 
