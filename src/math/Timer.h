@@ -8,9 +8,9 @@
 #ifndef SRC_TIMER_H_
 #define SRC_TIMER_H_
 
-namespace bsk {
+#include "math/Math.h"
 
-typedef float Milliseconds;
+namespace bsk {
 
 /**
  * A simple timer

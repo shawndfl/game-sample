@@ -11,13 +11,11 @@
 #include <sys/types.h>
 #include <string>
 #include <map>
-#include "math/math.h"
+#include "math/Math.h"
 
-#include "graphics/ShaderFont.h"
 #include "graphics/Geometry.h"
 #include "graphics/ImageLoader.h"
 #include "graphics/Material.h"
-
 #include "graphics/FontData.h"
 
 namespace bsk {
@@ -40,7 +38,7 @@ public:
     */
    void initialize(std::map<char, FontData>& charData, const std::string& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
 
-   void render(const ShaderFont& shader);
+   void render();
 
    void dispose();
 

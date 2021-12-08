@@ -10,18 +10,33 @@
 
 #include "graphics/VertexAttribute.h"
 #include <string>
-#include "glm/glm.hpp"
+#include "math/Math.h"
 
 namespace bsk {
 
 /**
- * Abstract shader program used by Geometry to map vertex attributes
+ * Shader program is used to load shaders from file or from memory.
+ * Once they are loaded uniform values can be set using the set functions
+ * call use to make the program active.
  */
 class ShaderProgram {
 public:
     ShaderProgram();
     virtual ~ShaderProgram();
 
+    /**
+     * Load from memory
+     */
+    bool loadShaderFromMemory(const std::string& vertexCode, const std::string& fragmentCode);
+
+    /**
+     * Load from a file
+     */
+    bool loadShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath);
+
+    /**
+     * Make this program active.
+     */
     void use() const;
 
     void setBool(const std::string& name, bool value) const;
@@ -35,9 +50,6 @@ public:
     void setVec3(const std::string& name, const glm::vec3& value) const;
 
     void setVec4(const std::string& name, const glm::vec4& value) const;
-
-    bool loadShaderFromMemory(const std::string& vertexCode, const std::string& fragmentCode);
-    bool loadShaderFromFile(const std::string& vertexPath, const std::string& fragmentPath);
 
 private:
    unsigned int program_;

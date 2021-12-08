@@ -8,8 +8,6 @@
 #ifndef SRC_FONTMANAGER_H_
 #define SRC_FONTMANAGER_H_
 
-#include "graphics/Font.h"
-#include "graphics/ShaderFont.h"
 #include <map>
 #include <string>
 #include <sstream>
@@ -17,6 +15,8 @@
 #include "glm/glm.hpp"
 #include "core/NoCopy.h"
 #include "graphics/FontData.h"
+#include "graphics/Font.h"
+#include "graphics/ShaderProgram.h"
 
 namespace bsk {
 
@@ -31,7 +31,10 @@ public:
    FontManager();
    virtual ~FontManager();
 
-   bool initialize(const std::string& fontImage= "assets/fonts/font.png", const std::string& fontData = "assets/fonts/font.dat");
+   bool initialize(
+           const std::string& fontImage = "assets/fonts/font.png",
+           const std::string& fontData = "assets/fonts/font.dat",
+           const std::string& shaderFilename = "assets/shaders/font");
 
    void update();
 
@@ -44,7 +47,7 @@ private:
    std::map<char, FontData>       fontData_;
    std::map<std::string, Font>    fonts_;
    Texture                        fontTexture_;
-   ShaderFont                     shader_;
+   ShaderProgram                  shader_;
 
 };
 

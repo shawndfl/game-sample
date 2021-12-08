@@ -5,7 +5,7 @@
 
 APP:=bin/BlockSimulatedKingdom
 
-SRC_CC := $(notdir $(wildcard ./src/*/*.cc))
+SRC_CC := $(notdir $(wildcard ./src/*/*.cc)) $(notdir $(wildcard ./src/*.cc))
 SRC_C  := $(notdir $(wildcard ./src/*/*.c ))
 OBJ    := $(SRC_CC:%.cc=bin/%.o) $(SRC_C:%.c=bin/%.o)
 

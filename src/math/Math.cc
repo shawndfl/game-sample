@@ -4,7 +4,7 @@
  *  Created on: Sep 6, 2020
  *      Author: sdady
  */
-#include "mathCore.h"
+#include "math/Math.h"
 #include <iomanip>
 
 /*************************************************/

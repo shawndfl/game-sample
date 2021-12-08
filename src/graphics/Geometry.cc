@@ -7,7 +7,6 @@
 
 #include "Geometry.h"
 #include "core/Logging.h"
-#include "graphics/ShaderSprite.h"
 
 namespace bsk {
 
@@ -27,6 +26,8 @@ Geometry::~Geometry() {
 
 /*************************************************/
 void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic) {
+
+    LOGGL();
 
     dispose();
     LOGGL();

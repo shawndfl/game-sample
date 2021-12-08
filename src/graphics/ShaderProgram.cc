@@ -64,7 +64,7 @@ void ShaderProgram::setMatrix4(const std::string& name, const glm::mat4& value) 
     if (loc == -1) {
         LOGE("Cannot find " << name << " in shader " << vertexPath_ << " or " << fragmentPath_);
     } else {
-        glUniformMatrix4fv(loc, 1, false,  &value[0][0]);
+        glUniformMatrix4fv(loc, 1, false,  glm::value_ptr(value));
     }
 }
 

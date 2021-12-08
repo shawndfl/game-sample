@@ -9,7 +9,7 @@
 #define SRC_MATERIAL_H_
 
 #include "graphics/Texture.h"
-#include "math/Vector4.h"
+#include "math/Math.h"
 
 namespace bsk {
 
@@ -30,18 +30,18 @@ public:
 	void setTransparent(bool transparent);
 
 private:
-	Texture 	diffused_;		/// the main texture
-	Texture 	overlay_;		/// The overlay texture
+    Texture     diffused_;		/// the main texture
+    Texture     overlay_;		/// The overlay texture
 
-	float    opacity_;      /// Opacity
+    float       opacity_;      /// Opacity
 
-	bool 		transparent_;	/// If this material is transparent
+    bool        transparent_;	/// If this material is transparent
 
-   Vector4        color_;
-   float          uscale_;
-   float          vscale_;
-   float          uoffset_;
-   float          voffset_;
+    glm::vec4   color_;
+    float       uscale_;
+    float       vscale_;
+    float       uoffset_;
+    float       voffset_;
 };
 
 } /* namespace bsk */

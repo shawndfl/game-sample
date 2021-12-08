@@ -1,15 +1,12 @@
 #version 330 core
                  
-varying vec2 v_tex;
-                      
-uniform sampler2D u_font;
-            
-uniform vec2 u_scale;                    
-uniform vec2 u_offset;                   
+in vec2 v_tex;                      
+uniform sampler2D u_font;                             
 uniform vec4 u_color;
+out vec4 color;
                     
 void main() {                            
-    vec2 tex = u_offset + v_tex * u_scale;
-    gl_FragColor = texture2D(u_diffused, tex) * u_color; 
+    vec2 tex = v_tex;
+    color = texture2D(u_font, tex) * u_color; 
 }                                         
                                                  

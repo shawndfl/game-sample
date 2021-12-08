@@ -8,8 +8,8 @@
 #ifndef SRC_ANIMATIONCLIP_H_
 #define SRC_ANIMATIONCLIP_H_
 
+#include <math/Math.h>
 #include "math/Timer.h"
-#include "math/mathCore.h"
 #include <vector>
 #include <map>
 

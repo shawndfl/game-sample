@@ -1,7 +1,4 @@
 
-#include "scenes/Level1.h"
-#include "scenes/LevelSquare.h"
-#include "scenes/LevelLight.h"
 #include "scenes/LevelCamera.h"
 #include "core/Logging.h"
 #include "core/GameEngine.h"

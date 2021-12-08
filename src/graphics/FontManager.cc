@@ -24,29 +24,18 @@ FontManager::~FontManager() {
 }
 
 /*************************************************/
-void FontManager::update() {
+bool FontManager::initialize(const std::string& fontImage, const std::string& fontData, const std::string& shaderFilename ) {
 
-   shader_.enableProgram();
-   fontTexture_.apply();
+    std::string vertFilename = shaderFilename + ".vert";
+    std::string fragFilename = shaderFilename + ".frag";
+    shader_.loadShaderFromFile(vertFilename, fragFilename);
 
-   Matrix4 projection;
-   projection.createOrthographic(0, GameEngine::get().getWidth(), 1, GameEngine::get().getHeight(), 0, 10);
-
-   shader_.setProjection(projection);
-
-   for(auto pair: fonts_) {
-      pair.second.render(shader_);
-   }
-}
-
-/*************************************************/
-bool FontManager::initialize(const std::string& fontImage, const std::string& fontData ) {
-    shader_.loadProgram();
     Image img;
     ImageLoader::loadImage(fontImage, img);
     fontTexture_.setImage(img);
 
     fontTexture_.apply();
+
     // set the texture wrapping/filtering options (on the currently bound texture object)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -55,6 +44,12 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
 
     glBindTexture(GL_TEXTURE0, 0);
 
+    // set the projection
+    glm::mat4 proj;
+    proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), 0.0f, 10.0f);
+    shader_.setMatrix4("u_projection", proj);
+
+    // load the font data file
     std::ifstream in;
     in.open(fontData.c_str());
 
@@ -104,6 +99,18 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
 
     return true;
 }
+
+/*************************************************/
+void FontManager::update() {
+
+   shader_.use();
+   fontTexture_.apply();
+
+   for(auto pair: fonts_) {
+      pair.second.render();
+   }
+}
+
 
 /*************************************************/
 void FontManager::resize(uint width, uint height) {

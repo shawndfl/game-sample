@@ -14,7 +14,7 @@ Material::Material() {
     opacity_        = 1.0;
     transparent_    = false;
 
-    color_          = Vector4(0,0,0,1);
+    color_          = glm::vec4(0,0,0,1);
     uscale_         = 1.0;
     vscale_         = 1.0;
     uoffset_        = 0.0;
