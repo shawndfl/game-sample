@@ -29,22 +29,28 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 
     color_ = color;
 
-    const int cols = 10;
     const int width = 1024;
     const int height = 1024;
-    const float chWidth = 102.4;
-    const float chHeight = 102.4;
-    const float chStep = pixelSize;
 
     std::vector<float> verts;
     std::vector<GLuint> indices;
-    uint xpos = x;
-    uint ypos = y;
+    float xpos = x;
+    float ypos = y;
     float zpos = 0;
     int charCount = 0;
 
     for (uint i = 0; i < text.size(); i++) {
         unsigned char ch = text[i];
+        auto data = charData.at(ch);
+
+        if(data == charData.end()) {
+            LOGD("Don't have data for ch: " << (int) ch);
+        }
+
+        //TODO
+        //..........
+
+        xpos += data.bearingX;
 
         if(ch =='\n') {
             ypos += chStep;

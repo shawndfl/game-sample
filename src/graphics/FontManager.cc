@@ -26,12 +26,14 @@ FontManager::~FontManager() {
 /*************************************************/
 bool FontManager::initialize(const std::string& fontImage, const std::string& fontData, const std::string& shaderFilename ) {
 
+
     std::string vertFilename = shaderFilename + ".vert";
     std::string fragFilename = shaderFilename + ".frag";
     shader_.loadShaderFromFile(vertFilename, fragFilename);
 
     Image img;
     ImageLoader::loadImage(fontImage, img);
+
     fontTexture_.setImage(img);
 
     fontTexture_.apply();
@@ -46,7 +48,8 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
 
     // set the projection
     glm::mat4 proj;
-    proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), 0.0f, 10.0f);
+    proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), -1.0f, 10.0f);
+    shader_.use();
     shader_.setMatrix4("u_projection", proj);
 
     // load the font data file

@@ -48,7 +48,6 @@ private:
    std::map<std::string, Font>    fonts_;
    Texture                        fontTexture_;
    ShaderProgram                  shader_;
-
 };
 
 } /* namespace bsk */

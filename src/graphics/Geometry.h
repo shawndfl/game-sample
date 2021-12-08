@@ -42,16 +42,19 @@ public:
 
    GLuint getStride() const;
 
+   GLuint getPrimitiveCount() const;
+
 protected:
 
    GLuint    vb_;
    GLuint    ib_;
    GLuint    vao_;
 
-   uint       indexCount_;
-   uint       vertexCount_;
+   GLuint     indexCount_;              /// How big is the index buffer
+   GLuint     vertexCount_;             /// How big is the vertex buffer
+   GLuint     primitiveCount_;          /// How many indices are we drawing
 
-   VertexAttributes             attribute_;
+   VertexAttributes       attribute_;
    std::vector<GLuint>    attributeIndex_;
 
 };

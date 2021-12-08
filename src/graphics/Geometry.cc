@@ -18,6 +18,7 @@ Geometry::Geometry() {
    indexCount_ = 0;
    vertexCount_ = 0;
    vao_ = 0;
+   primitiveCount_ =0;
 }
 
 /*************************************************/
@@ -35,6 +36,7 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     attribute_ = attribute;
     indexCount_ = indexCount;
     vertexCount_ = vertexCount;
+    primitiveCount_ = 0;    // this will be set in setBuffers()
 
     glGenVertexArrays(1, &vao_);
     glGenBuffers(1, &vb_);
@@ -140,6 +142,8 @@ void Geometry::setBuffers(float* verts, uint vertexCount, GLuint* indices, uint 
     uint vCount = vertexCount > vertexCount_? vertexCount_ :  vertexCount;
     uint iCount = indexCount > indexCount_? indexCount_ :  indexCount;
 
+    primitiveCount_ = iCount;
+
     uint vertBytes = vCount * sizeof(float);
     uint indexBytes = iCount * sizeof(GLuint);
 
@@ -194,6 +198,11 @@ GLuint Geometry::IndexCount() const {
 /*************************************************/
 VertexAttributes Geometry::getAttribute() const {
    return attribute_;
+}
+
+/*************************************************/
+GLuint Geometry::getPrimitiveCount() const {
+    return primitiveCount_;
 }
 
 } /* namespace bsk */
