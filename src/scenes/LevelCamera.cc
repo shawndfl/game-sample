@@ -42,11 +42,11 @@ bool LevelCamera::start() {
     shader_.setMatrix4("proj", proj);
 
     float vertices[] = {
-            // positions          // colors           // texture coords
-            0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
-            0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,   // bottom right
-            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,   // bottom left
-            -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f    // top left
+            // positions        // texture coords // colors 
+           -0.5f,   0.5f, 0.0f,   0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   // top right
+            0.5f,   0.5f, 0.0f,   1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   // bottom right
+            0.5f,  -0.5f, 0.0f,   1.0f, 1.0f,   1.0f, 1.0f, 1.0f,   // bottom left
+            -0.5f, -0.5f, 0.0f,   0.0f, 1.0f,   1.0f, 1.0f, 1.0f    // top left
             };
     GLuint indices[] = {
             0, 1, 3,  // first Triangle
@@ -63,6 +63,7 @@ bool LevelCamera::start() {
     bsk::Image img;
     if (bsk::ImageLoader::loadImage("assets/img/Bricks.png", img)) {
         texture_.setImage(img);
+        LOGGL();
     }
 
     // ping pong
@@ -71,10 +72,11 @@ bool LevelCamera::start() {
     clip_.addKey(2000, 0);
     clip_.play(true);
 
-
     // font manager
+    LOGGL();
     fontManager_.initialize();
-    //fontManager_.setFont("txt1", "hello", 0,0, 64);
+    LOGGL();
+    fontManager_.setFont("txt1", "A", 0, 30, 64);
 
     return true;
 }
@@ -86,7 +88,7 @@ void LevelCamera::update(bsk::Milliseconds dt) {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    clip_.update(dt);
+    //clip_.update(dt);
 
     // draw our first triangle
     shader_.use();
@@ -99,7 +101,7 @@ void LevelCamera::update(bsk::Milliseconds dt) {
 
     glDrawElements(GL_TRIANGLES, geometry_.getPrimitiveCount(), GL_UNSIGNED_INT, 0);
 
-    //fontManager_.update();
+    fontManager_.update();
 
 }
 

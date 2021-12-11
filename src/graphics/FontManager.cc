@@ -26,31 +26,38 @@ FontManager::~FontManager() {
 /*************************************************/
 bool FontManager::initialize(const std::string& fontImage, const std::string& fontData, const std::string& shaderFilename ) {
 
-
+    LOGGL();
     std::string vertFilename = shaderFilename + ".vert";
     std::string fragFilename = shaderFilename + ".frag";
     shader_.loadShaderFromFile(vertFilename, fragFilename);
 
     Image img;
     ImageLoader::loadImage(fontImage, img);
-
+    LOGGL();
     fontTexture_.setImage(img);
-
+    LOGGL();
     fontTexture_.apply();
+    LOGGL();
 
     // set the texture wrapping/filtering options (on the currently bound texture object)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glBindTexture(GL_TEXTURE0, 0);
+    glBindTexture( GL_TEXTURE_2D, 0);
+    LOGGL();
 
     // set the projection
-    glm::mat4 proj;
-    proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), -1.0f, 10.0f);
+    glm::mat4 proj(1);
+    glm::vec4 col(1);
+    //proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), -1.0f, 10.0f);
     shader_.use();
+    LOGGL();
     shader_.setMatrix4("u_projection", proj);
+    LOGGL();
+    shader_.setVec4("u_color", col);
+    LOGGL();
 
     // load the font data file
     std::ifstream in;

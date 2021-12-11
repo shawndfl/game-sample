@@ -38,11 +38,13 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     vertexCount_ = vertexCount;
     primitiveCount_ = 0;    // this will be set in setBuffers()
 
+    // create buffers
     glGenVertexArrays(1, &vao_);
     glGenBuffers(1, &vb_);
     glGenBuffers(1, &ib_);
 
-    glBindVertexArray(vb_);
+    // bind array buffer
+    glBindVertexArray(vao_);
     LOGGL();
 
     GLint size;
@@ -81,12 +83,12 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
 
     // the shader must have a attribute position order of pos, color, texture, normal
     // the combinations are:
-    //  pos, color
-    //  pos, color, texture
-    //  pos, color, texture, normal
-    //  pos, color, texture, normal, biNormal
-    //  pos, color, texture, normal, biNormal
-    //  pos, color, texture, normal, biNormal, weight, index
+    //  pos, texture
+    //  pos, texture, color,
+    //  pos, texture, color, normal
+    //  pos, texture, color, normal, biNormal
+    //  pos, texture, color, normal, biNormal
+    //  pos, texture, color, normal, biNormal, weight, index
 
     if ((getAttribute() & APos) > 0) {
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
@@ -94,16 +96,16 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
         offset += 3 * sizeof(float);
     }
 
-    if ((getAttribute() & AColor) > 0) {
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+    if ((getAttribute() & ATex1) > 0) {
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
         glEnableVertexAttribArray(1);
-        offset += 3 * sizeof(float);
+        offset += 2 * sizeof(float);
     }
 
-    if ((getAttribute() & ATex1) > 0) {
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+    if ((getAttribute() & AColor) > 0) {
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
         glEnableVertexAttribArray(2);
-        offset += 2 * sizeof(float);
+        offset += 3 * sizeof(float);
     }
 
     if ((getAttribute() & ANorm) > 0) {
@@ -133,6 +135,7 @@ GLuint Geometry::getStride() const {
 
 /*************************************************/
 void Geometry::setBuffers(std::vector<float>& verts, std::vector<GLuint>& indices) {
+
     setBuffers(&verts[0], verts.size(), &indices[0], indices.size());
 }
 
@@ -143,6 +146,29 @@ void Geometry::setBuffers(float* verts, uint vertexCount, GLuint* indices, uint 
     uint iCount = indexCount > indexCount_? indexCount_ :  indexCount;
 
     primitiveCount_ = iCount;
+
+    LOGD("primitiveCount " << iCount);
+    uint index = 0;
+    uint i = 0;
+    while (i < vertexCount) {
+        LOGD("Vert: " << index++ );
+        if ((getAttribute() & APos) > 0) {
+            LOGD("   pos (" << verts[i++] << ", " << verts[i++] << ", " << verts[i++] << ")");
+        }
+        if ((getAttribute() & ATex1) > 0) {
+            LOGD("   txt (" << verts[i++] << ", " << verts[i++] << ")");
+        }
+        if ((getAttribute() & AColor) > 0) {
+            LOGD("   col (" << verts[i++] << ", " << verts[i++] << ", " << verts[i++] << ")");
+        }
+    }
+
+    i = 0;
+    index = 0;
+    while (i < indexCount) {
+        LOGD((index++)
+                << ") index (" << indices[i++] << ", " << indices[i++] << ", " << indices[i++] << ")");
+    }
 
     uint vertBytes = vCount * sizeof(float);
     uint indexBytes = iCount * sizeof(GLuint);

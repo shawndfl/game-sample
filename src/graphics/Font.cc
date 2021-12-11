@@ -34,85 +34,91 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 
     std::vector<float> verts;
     std::vector<GLuint> indices;
-    float xpos = x;
-    float ypos = y;
+    float originX = x;
+    float originY = y;
+    float xpos1 = x;
+    float ypos1 = y;
+    float xpos2 = x;
+    float ypos2 = y;
+
     float zpos = 0;
     int charCount = 0;
-
+    LOGD("position " << originX << ", " << originY);
     for (uint i = 0; i < text.size(); i++) {
         unsigned char ch = text[i];
-        auto data = charData.at(ch);
-
-        if(data == charData.end()) {
-            LOGD("Don't have data for ch: " << (int) ch);
-        }
-
-        //TODO
-        //..........
-
-        xpos += data.bearingX;
-
         if(ch =='\n') {
-            ypos += chStep;
-            xpos = x;
+            //ypos += chStep;
+            //xpos = x;
             continue;
         } else  if (ch < ' ' || ch > '~') {
             ch = '?';
         }
 
-        unsigned char chXOffset1 = (ch - ' ') % cols;
-        unsigned char chYOffset1 = (ch - ' ') / cols;
-        unsigned char chXOffset2 = chXOffset1 + 1;
-        unsigned char chYOffset2 = chYOffset1 + 1;
+        auto index = charData.find(ch);
+        if (index == charData.end()) {
+            LOGD("Don't have data for ch: " << (int) ch);
+        }
 
-        //LOGD("offset " << (int)chXOffset1 << ", " << (int)chYOffset1 << ", " << (int)chXOffset2 << ", " << (int)chYOffset2);
+        FontData data = (*index).second;
 
-        //float scaleX = chHeight * (float) chYOffset1;
+        xpos1 = .5;//originX + data.bearingX;
+        ypos1 = .5;//originY + data.sizeY - data.bearingY;
 
-        float tu1 = (float) (chWidth * (float) chXOffset1) / (float) width;
-        float tv1 = (float) (chHeight * (float) chYOffset1) / (float) height;
+        xpos2 = .8;//originX + data.advance;
+        ypos2 = .8;//originY - data.sizeY + data.bearingY;
 
-        float tu2 = (float) (chWidth * (float) chXOffset2) / (float) width;
-        float tv2 = (float) (chHeight * (float) chYOffset2) / (float) height;
+        LOGD("Character " << (int) ch << " = " <<ch);
+        LOGD("offset " << xpos1 << ", " << ypos1
+                       << " to "
+                       << xpos2 << ", " << ypos2);
+
+        float tu1 = 0;//data.u1;
+        float tv1 = .3333;//data.v1;
+
+        float tu2 = .3333;//data.u2;
+        float tv2 = 0;//data.v2;
+
+        LOGD("texture " << tu1 << ", " << tv1
+                        << " to "
+                        << tu2 << ", " << tv2);
 
         // top left
-        verts.push_back(xpos);
-        verts.push_back(ypos);
+        verts.push_back(xpos1);
+        verts.push_back(ypos1);
         verts.push_back(zpos);
         verts.push_back(tu1);
         verts.push_back(tv1);
 
         // top right
-        verts.push_back(xpos + chStep);
-        verts.push_back(ypos);
+        verts.push_back(xpos2);
+        verts.push_back(ypos1);
         verts.push_back(zpos);
         verts.push_back(tu2);
         verts.push_back(tv1);
 
         // bottom right
-        verts.push_back(xpos + chStep);
-        verts.push_back(ypos + chStep);
+        verts.push_back(xpos2);
+        verts.push_back(ypos2);
         verts.push_back(zpos);
         verts.push_back(tu2);
         verts.push_back(tv2);
 
         // bottom left
-        verts.push_back(xpos);
-        verts.push_back(ypos + chStep);
+        verts.push_back(xpos1);
+        verts.push_back(ypos2);
         verts.push_back(zpos);
         verts.push_back(tu1);
         verts.push_back(tv2);
 
         indices.push_back(charCount * 4 + 0);
         indices.push_back(charCount * 4 + 1);
-        indices.push_back(charCount * 4 + 2);
+        indices.push_back(charCount * 4 + 3);
 
-        indices.push_back(charCount * 4 + 0);
+        indices.push_back(charCount * 4 + 1);
         indices.push_back(charCount * 4 + 2);
         indices.push_back(charCount * 4 + 3);
 
         charCount++;
-        xpos += chStep;
     }
 
     geometry_.setBuffers(verts, indices);
@@ -122,7 +128,7 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 void Font::render() {
 
    geometry_.makeActive();
-   glDrawElements(GL_TRIANGLES, geometry_.IndexCount(), GL_UNSIGNED_SHORT, NULL);
+   glDrawElements(GL_TRIANGLES, geometry_.getPrimitiveCount(), GL_UNSIGNED_INT, NULL);
 }
 
 /*************************************************/

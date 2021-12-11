@@ -25,7 +25,9 @@ ShaderProgram::~ShaderProgram() {
 
 /*************************************************/
 void ShaderProgram::use() const {
+    LOGGL();
     glUseProgram(program_);
+    LOGGL();
 }
 
 /*************************************************/
