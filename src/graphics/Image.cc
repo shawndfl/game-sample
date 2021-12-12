@@ -89,7 +89,9 @@ uint Image::getRowBytes() const {
 
 /*************************************************/
 uint Image::getOpenGlColorType() const {
-    if((colorType_ & CTAlpha) > 0) {
+    if(colorType_ == CTGray) {
+        return GL_RED;
+    } else if((colorType_ & CTAlpha) > 0) {
         return GL_RGBA;
     } else {
         return GL_RGB;

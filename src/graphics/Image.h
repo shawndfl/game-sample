@@ -27,6 +27,7 @@ public:
    };
 
    enum ColorType {
+      CTGray      = 0,
       CTPalette   = 1,
       CTColor     = 2,
       CTAlpha     = 4,

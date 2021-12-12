@@ -29,9 +29,6 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 
     color_ = color;
 
-    const int width = 1024;
-    const int height = 1024;
-
     std::vector<float> verts;
     std::vector<GLuint> indices;
     float originX = x;
@@ -72,11 +69,11 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
                        << " to "
                        << xpos2 << ", " << ypos2);
 
-        float tu1 = 0;//data.u1;
-        float tv1 = .3333;//data.v1;
+        float tu1 = data.u1;
+        float tv1 = data.v2;
 
-        float tu2 = .3333;//data.u2;
-        float tv2 = 0;//data.v2;
+        float tu2 = data.u2;
+        float tv2 = data.v1;
 
         LOGD("texture " << tu1 << ", " << tv1
                         << " to "
