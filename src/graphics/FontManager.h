@@ -40,7 +40,7 @@ public:
 
    void resize(uint width, uint height);
 
-   void setFont(const std::string& id, const std::string& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
+   void setFont(const std::string& id, const std::string& text, uint x, uint y, uint depth = 0, const glm::vec4& color = glm::vec4(1,1,1,1));
 
 
 private:
@@ -48,6 +48,8 @@ private:
    std::map<std::string, Font>    fonts_;
    Texture                        fontTexture_;
    ShaderProgram                  shader_;
+   uint                           width_;
+   uint                           height_;
 };
 
 } /* namespace bsk */

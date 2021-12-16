@@ -36,18 +36,29 @@ public:
     * screenY - the offset in screen space (-1, 1)
     *
     */
-   void initialize(std::map<char, FontData>& charData, const std::string& text, uint x, uint y, uint pixelSize = 16, const glm::vec4& color = glm::vec4(1,1,1,1));
+   void initialize(const std::map<char, FontData>& charData,
+           const std::string& text,
+           uint x,
+           uint y,
+           uint depth = 0,
+           const glm::vec4& color = glm::vec4(1,1,1,1));
 
    void render();
+
+   void resize(const std::map<char, FontData>& charData, uint width, uint height);
 
    void dispose();
 
    const Geometry& getGeometry() const;
 
 private:
+   void createBuffers(const std::map<char, FontData>& charData, uint width = 1920, uint height = 1024);
+
+private:
    std::string   text_;
-   int           screenX_;
-   int           screenY_;
+   uint          posX_;
+   uint          posY_;
+   uint          depth_;
 
    Geometry      geometry_;
 

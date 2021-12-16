@@ -13,8 +13,9 @@ namespace bsk {
 
 /*************************************************/
 Font::Font() {
-   screenX_  = 0;
-   screenY_  = 0;
+   posX_  = 0;
+   posY_  = 0;
+   depth_ = 0;
    const uint MAX_CH = 50;
 
    geometry_.initialize(MAX_CH * 4 * 5, MAX_CH * 6, APos | ATex1);
@@ -25,29 +26,27 @@ Font::~Font() {
 }
 
 /*************************************************/
-void Font::initialize(std::map<char, FontData>& charData, const std::string& text, uint x, uint y, uint pixelSize, const glm::vec4& color) {
-
-    color_ = color;
+void Font::createBuffers(const std::map<char, FontData>& charData, uint width, uint height) {
 
     std::vector<float> verts;
     std::vector<GLuint> indices;
-    float originX = x;
-    float originY = y;
-    float xpos1 = x;
-    float ypos1 = y;
-    float xpos2 = x;
-    float ypos2 = y;
+    float originX = posX_;
+    float originY = posY_;
+    float xpos1 = posX_;
+    float ypos1 = posY_;
+    float xpos2 = posX_;
+    float ypos2 = posY_;
 
-    float zpos = 0;
+    float zpos = depth_;
     int charCount = 0;
     LOGD("position " << originX << ", " << originY);
-    for (uint i = 0; i < text.size(); i++) {
-        unsigned char ch = text[i];
-        if(ch =='\n') {
+    for (uint i = 0; i < text_.size(); i++) {
+        unsigned char ch = text_[i];
+        if (ch == '\n') {
             //ypos += chStep;
             //xpos = x;
             continue;
-        } else  if (ch < ' ' || ch > '~') {
+        } else if (ch < ' ' || ch > '~') {
             ch = '?';
         }
 
@@ -58,16 +57,14 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 
         FontData data = (*index).second;
 
-        xpos1 = .5;//originX + data.bearingX;
-        ypos1 = .5;//originY + data.sizeY - data.bearingY;
+        xpos1 = (float)(originX + data.bearingX) / width;
+        ypos1 = (float)(originY - data.sizeY + data.bearingY) / height;
 
-        xpos2 = .8;//originX + data.advance;
-        ypos2 = .8;//originY - data.sizeY + data.bearingY;
+        xpos2 = (float)(originX + data.advance) / width;
+        ypos2 = (float)(originY + data.sizeY - data.bearingY) / height;
 
         LOGD("Character " << (int) ch << " = " <<ch);
-        LOGD("offset " << xpos1 << ", " << ypos1
-                       << " to "
-                       << xpos2 << ", " << ypos2);
+        LOGD("offset " << xpos1 << ", " << ypos1 << " to " << xpos2 << ", " << ypos2);
 
         float tu1 = data.u1;
         float tv1 = data.v2;
@@ -75,9 +72,7 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
         float tu2 = data.u2;
         float tv2 = data.v1;
 
-        LOGD("texture " << tu1 << ", " << tv1
-                        << " to "
-                        << tu2 << ", " << tv2);
+        LOGD("texture " << tu1 << ", " << tv1 << " to " << tu2 << ", " << tv2);
 
         // top left
         verts.push_back(xpos1);
@@ -122,10 +117,29 @@ void Font::initialize(std::map<char, FontData>& charData, const std::string& tex
 }
 
 /*************************************************/
+void Font::initialize(const std::map<char, FontData>& charData, const std::string& text,
+        uint x, uint y, uint depth, const glm::vec4& color) {
+
+    color_ = color;
+    text_ = text;
+    posX_ = x;
+    posY_ = y;
+    depth_ = depth;
+
+    createBuffers(charData);
+
+}
+
+/*************************************************/
 void Font::render() {
 
    geometry_.makeActive();
    glDrawElements(GL_TRIANGLES, geometry_.getPrimitiveCount(), GL_UNSIGNED_INT, NULL);
+}
+
+/*************************************************/
+void Font::resize(const std::map<char, FontData>& charData, uint width, uint height) {
+    createBuffers(charData, width, height);
 }
 
 /*************************************************/

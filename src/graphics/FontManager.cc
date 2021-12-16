@@ -16,6 +16,8 @@ namespace bsk {
 
 /*************************************************/
 FontManager::FontManager() {
+    width_ = 800;
+    height_ = 600;
 }
 
 /*************************************************/
@@ -125,11 +127,17 @@ void FontManager::update() {
 /*************************************************/
 void FontManager::resize(uint width, uint height) {
 
+    width_ = width;
+    height_ = height;
+
+    for (auto pair : fonts_) {
+        pair.second.resize(fontData_, width, height);
+    }
 }
 
 /*************************************************/
-void FontManager::setFont(const std::string& id, const std::string& text, uint x, uint y, uint pixelSize, const glm::vec4& color) {
-   fonts_[id].initialize(fontData_, text, x, y, pixelSize, color);
+void FontManager::setFont(const std::string& id, const std::string& text, uint x, uint y, uint depth, const glm::vec4& color) {
+   fonts_[id].initialize(fontData_, text, x, y, depth, color);
 }
 
 } /* namespace bsk */

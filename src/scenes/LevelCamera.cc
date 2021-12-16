@@ -76,7 +76,7 @@ bool LevelCamera::start() {
     LOGGL();
     fontManager_.initialize();
     LOGGL();
-    fontManager_.setFont("txt1", "A", 0, 30, 64);
+    fontManager_.setFont("txt1", "A", 0, 30);
 
     return true;
 }
@@ -107,6 +107,7 @@ void LevelCamera::update(bsk::Milliseconds dt) {
 
 /*************************************************/
 void LevelCamera::resize(uint width, uint height) {
+    fontManager_.resize(width, height);
 }
 
 /*************************************************/
