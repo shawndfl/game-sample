@@ -12,7 +12,7 @@ OBJ    := $(SRC_CC:%.cc=bin/%.o) $(SRC_C:%.c=bin/%.o)
 CFLAGS := -Wall -O3 -pthread -MMD
 CFLAGS += -I src/
 LDFLAGS := -pthread
-LDLIBS := -lstdc++ -lpng -ldl /usr/local/lib64/libglfw3.a
+LDLIBS := -lstdc++ -lpng -ldl -lglfw
 
 # Phony targets
 .PHONY: all clean debug
