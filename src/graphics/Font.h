@@ -59,6 +59,7 @@ private:
    uint          posX_;
    uint          posY_;
    uint          depth_;
+   uint          maxHeight_;
 
    Geometry      geometry_;
 

@@ -25,6 +25,10 @@ struct Character {
     float        v2;          ///  bottom right uv coordinates
 };
 
+float clamp(float num) {
+   return num < 0 ? 0 : num > 1.0 ? 1.0 : num;
+}
+
 int main(int argc, char *argv[]) {
 
     // inputs
@@ -118,6 +122,14 @@ int main(int argc, char *argv[]) {
         data.bearingX   = face->glyph->bitmap_left;
         data.bearingY   = face->glyph->bitmap_top;
 
+        // wrap to the next row if needed
+        if (xOffset + data.sizeX >= imageWidth) {
+           yOffset += yCurrentMax;
+           yCurrentMax = 0;
+           xOffset = 0;
+           std::cout << "New line " << xOffset << " size " << data.sizeX << " width " << imageWidth << std::endl;
+        }
+
         // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
         // bitshift by 6 to get value in pixels (2^6 = 64)
         data.advance    = face->glyph->advance.x >> 6;
@@ -127,11 +139,11 @@ int main(int argc, char *argv[]) {
         data.v2         = (float) (yOffset + data.sizeY) / imageHeight;
 
         fileData << "'" << ch  << "' "  << (int) ch          << " " <<
-                data.sizeX      << " "  << data.sizeX        << " " <<
+                data.sizeX      << " "  << data.sizeY        << " " <<
                 data.bearingX   << " "  << data.bearingY     << " " <<
                 data.advance    << " "  <<
-                data.u1         << " "  << data.v1           << " " <<
-                data.u2         << " "  << data.v2           << "\n";
+                data.u1         << " "  << data.v1   << " " <<
+                data.u2         << " "  << data.v2   << "\n";
 
         // save the character
         characters.push_back(data);
@@ -147,13 +159,6 @@ int main(int argc, char *argv[]) {
         std::cout << " data.u2       : " << data.u2 << "\n";
         std::cout << " data.v2       : " << data.v2 << "\n";
         std::cout << "\n";
-
-        // wrap to the next row if needed
-        if (xOffset + data.sizeX >= imageWidth) {
-            yOffset += yCurrentMax;
-            yCurrentMax = 0;
-            xOffset = 0;
-        }
 
         // copy glyph to the final image
         int x = 0;

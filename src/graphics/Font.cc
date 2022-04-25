@@ -32,10 +32,14 @@ void Font::createBuffers(const std::map<char, FontData>& charData, uint width, u
     std::vector<GLuint> indices;
     float originX = posX_;
     float originY = posY_;
-    float xpos1 = posX_;
-    float ypos1 = posY_;
-    float xpos2 = posX_;
-    float ypos2 = posY_;
+    float offsetX = originX / width;
+    float offsetY = originY / height;
+    float xpos1 = offsetX  / width;
+    float ypos1 = offsetY  / height;
+    float xpos2 = offsetX  / width;
+    float ypos2 = offsetY  / height;
+
+    float scale = 1;
 
     float zpos = depth_;
     int charCount = 0;
@@ -43,8 +47,8 @@ void Font::createBuffers(const std::map<char, FontData>& charData, uint width, u
     for (uint i = 0; i < text_.size(); i++) {
         unsigned char ch = text_[i];
         if (ch == '\n') {
-            //ypos += chStep;
-            //xpos = x;
+            offsetY -= (float)maxHeight_ / height;
+            offsetX = originX / width;
             continue;
         } else if (ch < ' ' || ch > '~') {
             ch = '?';
@@ -57,11 +61,13 @@ void Font::createBuffers(const std::map<char, FontData>& charData, uint width, u
 
         FontData data = (*index).second;
 
-        xpos1 = (float)(originX + data.bearingX) / width;
-        ypos1 = (float)(originY - data.sizeY + data.bearingY) / height;
+        xpos1 = offsetX + (float)(data.bearingX) / width;
+        ypos1 = offsetY - (float)((data.sizeY - data.bearingY)) / height;      // bottom of the letter
 
-        xpos2 = (float)(originX + data.advance) / width;
-        ypos2 = (float)(originY + data.sizeY - data.bearingY) / height;
+        xpos2 = offsetX + (float)(data.advance) / width;
+        ypos2 = offsetY + (float)(data.bearingY) / height; // top of the letter
+
+        offsetX = xpos2;
 
         LOGD("Character " << (int) ch << " = " <<ch);
         LOGD("offset " << xpos1 << ", " << ypos1 << " to " << xpos2 << ", " << ypos2);
@@ -125,6 +131,12 @@ void Font::initialize(const std::map<char, FontData>& charData, const std::strin
     posX_ = x;
     posY_ = y;
     depth_ = depth;
+    maxHeight_ = 0;
+    for(auto pair: charData) {
+       if( maxHeight_ < pair.second.sizeY) {
+          maxHeight_ = pair.second.sizeY;
+       }
+    }
 
     createBuffers(charData);
 

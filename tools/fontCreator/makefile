@@ -25,7 +25,7 @@ all: $(APP)
 #
 # Debug the app
 #
-debug: CFLAGS += -g3
+debug: CFLAGS += -Og -ggdb
 debug: all
 
 #
