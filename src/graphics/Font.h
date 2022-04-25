@@ -51,6 +51,12 @@ public:
 
    const Geometry& getGeometry() const;
 
+   /**
+    * Gets the color of the font.
+    * This is used by \ref FontManager
+    */
+   const glm::vec4& getColor() const;
+
 private:
    void createBuffers(const std::map<char, FontData>& charData, uint width = 1920, uint height = 1024);
 

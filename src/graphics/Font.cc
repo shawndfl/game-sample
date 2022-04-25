@@ -16,6 +16,7 @@ Font::Font() {
    posX_  = 0;
    posY_  = 0;
    depth_ = 0;
+   maxHeight_ = 0;
    const uint MAX_CH = 50;
 
    geometry_.initialize(MAX_CH * 4 * 5, MAX_CH * 6, APos | ATex1);
@@ -162,6 +163,11 @@ void Font::dispose() {
 /*************************************************/
 const Geometry& Font::getGeometry() const {
     return geometry_;
+}
+
+/*************************************************/
+const glm::vec4& Font::getColor() const {
+   return color_;
 }
 
 } /* namespace bsk */

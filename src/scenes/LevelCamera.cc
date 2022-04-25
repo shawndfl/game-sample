@@ -76,9 +76,8 @@ bool LevelCamera::start() {
     LOGGL();
     fontManager_.initialize();
     LOGGL();
-    fontManager_.setFont("txt1", "abcdefgh\nijklmnop\nqrstuv\nwxyz\n012345678S9\n", 0, 30);
-    //fontManager_.setFont("txt1", "S_", 0, 30);
-
+    glm::vec4 color(0,1,0,1);
+    fontManager_.setFont("txt1", "abcdefgh\nijklmnop\nqrstuv\nwxyz\n012345678S9\n", 0, 30, 0, color);
 
     return true;
 }

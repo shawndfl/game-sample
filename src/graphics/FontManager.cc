@@ -52,7 +52,7 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
 
     // set the projection
     glm::mat4 proj(1);
-    glm::vec4 col(1);
+    glm::vec4 col(0,0,0,1);
     //proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), -1.0f, 10.0f);
     shader_.use();
     LOGGL();
@@ -115,10 +115,17 @@ bool FontManager::initialize(const std::string& fontImage, const std::string& fo
 /*************************************************/
 void FontManager::update() {
 
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
    shader_.use();
    fontTexture_.apply();
 
    for(auto pair: fonts_) {
+      // set the color
+      shader_.setVec4("u_color", pair.second.getColor());
+
+      // render
       pair.second.render();
    }
 }

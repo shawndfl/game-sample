@@ -1,6 +1,5 @@
 #version 330 core
 
-uniform vec4 u_color;
 uniform mat4 u_projection;
 
 layout (location = 0) in vec3 a_pos;						
