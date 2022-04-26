@@ -38,10 +38,12 @@ public:
     */
    void initialize(const std::map<char, FontData>& charData,
            const std::string& text,
-           uint x,
-           uint y,
-           uint depth = 0,
-           const glm::vec4& color = glm::vec4(1,1,1,1));
+           int x,
+           int y,
+           int depth = 0,
+           float scale = 1.0,
+           const glm::vec4& color = glm::vec4(1,1,1,1),
+           int maxHeight = 0);
 
    void render();
 
@@ -62,10 +64,11 @@ private:
 
 private:
    std::string   text_;
-   uint          posX_;
-   uint          posY_;
-   uint          depth_;
-   uint          maxHeight_;
+   int           posX_;
+   int           posY_;
+   int           depth_;
+   float         scale_;
+   int           maxHeight_;
 
    Geometry      geometry_;
 

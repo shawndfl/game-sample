@@ -12,11 +12,11 @@ namespace bsk {
 
 struct FontData {
       char         character;   /// The char
-      uint         sizeX;       /// Size of glyph
-      uint         sizeY;       /// Size of glyph
+      int          sizeX;       /// Size of glyph
+      int          sizeY;       /// Size of glyph
       int          bearingX;    /// Offset from baseline to left/top of glyph
       int          bearingY;    /// Offset from baseline to left/top of glyph
-      uint         advance;     /// Offset to advance to next glyph
+      int          advance;     /// Offset to advance to next glyph
       float        u1;          /// upper left uv coordinates
       float        v1;          /// upper left uv coordinates
       float        u2;          /// bottom right uv coordinates

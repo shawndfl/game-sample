@@ -19,7 +19,7 @@ public:
     LevelCamera();
     virtual ~LevelCamera();
 
-    virtual bool start();
+    virtual bool start(uint width, uint height);
 
     virtual void update(bsk::Milliseconds dt);
 

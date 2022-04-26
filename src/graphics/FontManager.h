@@ -40,7 +40,15 @@ public:
 
    void resize(uint width, uint height);
 
-   void setFont(const std::string& id, const std::string& text, uint x, uint y, uint depth = 0, const glm::vec4& color = glm::vec4(1,1,1,1));
+   /**
+    * creates or updates an existing font
+    */
+   void setFont(const std::string& id,
+         const std::string& text,
+         uint x, uint y,
+         uint depth = 0,
+         float scale = 1,
+         const glm::vec4& color = glm::vec4(1,1,1,1));
 
 
 private:
@@ -50,6 +58,7 @@ private:
    ShaderProgram                  shader_;
    uint                           width_;
    uint                           height_;
+   int                            maxHeight_;
 };
 
 } /* namespace bsk */

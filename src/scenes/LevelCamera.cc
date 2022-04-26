@@ -24,7 +24,7 @@ LevelCamera::~LevelCamera() {
 }
 
 /*************************************************/
-bool LevelCamera::start() {
+bool LevelCamera::start(uint width, uint height) {
     shader_.loadShaderFromFile("assets/shaders/texture.vert", "assets/shaders/texture.frag");
 
     glm::mat4 model(1);
@@ -76,8 +76,14 @@ bool LevelCamera::start() {
     LOGGL();
     fontManager_.initialize();
     LOGGL();
-    glm::vec4 color(0,1,0,1);
-    fontManager_.setFont("txt1", "abcdefgh\nijklmnop\nqrstuv\nwxyz\n012345678S9\n", 0, 30, 0, color);
+
+    uint x = 0;
+    uint y = 0;
+    uint depth = 0;
+    float scale = .2;
+    glm::vec4 color(.2,1,.7,1);
+
+    fontManager_.setFont("txt1", "FPS: ", x, y, depth, scale, color);
 
     return true;
 }

@@ -71,7 +71,7 @@ bool GameEngine::start(uint width, uint height) {
    //if(!fontManager_->initialize()) {
    //   return false;
    //}
-   if(scene_ && !scene_->start()){
+   if(scene_ && !scene_->start(width, height)){
       return false;
    }
 

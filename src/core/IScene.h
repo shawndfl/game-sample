@@ -22,7 +22,7 @@ public:
 
    virtual ~IScene();
 
-   virtual bool start() = 0;
+   virtual bool start(uint width, uint height) = 0;
 
    virtual void update(Milliseconds dt) = 0;
 
