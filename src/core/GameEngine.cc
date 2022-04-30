@@ -62,6 +62,9 @@ void GameEngine::keyEvent(int key, int scancode, int action, int mods) {
 /*************************************************/
 bool GameEngine::start(uint width, uint height) {
 
+   width_ = width;
+   height_ = height;
+
    joy_->initialize();
    keyboard_->initialize("/dev/input/event1");
 

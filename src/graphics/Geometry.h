@@ -17,6 +17,9 @@ namespace bsk {
 
 class ShaderProgram;
 
+/**
+ * Geometry class that holds the vertex, index and vertex buffer array
+ */
 class Geometry {
 public:
 
@@ -24,6 +27,9 @@ public:
 
    virtual ~Geometry();
 
+   /**
+    * Create geometry buffer using the given inputs
+    */
    void initialize(uint vertexCount, uint indexCount, VertexAttributes attribute, bool dynamic = false);
 
    void setBuffers(std::vector<float>& verts, std::vector<GLuint>& indices);

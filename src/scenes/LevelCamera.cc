@@ -12,6 +12,7 @@
 #include "core/GameEngine.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "graphics/Primitive.h"
 #include <iomanip>
 
 /*************************************************/
@@ -28,6 +29,7 @@ LevelCamera::~LevelCamera() {
 bool LevelCamera::start(uint width, uint height) {
     shader_.loadShaderFromFile("assets/shaders/texture.vert", "assets/shaders/texture.frag");
 
+    float aspect = (float)width/height;
     glm::mat4 model(1);
     glm::mat4 view(1);
     glm::mat4 proj(1);
@@ -35,30 +37,15 @@ bool LevelCamera::start(uint width, uint height) {
     // note that we're translating the scene in the reverse direction of where we want to move
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    proj = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
     shader_.use();
     shader_.setMatrix4("model", model);
     shader_.setMatrix4("view", view);
     shader_.setMatrix4("proj", proj);
 
-    float vertices[] = {
-            // positions        // texture coords // colors 
-           -0.5f,   0.5f, 0.0f,   0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   // top right
-            0.5f,   0.5f, 0.0f,   1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   // bottom right
-            0.5f,  -0.5f, 0.0f,   1.0f, 1.0f,   1.0f, 1.0f, 1.0f,   // bottom left
-            -0.5f, -0.5f, 0.0f,   0.0f, 1.0f,   1.0f, 1.0f, 1.0f    // top left
-            };
-    GLuint indices[] = {
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
-            };
-    uint vertSize = sizeof(vertices) / sizeof(float);
-    uint indSize = sizeof(indices) / sizeof(GLuint);
-    bsk::VertexAttributes attribute = bsk::APos | bsk::AColor | bsk::ATex1;
-
-    geometry_.initialize(vertSize, indSize, attribute, false);
-    geometry_.setBuffers(vertices, vertSize, indices, indSize);
+    //geometry_ = bsk::Primitive::createQuad();
+    geometry_ = bsk::Primitive::createPlane(glm::vec2(2,2),10,2);
 
     // texture
     bsk::Image img;
@@ -99,12 +86,13 @@ void LevelCamera::update(bsk::Milliseconds dt) {
     // draw our first triangle
     shader_.use();
     glm::mat4 model(1);
-    model = glm::rotate(model, glm::radians(clip_.evaluate()) , glm::vec3(1.0f, 0.0f, 0.0f));
+    //model = glm::rotate(model, glm::radians(clip_.evaluate()) , glm::vec3(1.0f, 0.0f, 0.0f));
     shader_.setMatrix4("model", model);
 
     texture_.apply();
     geometry_.makeActive();
 
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     glDrawElements(GL_TRIANGLES, geometry_.getPrimitiveCount(), GL_UNSIGNED_INT, 0);
 
 
@@ -126,6 +114,14 @@ void LevelCamera::update(bsk::Milliseconds dt) {
 
 /*************************************************/
 void LevelCamera::resize(uint width, uint height) {
+
+   float aspect = (float)width/height;
+   glm::mat4 proj(1);
+   proj = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+
+   shader_.use();
+   shader_.setMatrix4("proj", proj);
+
 
 }
 
