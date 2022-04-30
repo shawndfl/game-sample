@@ -13,6 +13,8 @@
 #include "graphics/ShaderProgram.h"
 #include "core/AnimationClip.h"
 #include "graphics/FontManager.h"
+#include "graphics/ParticleEffect.h"
+#include "math/Timer.h"
 
 class LevelCamera : public bsk::IScene  {
 public:
@@ -34,7 +36,11 @@ private:
     bsk::ShaderProgram  shader_;
 
     bsk::AnimationClip  clip_;
-    bsk::FontManager    fontManager_;
+
+    bsk::ParticleEffect  particle_;
+
+    bsk::Timer           fps_;
+    int                  frames_;
 };
 
 #endif /* SCENES_LEVELCAMERA_H_ */

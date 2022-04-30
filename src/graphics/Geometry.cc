@@ -147,29 +147,6 @@ void Geometry::setBuffers(float* verts, uint vertexCount, GLuint* indices, uint 
 
     primitiveCount_ = iCount;
 
-    LOGD("primitiveCount " << iCount);
-    uint index = 0;
-    uint i = 0;
-    while (i < vertexCount) {
-        LOGD("Vert: " << index++ );
-        if ((getAttribute() & APos) > 0) {
-            LOGD("   pos (" << verts[i++] << ", " << verts[i++] << ", " << verts[i++] << ")");
-        }
-        if ((getAttribute() & ATex1) > 0) {
-            LOGD("   txt (" << verts[i++] << ", " << verts[i++] << ")");
-        }
-        if ((getAttribute() & AColor) > 0) {
-            LOGD("   col (" << verts[i++] << ", " << verts[i++] << ", " << verts[i++] << ")");
-        }
-    }
-
-    i = 0;
-    index = 0;
-    while (i < indexCount) {
-        LOGD((index++)
-                << ") index (" << indices[i++] << ", " << indices[i++] << ", " << indices[i++] << ")");
-    }
-
     uint vertBytes = vCount * sizeof(float);
     uint indexBytes = iCount * sizeof(GLuint);
 

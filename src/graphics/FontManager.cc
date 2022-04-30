@@ -18,6 +18,7 @@ namespace bsk {
 FontManager::FontManager() {
    width_ = 800;
    height_ = 600;
+   maxHeight_ = 20;
 }
 
 /*************************************************/
@@ -29,6 +30,8 @@ FontManager::~FontManager() {
 bool FontManager::initialize(const std::string &fontImage, const std::string &fontData, const std::string &shaderFilename) {
 
    LOGGL();
+   width_ = GameEngine::get().getWidth();
+   height_ = GameEngine::get().getHeight();
 
    // load the shaders
    std::string vertFilename = shaderFilename + ".vert";
@@ -57,7 +60,8 @@ bool FontManager::initialize(const std::string &fontImage, const std::string &fo
    // set the projection
    glm::mat4 proj(1);
    glm::vec4 col(0, 0, 0, 1);
-   proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), -1.0f, 1.0f);
+   proj = glm::ortho(0.0f, (float)width_, 0.0f, (float)height_, -1.0f, 1.0f);
+   LOGD("proj " << proj);
    shader_.use();
    LOGGL();
    shader_.setMatrix4("u_projection", proj);
@@ -129,7 +133,14 @@ void FontManager::update() {
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+   glm::mat4 proj(1);
+   proj = glm::ortho(0.0f, (float)GameEngine::get().getWidth(), 0.0f, (float)GameEngine::get().getHeight(), -1.0f, 1.0f);
+
    shader_.use();
+   LOGGL();
+   shader_.setMatrix4("u_projection", proj);
+   LOGGL();
+
    fontTexture_.apply();
 
    for (auto pair : fonts_) {
@@ -147,11 +158,6 @@ void FontManager::resize(uint width, uint height) {
    width_ = width;
    height_ = height;
 
-   glm::mat4 proj = glm::ortho(0.0f, (float)width_, 0.0f, (float)height_, -1.0f, 1.0f);
-   shader_.use();
-   LOGGL();
-   shader_.setMatrix4("u_projection", proj);
-
    for (auto pair : fonts_) {
       pair.second.resize(fontData_, width, height);
    }
@@ -165,7 +171,7 @@ void FontManager::setFont(const std::string &id,
       float scale,
       const glm::vec4 &color) {
 
-   fonts_[id].initialize(fontData_, text, x, y, depth, scale, color, maxHeight_ * scale);
+   fonts_[id].initialize(fontData_, text, x, y, depth, scale, color, maxHeight_ * scale, width_, height_);
 }
 
 } /* namespace bsk */

@@ -9,13 +9,14 @@
 #include "core/Logging.h"
 #include "graphics/Image.h"
 #include "graphics/ImageLoader.h"
+#include "core/GameEngine.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <iomanip>
 
 /*************************************************/
 LevelCamera::LevelCamera() {
-
+   frames_ = 0;
 }
 
 /*************************************************/
@@ -72,30 +73,28 @@ bool LevelCamera::start(uint width, uint height) {
     clip_.addKey(2000, 0);
     clip_.play(true);
 
-    // font manager
-    LOGGL();
-    fontManager_.initialize();
-    LOGGL();
-
     uint x = 0;
     uint y = 0;
     uint depth = 0;
     float scale = .2;
     glm::vec4 color(.2,1,.7,1);
 
-    fontManager_.setFont("txt1", "FPS: ", x, y, depth, scale, color);
+
+    bsk::GameEngine::get().getFontManager().setFont("fps", "FPS: ", x, y, depth, scale, color);
+
 
     return true;
 }
 
 /*************************************************/
 void LevelCamera::update(bsk::Milliseconds dt) {
+
     // render
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    //clip_.update(dt);
+    clip_.update(dt);
 
     // draw our first triangle
     shader_.use();
@@ -108,13 +107,26 @@ void LevelCamera::update(bsk::Milliseconds dt) {
 
     glDrawElements(GL_TRIANGLES, geometry_.getPrimitiveCount(), GL_UNSIGNED_INT, 0);
 
-    fontManager_.update();
 
+    if(fps_.getDelta() > 1000.0) {
+       std::stringstream fps;
+       fps << "FPS: " << std::fixed << std::setprecision(2) << (float)(frames_)/(fps_.getDelta()  * 0.001);
+       uint x = 0;
+       uint y = 10;
+       uint depth = 0;
+       float scale = .2;
+       glm::vec4 color(.2,1,.7,1);
+
+       bsk::GameEngine::get().getFontManager().setFont("fps", fps.str(), x, y, depth, scale, color);
+       fps_.reset();
+       frames_ = 0;
+    }
+    frames_++;
 }
 
 /*************************************************/
 void LevelCamera::resize(uint width, uint height) {
-    fontManager_.resize(width, height);
+
 }
 
 /*************************************************/

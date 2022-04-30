@@ -43,7 +43,7 @@ void Font::createBuffers(const std::map<char, FontData>& charData, uint width, u
 
     float zpos = depth_;
     int charCount = 0;
-    LOGD("position " << originX << ", " << originY);
+    //LOGD("position " << originX << ", " << originY);
     for (uint i = 0; i < text_.size(); i++) {
         unsigned char ch = text_[i];
         if (ch == '\n') {
@@ -69,8 +69,8 @@ void Font::createBuffers(const std::map<char, FontData>& charData, uint width, u
 
         offsetX = xpos2;
 
-        LOGD("Character " << (int) ch << " = " <<ch);
-        LOGD("offset " << xpos1 << ", " << ypos1 << " to " << xpos2 << ", " << ypos2);
+        //LOGD("Character " << (int) ch << " = " <<ch);
+        //LOGD("offset " << xpos1 << ", " << ypos1 << " to " << xpos2 << ", " << ypos2);
 
         float tu1 = data.u1;
         float tv1 = data.v2;
@@ -78,7 +78,7 @@ void Font::createBuffers(const std::map<char, FontData>& charData, uint width, u
         float tu2 = data.u2;
         float tv2 = data.v1;
 
-        LOGD("texture " << tu1 << ", " << tv1 << " to " << tu2 << ", " << tv2);
+        //LOGD("texture " << tu1 << ", " << tv1 << " to " << tu2 << ", " << tv2);
 
         // top left
         verts.push_back(xpos1);
@@ -129,7 +129,9 @@ void Font::initialize(const std::map<char, FontData>& charData,
         int depth,
         float scale,
         const glm::vec4& color,
-        int maxHeight) {
+        int maxHeight,
+        uint width,
+        uint height) {
 
     color_ = color;
     text_ = text;
@@ -139,7 +141,7 @@ void Font::initialize(const std::map<char, FontData>& charData,
     scale_ = scale;
     maxHeight_ = maxHeight;
 
-    createBuffers(charData);
+    createBuffers(charData, width, height);
 
 }
 

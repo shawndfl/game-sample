@@ -35,7 +35,7 @@ debug: all
 bin/%.o: src/*/%.cc
 	@mkdir -p bin/
 	@echo compiling $<
-	@$(CXX) -c $(CFLAGS) -std=c++17 $(CPPFLAGS) -o $@ $<
+	$(CXX) -c $(CFLAGS) -std=c++17 $(CPPFLAGS) -o $@ $<
 	 
 #
 # Compile C

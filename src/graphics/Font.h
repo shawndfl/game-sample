@@ -40,10 +40,12 @@ public:
            const std::string& text,
            int x,
            int y,
-           int depth = 0,
-           float scale = 1.0,
-           const glm::vec4& color = glm::vec4(1,1,1,1),
-           int maxHeight = 0);
+           int depth,
+           float scale,
+           const glm::vec4& color,
+           int maxHeight,
+           uint width,
+           uint height);
 
    void render();
 
@@ -60,7 +62,7 @@ public:
    const glm::vec4& getColor() const;
 
 private:
-   void createBuffers(const std::map<char, FontData>& charData, uint width = 1920, uint height = 1024);
+   void createBuffers(const std::map<char, FontData>& charData, uint width, uint height);
 
 private:
    std::string   text_;

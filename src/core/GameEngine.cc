@@ -68,9 +68,9 @@ bool GameEngine::start(uint width, uint height) {
    if(!render_->initialize(width, height)){
       return false;
    }
-   //if(!fontManager_->initialize()) {
-   //   return false;
-   //}
+   if(!fontManager_->initialize()) {
+      return false;
+   }
    if(scene_ && !scene_->start(width, height)){
       return false;
    }
@@ -82,7 +82,6 @@ bool GameEngine::start(uint width, uint height) {
 bool bsk::GameEngine::update() {
 
    render_->render();
-   //fontManager_->update();
    joy_->poll();
    keyboard_ ->poll();
 
@@ -92,6 +91,7 @@ bool bsk::GameEngine::update() {
    if(scene_) {
       scene_->update(dt);
    }
+   fontManager_->update();
 
    return true;
 }

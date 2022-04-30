@@ -17,6 +17,7 @@
 #include "graphics/FontData.h"
 #include "graphics/Font.h"
 #include "graphics/ShaderProgram.h"
+#include "math/Timer.h"
 
 namespace bsk {
 
@@ -50,7 +51,6 @@ public:
          float scale = 1,
          const glm::vec4& color = glm::vec4(1,1,1,1));
 
-
 private:
    std::map<char, FontData>       fontData_;
    std::map<std::string, Font>    fonts_;
@@ -59,6 +59,7 @@ private:
    uint                           width_;
    uint                           height_;
    int                            maxHeight_;
+   Timer                          logTimer_;
 };
 
 } /* namespace bsk */
