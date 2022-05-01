@@ -45,9 +45,9 @@ Geometry Primitive::createQuad() {
 }
 
 /*************************************************/
-Geometry Primitive::createPlane(const glm::vec2 &size, uint widthSegments, uint heightSegments) {
-   float widthHalf = size.x / 2.0;
-   float heightHalf = size.y / 2.0;
+Geometry Primitive::createPlane(float width, float height, uint widthSegments, uint heightSegments) {
+   float widthHalf = width / 2.0;
+   float heightHalf = height / 2.0;
 
    uint gridX = widthSegments;
    uint gridY = heightSegments;
@@ -55,8 +55,8 @@ Geometry Primitive::createPlane(const glm::vec2 &size, uint widthSegments, uint 
    uint gridX1 = gridX + 1;
    uint gridY1 = gridY + 1;
 
-   float segmentWidth = size.x / gridX;
-   float segmentHeight = size.y / gridY;
+   float segmentWidth = width / gridX;
+   float segmentHeight = height / gridY;
 
    std::vector<uint> indices;
    std::vector<posTxtNorm> vertices;

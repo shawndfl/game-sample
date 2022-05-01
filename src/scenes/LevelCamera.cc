@@ -10,8 +10,6 @@
 #include "graphics/Image.h"
 #include "graphics/ImageLoader.h"
 #include "core/GameEngine.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include "graphics/Primitive.h"
 #include <iomanip>
 
@@ -27,32 +25,17 @@ LevelCamera::~LevelCamera() {
 
 /*************************************************/
 bool LevelCamera::start(uint width, uint height) {
-    shader_.loadShaderFromFile("assets/shaders/texture.vert", "assets/shaders/texture.frag");
 
     float aspect = (float)width/height;
-    glm::mat4 model(1);
-    glm::mat4 view(1);
-    glm::mat4 proj(1);
 
-    // note that we're translating the scene in the reverse direction of where we want to move
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    proj = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+    camera_.initializeProj(45, aspect, .1, 1000);
+    camera_.initializeView( glm::vec3(0.0f, 0.0f, -3.0f),
+                            glm::vec3(0.0f, 0.0f, 1.0f),
+                            glm::vec3(0.0f, 1.00f, 0));
 
-    shader_.use();
-    shader_.setMatrix4("model", model);
-    shader_.setMatrix4("view", view);
-    shader_.setMatrix4("proj", proj);
-
-    //geometry_ = bsk::Primitive::createQuad();
-    geometry_ = bsk::Primitive::createPlane(glm::vec2(2,2),10,2);
-
-    // texture
-    bsk::Image img;
-    if (bsk::ImageLoader::loadImage("assets/img/Bricks.png", img)) {
-        texture_.setImage(img);
-        LOGGL();
-    }
+    ground_ = std::make_shared<bsk::Ground>();
+    ground_->initialize();
+    root_.add(ground_);
 
     // ping pong
     clip_.addKey(0, 0);
@@ -83,18 +66,9 @@ void LevelCamera::update(bsk::Milliseconds dt) {
 
     clip_.update(dt);
 
-    // draw our first triangle
-    shader_.use();
-    glm::mat4 model(1);
-    //model = glm::rotate(model, glm::radians(clip_.evaluate()) , glm::vec3(1.0f, 0.0f, 0.0f));
-    shader_.setMatrix4("model", model);
+    root_.updateMatrixWorld();
 
-    texture_.apply();
-    geometry_.makeActive();
-
-    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    glDrawElements(GL_TRIANGLES, geometry_.getPrimitiveCount(), GL_UNSIGNED_INT, 0);
-
+    ground_->render(camera_);
 
     if(fps_.getDelta() > 1000.0) {
        std::stringstream fps;
@@ -119,10 +93,8 @@ void LevelCamera::resize(uint width, uint height) {
    glm::mat4 proj(1);
    proj = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
-   shader_.use();
-   shader_.setMatrix4("proj", proj);
-
-
+   // adjust prospective
+   camera_.initializeProj(45, aspect, .1f, 1000.0f);
 }
 
 /*************************************************/

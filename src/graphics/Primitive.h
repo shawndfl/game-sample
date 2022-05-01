@@ -42,7 +42,7 @@ public:
    /**
     * This will create a plane given the normal and position
     */
-   static Geometry createPlane(const glm::vec2& size = glm::vec2(1), uint widthSegments = 1, uint horzontalSegments = 1);
+   static Geometry createPlane(float width = 1.0, float height = 1.0, uint widthSegments = 1, uint horzontalSegments = 1);
 private:
    Primitive();
 

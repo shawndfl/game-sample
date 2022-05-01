@@ -12,8 +12,10 @@
 #include "graphics/Texture.h"
 #include "graphics/ShaderProgram.h"
 #include "core/AnimationClip.h"
+#include "meshes/Ground.h"
 #include "graphics/FontManager.h"
 #include "graphics/ParticleEffect.h"
+#include "core/Camera.h"
 #include "math/Timer.h"
 
 class LevelCamera : public bsk::IScene  {
@@ -31,10 +33,9 @@ public:
 
     virtual void dispose();
 private:
-    bsk::Geometry       geometry_;
-    bsk::Texture        texture_;
-    bsk::ShaderProgram  shader_;
-
+    bsk::Camera         camera_;
+    std::shared_ptr<bsk::Ground>    ground_;
+    bsk::Object3d       root_;
     bsk::AnimationClip  clip_;
 
     bsk::ParticleEffect  particle_;
