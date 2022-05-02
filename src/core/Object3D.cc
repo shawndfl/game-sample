@@ -18,7 +18,7 @@ Object3d::Object3d() {
 
    position_ = glm::vec3(0);
    scale_ = glm::vec3(1);
-   rotation_= glm::quat(0,0,0,1);
+   rotation_= glm::quat(1,0,0,0);
    up_ = glm::vec3(0,1,0);
 
    worldNeedsUpdate_ = false;
@@ -79,6 +79,14 @@ void Object3d::attach(Object3dPrt obj) {
 }
 
 /*************************************************/
+void Object3d::rotateOnAxis(const glm::vec3& axis, float angle) {
+   glm::mat4 matRot = glm::toMat4(rotation_);
+   float a = glm::radians(angle);
+   matRot = glm::rotate(matRot, a, axis);
+   rotation_ = glm::toQuat(matRot);
+}
+
+/*************************************************/
 void Object3d::clone(bool recursive) {
 }
 
@@ -96,6 +104,21 @@ glm::vec3 Object3d::getWorldPosition() const {
 glm::vec3 Object3d::getWorldDirection() const {
    glm::vec3 world(0);
    return world;
+}
+
+/*************************************************/
+void Object3d::rotateX(float angle) {
+   rotateOnAxis(bsk::vec3Right, angle);
+}
+
+/*************************************************/
+void Object3d::rotateY(float angle) {
+   rotateOnAxis(bsk::vec3Up, angle);
+}
+
+/*************************************************/
+void Object3d::rotateZ(float angle) {
+   rotateOnAxis(bsk::vec3Forward, angle);
 }
 
 } /* namespace bsk */

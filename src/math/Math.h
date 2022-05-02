@@ -13,6 +13,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace bsk {
@@ -73,7 +74,27 @@ glm::mat4 bsk::compose(const glm::vec3& pos, const glm::quat& rotation, const gl
    mat[1].w = pos.y;
    mat[2].w = pos.z;
    mat[3].w = 1;
+   /*
+   mat[0].x = (1 - (yy + zz)) * sx;
+   mat[0].y = (xy + wz) * sx;
+   mat[0].z = (xz - wy) * sx;
+   mat[0].w = 0;
 
+   mat[1].x = (xy - wz) * sy;
+   mat[1].y = (1 - (xx + zz)) * sy;
+   mat[1].z = (yz + wx) * sy;
+   mat[1].w = 0;
+
+   mat[2].x = (xz + wy) * sz;
+   mat[2].y = (yz - wx) * sz;
+   mat[2].z = (1 - (xx + yy)) * sz;
+   mat[2].w = 0;
+
+   mat[3].x = pos.x;
+   mat[3].y = pos.y;
+   mat[3].z = pos.z;
+   mat[3].w = 1;
+   */
    return mat;
 }
 

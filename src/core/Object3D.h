@@ -79,6 +79,12 @@ public:
    glm::vec3 getWorldDirection() const;
 
 
+   void rotateOnAxis(const glm::vec3& axis, float angle);
+
+   void rotateX( float angle );
+
+   void rotateY( float angle );
+   void rotateZ( float angle );
 
 public:
    Object3d* parent_;

@@ -32,7 +32,7 @@ void Ground::initialize() {
    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
    shader_.use();
-   shader_.setMatrix4("model", model);
+   shader_.setMatrix4("model", world_);
 
    //geometry_ = bsk::Primitive::createQuad();
    geometry_ = bsk::Primitive::createPlane(2, 2, 10, 2);
@@ -49,10 +49,9 @@ void Ground::initialize() {
 void Ground::render(const Camera& camera) {
 
    shader_.use();
-   glm::mat4 model(1);
 
    //model = glm::rotate(model, glm::radians(clip_.evaluate()) , glm::vec3(1.0f, 0.0f, 0.0f));
-   shader_.setMatrix4("model", model);
+   shader_.setMatrix4("model", world_);
    shader_.setMatrix4("view", camera.getView());
    shader_.setMatrix4("proj", camera.getProjection());
 

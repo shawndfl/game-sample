@@ -35,6 +35,13 @@ bool LevelCamera::start(uint width, uint height) {
 
     ground_ = std::make_shared<bsk::Ground>();
     ground_->initialize();
+    root_.rotateZ(90);
+    root_.rotateX(45);
+
+    //TODO test scale position,
+
+    root_.updateMatrixWorld();
+    LOGD("world " << root_.world_);
     root_.add(ground_);
 
     // ping pong
