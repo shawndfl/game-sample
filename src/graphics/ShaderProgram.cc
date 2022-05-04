@@ -46,7 +46,7 @@ void ShaderProgram::setInt(const std::string& name, int value) const {
     if (loc == -1) {
         LOGE("Cannot find " << name << " in shader " << vertexPath_ << " or " << fragmentPath_);
     } else {
-        glUniform1i(loc, value);
+        glUniform1i(loc, (int)value);
     }
 }
 
@@ -56,7 +56,7 @@ void ShaderProgram::setFloat(const std::string& name, float value) const {
     if (loc == -1) {
         LOGE("Cannot find " << name << " in shader " << vertexPath_ << " or " << fragmentPath_);
     } else {
-        glUniform1f(loc, (int) value);
+        glUniform1f(loc, value);
     }
 }
 
@@ -141,7 +141,7 @@ bool ShaderProgram::loadShaderFromMemory(const std::string& vertexCode, const st
     glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertex, LOG_LEN, NULL, infoLog);
-        LOGD("Vertex compiler error: " << infoLog);
+        LOGD("Vertex compiler error (" << vertexPath_ << "): " << infoLog);
         return false;
     }
 
@@ -152,7 +152,7 @@ bool ShaderProgram::loadShaderFromMemory(const std::string& vertexCode, const st
     glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragment, LOG_LEN, NULL, infoLog);
-        LOGD("Fragment compiler error: " << infoLog);
+        LOGD("Fragment compiler error (" << fragmentPath_ << "): "  << infoLog);
         return false;
     }
 

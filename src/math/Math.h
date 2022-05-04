@@ -28,7 +28,9 @@ namespace bsk {
     constexpr glm::vec3 vec3Forward  = glm::vec3(0,0,1);
     constexpr glm::vec3 vec3Back     = glm::vec3(0,0,-1);
 
-    inline glm::mat4 compose(const glm::vec3& pos, const glm::quat& rotation, const glm::vec3 scale);
+    inline glm::mat4 compose(const glm::vec3& pos, const glm::quat& rotation, const glm::vec3& scale);
+
+    inline void decompose(const glm::mat4& mat, glm::vec3& pos, glm::quat& rotation, glm::vec3& scale);
 }
 
 std::ostream& operator<<(std::ostream& os, const glm::mat4x4& mat);
@@ -38,7 +40,7 @@ std::ostream& operator<<(std::ostream& os, const glm::vec3& vec);
 std::ostream& operator<<(std::ostream& os, const glm::vec4& vec);
 
 /*************************************************/
-glm::mat4 bsk::compose(const glm::vec3& pos, const glm::quat& rotation, const glm::vec3 scale) {
+glm::mat4 bsk::compose(const glm::vec3& pos, const glm::quat& rotation, const glm::vec3& scale) {
    glm::mat4 mat;
 
    float x = rotation.x;
@@ -55,26 +57,6 @@ glm::mat4 bsk::compose(const glm::vec3& pos, const glm::quat& rotation, const gl
    float sy = scale.y;
    float sz = scale.z;
 
-   mat[0].x = (1 - (yy + zz)) * sx;
-   mat[1].x = (xy + wz) * sx;
-   mat[2].x = (xz - wy) * sx;
-   mat[3].x = 0;
-
-   mat[0].y = (xy - wz) * sy;
-   mat[1].y = (1 - (xx + zz)) * sy;
-   mat[2].y = (yz + wx) * sy;
-   mat[3].y = 0;
-
-   mat[0].z= (xz + wy) * sz;
-   mat[1].z= (yz - wx) * sz;
-   mat[2].z = (1 - (xx + yy)) * sz;
-   mat[3].z = 0;
-
-   mat[0].w = pos.x;
-   mat[1].w = pos.y;
-   mat[2].w = pos.z;
-   mat[3].w = 1;
-   /*
    mat[0].x = (1 - (yy + zz)) * sx;
    mat[0].y = (xy + wz) * sx;
    mat[0].z = (xz - wy) * sx;
@@ -94,8 +76,12 @@ glm::mat4 bsk::compose(const glm::vec3& pos, const glm::quat& rotation, const gl
    mat[3].y = pos.y;
    mat[3].z = pos.z;
    mat[3].w = 1;
-   */
+
    return mat;
+}
+
+inline void decompose(const glm::mat4& mat, glm::vec3& pos, glm::quat& rotation, glm::vec3& scale) {
+
 }
 
 #endif /* SRC_MATH_CORE_H_ */

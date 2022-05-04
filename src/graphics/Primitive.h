@@ -42,7 +42,11 @@ public:
    /**
     * This will create a plane given the normal and position
     */
-   static Geometry createPlane(float width = 1.0, float height = 1.0, uint widthSegments = 1, uint horzontalSegments = 1);
+   static Geometry createPlane(float width = 1.0,
+         float height = 1.0,
+         uint widthSegments = 1,
+         uint horzontalSegments = 1,
+         float uvScale = 1.0);
 private:
    Primitive();
 

@@ -28,6 +28,8 @@ private:
    bsk::Geometry       geometry_;
    bsk::Texture        texture_;
    bsk::ShaderProgram  shader_;
+
+   bool initialized_;
 };
 
 } /* namespace bsk */

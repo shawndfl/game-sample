@@ -85,10 +85,8 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     // the combinations are:
     //  pos, texture
     //  pos, texture, color,
-    //  pos, texture, color, normal
-    //  pos, texture, color, normal, biNormal
-    //  pos, texture, color, normal, biNormal
-    //  pos, texture, color, normal, biNormal, weight, index
+    //  pos, texture, normal
+    //  pos, texture, normal, biNormal, weight, index
 
     if ((getAttribute() & APos) > 0) {
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
@@ -109,8 +107,8 @@ void Geometry::initialize(uint vertexCount, uint indexCount, VertexAttributes at
     }
 
     if ((getAttribute() & ANorm) > 0) {
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
-        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*) offset);
+        glEnableVertexAttribArray(2);
         offset += 3 * sizeof(float);
     }
 }

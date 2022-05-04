@@ -45,7 +45,12 @@ Geometry Primitive::createQuad() {
 }
 
 /*************************************************/
-Geometry Primitive::createPlane(float width, float height, uint widthSegments, uint heightSegments) {
+Geometry Primitive::createPlane(float width,
+      float height,
+      uint widthSegments,
+      uint heightSegments,
+      float uvScale) {
+
    float widthHalf = width / 2.0;
    float heightHalf = height / 2.0;
 
@@ -71,7 +76,7 @@ Geometry Primitive::createPlane(float width, float height, uint widthSegments, u
 
          posTxtNorm vert;
          vert.pos = glm::vec3(x, -y, 0);
-         vert.txt = glm::vec2((float)ix / gridX, 1.0 - ((float)iy / gridY));
+         vert.txt = glm::vec2(uvScale* (float)ix / gridX, 1.0 - uvScale * ((float)iy / gridY));
          vert.norm = glm::vec3(0, 0, 1);
 
          vertices.push_back(vert);
@@ -102,7 +107,7 @@ Geometry Primitive::createPlane(float width, float height, uint widthSegments, u
    Geometry geometry;
    uint vertSize = sizeof(posTxtNorm) / sizeof(float) * vertices.size();
    uint indSize = sizeof(uint) / sizeof(GLuint) * indices.size();
-   bsk::VertexAttributes attribute = bsk::APos | bsk::AColor | bsk::ATex1;
+   bsk::VertexAttributes attribute = bsk::APos | bsk::ANorm | bsk::ATex1;
 
    geometry.initialize(vertSize, indSize, attribute, false);
    geometry.setBuffers((float*)vertices.data(), vertSize, indices.data(), indSize);

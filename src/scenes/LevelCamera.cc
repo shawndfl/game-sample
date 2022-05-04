@@ -35,8 +35,8 @@ bool LevelCamera::start(uint width, uint height) {
 
     ground_ = std::make_shared<bsk::Ground>();
     ground_->initialize();
-    root_.rotateZ(90);
-    root_.rotateX(45);
+
+    root_.position_.z = 2.2;
 
     //TODO test scale position,
 
