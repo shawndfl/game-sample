@@ -36,7 +36,7 @@
     ]
   },
   "main": "./src/",
-  "homepage": "https://shawndfl.github.io/react-sample",
+  "homepage": "https://shawndfl.github.io/game-sample",
   "browserslist": {
     "production": [
       ">0.2%",
