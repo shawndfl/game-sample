@@ -1,9 +1,11 @@
 import OrbitControls from "./OrbitControls";
 import * as THREE from 'three';
 import GLTFLoader from './GLTFLoader';
-import floorTexture from 'img/floor2.jpg'
+import floorTexture from 'img/cobblestone.png'
+// import floorTexture from 'img/floor.png'
 import Sky from "./Sky"
 import {DayState} from "context/SceneContext";
+import {GroundTerrain} from "./GroundTerrain";
 
 /**
  * This is the main scene that will be used for rendering 
@@ -48,9 +50,7 @@ export default class MainScene {
     /**
      * Ground mesh
      */
-    groundMesh : THREE.Mesh;
-    groundGeo : THREE.PlaneGeometry;
-    groundMat : THREE.MeshPhongMaterial;
+    _ground : GroundTerrain
 
     /**
      * Used to show different lighting
@@ -107,14 +107,6 @@ export default class MainScene {
 
         this.dayState = DayState.Loop;
 
-        // manually create the ground
-        this.groundGeo = new THREE.PlaneGeometry(30, 30);
-        this.groundGeo.rotateX(THREE.MathUtils.degToRad(-90));
-        this.groundMat = new THREE.MeshPhongMaterial({color: 0x646464});
-        this.groundMesh = new THREE.Mesh(this.groundGeo, this.groundMat);
-        this.groundMesh.position.set(0, 0, 0);
-        this.groundMesh.receiveShadow = true;
-        this.scene.add(this.groundMesh);
 
         // default light bulb until the model is loaded
         this.lightBulb = new THREE.Mesh();
@@ -132,23 +124,7 @@ export default class MainScene {
         // this.arrowHelperUp = new THREE.ArrowHelper(dir, origin, 20, color2);
         // this.scene.add(this.arrowHelperUp);
 
-
-        // instantiate a loader
-        const texture = new THREE.TextureLoader();
-
-        // load a resource
-        texture.load(
-            // resource URL
-                floorTexture,
-
-            // onLoad callback
-                (texture) => { // in this example we create the material when the texture is loaded
-                texture.wrapS = THREE.MirroredRepeatWrapping;
-                texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(2, 8);
-                this.groundMat.map = texture;
-            }
-        );
+        this._ground = this.buildTerrain(100, 100);        
 
         const light = new THREE.AmbientLight(0xc4c4c4); // soft white light
         this.scene.add(light);
@@ -177,7 +153,11 @@ export default class MainScene {
         this.camera.position.z = 4;
         this.camera.position.y = 4;
 
-        this.loadModel();
+        // this.loadModel();
+    }
+
+    buildTerrain(width : number, height : number) {
+        return new GroundTerrain(width, height, floorTexture, this.scene);
     }
 
     /**
@@ -223,21 +203,19 @@ export default class MainScene {
      */
     loadModel() { // instantiate a loader
         const loader = new GLTFLoader();
-        
+
         // load a resource
         loader.load(
             // resource URL
-            process.env.PUBLIC_URL + '/models/chair.gltf',
+                process.env.PUBLIC_URL + '/models/chair.gltf',
 
             // called when resource is loaded
-            (gltf : any) => {
-                
-                // turn on shadows
-                gltf.scene.traverse((child: any) => {
+                (gltf : any) => { // turn on shadows
+                gltf.scene.traverse((child : any) => {
                     if ((child as THREE.Mesh).isMesh) {
-                        child.castShadow = true                                                
+                        child.castShadow = true
                     }
-                });               
+                });
 
                 // cast shadows onto the table
                 const tableTop: THREE.Mesh = gltf.scene.getObjectByName('Table');
@@ -302,14 +280,14 @@ export default class MainScene {
         const isSunUp = up.dot(sunTransform) >= 0;
 
         // Toggle lights based on the sun position
-        if(isSunUp) {   
-            this.overhead.visible = false;         
+        if (isSunUp) {
+            this.overhead.visible = false;
             this.dirLight.visible = true;
-            this.lightBulb.material= new THREE.MeshBasicMaterial({color: "#323232"})
-        } else {            
+            this.lightBulb.material = new THREE.MeshBasicMaterial({color: "#323232"})
+        } else {
             this.overhead.visible = true;
             this.dirLight.visible = false;
-            this.lightBulb.material= new THREE.MeshBasicMaterial({color: "#ffffff"})
+            this.lightBulb.material = new THREE.MeshBasicMaterial({color: "#ffffff"})
         }
 
         // helpers
@@ -382,8 +360,7 @@ export default class MainScene {
      */
     dispose() {
         console.log("Dispose");
-        this.scene.remove(this.groundMesh);
-        this.groundGeo.dispose();
-        this.groundMat.dispose();
+        this.scene.remove(this._ground.mesh);
+        this._ground.dispose();
     }
 }
