@@ -1,5 +1,7 @@
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: "production",
@@ -30,8 +32,7 @@ module.exports = {
                 use: {
                     loader: "svg-url-loader"
                 }
-            },
-            {
+            }, {
                 test: /\.png$/,
                 use: ["file-loader"]
             }
@@ -40,25 +41,47 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
-    plugins: [
+    plugins: [  
         new HtmlWebpackPlugin(
-            {title: 'Production'}
+            {
+                template: path.join(__dirname, 'public/index.html'),
+                inject: true,
+                filename: 'index.html'
+            }
+        ),    
+        new CopyPlugin(
+            {
+                patterns: [
+                    {
+                        from: "./public/*/",
+                        to: "../docs"
+                    },
+                ]
+            }
         ),
+        new MiniCssExtractPlugin(),
     ],
     output: {
-        filename: '[name].bundle.js',
+        filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, '../docs'),
-        clean: true
+        clean: true,
+        publicPath: 'auto'
     },
     performance: {
         hints: false,
         maxEntrypointSize: 3512000,
-        maxAssetSize: 3512000            
+        maxAssetSize: 3512000
     },
     optimization: {
         chunkIds: 'named',
         splitChunks: {
-            chunks: 'all'
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+            }
         }
     }
 
