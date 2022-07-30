@@ -15,6 +15,26 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/
             },
+            {
+                test: /\.html$/,
+                use: {
+                    loader: 'html-loader'
+                }
+            },
+            {
+                test: /\.(css|scss)$/,
+                use: ["style-loader", "css-loader", "sass-loader"]
+            },
+            {
+                test: /\.svg$/,
+                use: {
+                    loader: "svg-url-loader"
+                }
+            },
+            {
+                test: /\.png$/,
+                use: ["file-loader"]
+            }
         ]
     },
     resolve: {
@@ -27,12 +47,13 @@ module.exports = {
     ],
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'docs'),
+        path: path.resolve(__dirname, '../docs'),
         clean: true
     },
     performance: {
-        maxEntrypointSize: 512000,
-        maxAssetSize: 512000
+        hints: false,
+        maxEntrypointSize: 3512000,
+        maxAssetSize: 3512000            
     },
     optimization: {
         chunkIds: 'named',

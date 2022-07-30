@@ -15,30 +15,24 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use:{
+                use: {
                     loader: 'html-loader'
                 }
             },
             {
                 test: /\.(css|scss)$/,
-                use:[
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader"
-                ]
+                use: ["style-loader", "css-loader", "sass-loader"]
             },
             {
                 test: /\.svg$/,
-                use:{
+                use: {
                     loader: "svg-url-loader"
                 }
             },
             {
                 test: /\.png$/,
-                use: [
-                    "file-loader"                   
-                ]
-            }          
+                use: ["file-loader"]
+            }
         ]
     },
     resolve: {
@@ -55,27 +49,31 @@ module.exports = {
         clean: true
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'public/index.html'),
-            inject:true,
-            filename: 'index.html'
-        }),
+        new HtmlWebpackPlugin(
+            {
+                template: path.join(__dirname, 'public/index.html'),
+                inject: true,
+                filename: 'index.html'
+            }
+        ),
         new MiniCssExtractPlugin(),
     ],
 
     devServer: {
-        watchFiles: ['src/**/*.ts', 'public/**/*'],
+        watchFiles: [
+            'src/**/*.ts', 'public/**/*'
+        ],
         static: {
-            publicPath : './',
-            directory: path.join(__dirname, 'public'),
+            publicPath: './',
+            directory: path.join(__dirname, 'public')
         },
         compress: true,
         client: {
-            overlay: true,            
+            overlay: true,
             progress: true,
             reconnect: true,
-            webSocketTransport: 'ws',
-        },
+            webSocketTransport: 'ws'
+        }
     },
 
     optimization: {
