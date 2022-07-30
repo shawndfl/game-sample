@@ -1,0 +1,29 @@
+{
+"Notes": {
+    "Scale" : "scale is in meters",
+    "Mirror" : "To mirror bones or meshes prefix the name with r_ or l_. This will create a new node or mesh mirrored over the x axis"
+},
+
+"models" : [
+    {
+        "Name": "FireStar",
+        "Node" : {                
+                "name": "body",
+                "pos": "0,0,0",
+                "rot": "0,0,0",
+                "children": [
+                {
+                    "name": "r_arm",
+                    "pos": "0,0,0",
+                    "rot": "0,0,0"
+
+                    
+                }
+                ]
+            },
+    "Mesh" : [
+
+    ]
+}
+]
+}
