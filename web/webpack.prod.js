@@ -19,9 +19,7 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use: {
-                    loader: 'html-loader'
-                }
+                use: ['html-loader']
             },
             {
                 test: /\.(css|scss)$/,
@@ -29,34 +27,23 @@ module.exports = {
             },
             {
                 test: /\.svg$/,
-                use: {
-                    loader: "svg-url-loader"
-                }
-            }, {
+                use: ["svg-url-loader"]
+            },
+            {
                 test: /\.png$/,
-                use: ["file-loader"]
+                use: ["url-loader"]
             }
         ]
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
-    plugins: [  
+    plugins: [
         new HtmlWebpackPlugin(
             {
                 template: path.join(__dirname, 'public/index.html'),
                 inject: true,
                 filename: 'index.html'
-            }
-        ),    
-        new CopyPlugin(
-            {
-                patterns: [
-                    {
-                        from: "./public/*/",
-                        to: "../docs"
-                    },
-                ]
             }
         ),
         new MiniCssExtractPlugin(),

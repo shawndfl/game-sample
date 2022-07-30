@@ -15,9 +15,7 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use: {
-                    loader: 'html-loader'
-                }
+                use: ['html-loader']
             },
             {
                 test: /\.(css|scss)$/,
@@ -25,18 +23,16 @@ module.exports = {
             },
             {
                 test: /\.svg$/,
-                use: {
-                    loader: "svg-url-loader"
-                }
+                use: ["svg-url-loader"]
             },
             {
                 test: /\.png$/,
-                use: ["file-loader"]
+                use: ["url-loader"]
             }
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.ts', '.js', 'png', 'scss', 'json']
     },    
     output: {
         filename: '[name].bundle.js',
