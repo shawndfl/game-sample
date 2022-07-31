@@ -1,22 +1,28 @@
-import CameraController from './CameraController';
+import CameraController from './controllers/CameraController';
 import Terrain from './Terrain';
 
 import {
     Scene, Renderer, PerspectiveCamera, WebGLRenderer, Mesh, MeshBasicMaterial, BoxGeometry, Clock, Vector3
 }
 from "three";
+import CharacterController from './controllers/CharacterController';
+import CharacterComponent from './components/CharacterComponent';
 
 export default class GameEngine {
-    scene: Scene;
+    private _scene: Scene;
     private _camera: PerspectiveCamera;
     private _cameraController: CameraController;
-    renderer: Renderer;
+
+    private _characterCtl: CharacterController;
+    private _characterComp: CharacterComponent;
+
+    private renderer: Renderer;
     private _clock: Clock;
 
     private _terrain : Terrain;
 
     constructor(private _container: HTMLElement) {
-        this.scene = new Scene();
+        this._scene = new Scene();
         this._clock = new Clock();
 
         this._camera = new PerspectiveCamera(45, 1.25, .01, 1000);
@@ -26,6 +32,12 @@ export default class GameEngine {
 
         this._terrain = new Terrain();
         this._initialize(this._container)
+
+        // make a character
+        this._characterComp = new CharacterComponent({});        
+        this._characterCtl = new CharacterController(this._characterComp);
+
+        this._scene.add(this._characterComp);
     }
 
 
@@ -40,14 +52,9 @@ export default class GameEngine {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         container.appendChild(this.renderer.domElement);
 
-        window.addEventListener("resize", (e:UIEvent)=> { this.onResize(e)})
+        window.addEventListener("resize", (e:UIEvent)=> { this.onResize(e)})        
 
-        const geometry = new BoxGeometry(1, 1, 1);
-        const material = new MeshBasicMaterial({color: 0x00ff00});
-        const cube = new Mesh(geometry, material);
-        this.scene.add(cube);
-
-        this.scene.add(this._terrain.mesh);
+        this._scene.add(this._terrain.mesh);
 
 
         this._camera.position.z = 5;
@@ -70,7 +77,7 @@ export default class GameEngine {
         requestAnimationFrame(this.update); 
 
         //render
-        this.renderer.render(this.scene, this._camera); 
+        this.renderer.render(this._scene, this._camera); 
     });
 
 
