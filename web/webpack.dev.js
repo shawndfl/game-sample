@@ -28,6 +28,10 @@ module.exports = {
             {
                 test: /\.png$/,
                 use: ["url-loader"]
+            },
+            {
+                test: /\.mp3$/,
+                use: ["url-loader"]
             }
         ]
     },
