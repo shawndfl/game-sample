@@ -42,6 +42,7 @@ export default class GameEngine {
         this._cameraController = new CameraController(this._container, this._camera);
         this._camera.position.add(new Vector3(0, 1, 0));
 
+        this.onResize();
         this._terrain = new Terrain();
         this._initialize(this._container)
 
@@ -72,8 +73,8 @@ export default class GameEngine {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         container.appendChild(this.renderer.domElement);
 
-        window.addEventListener("resize", (e : UIEvent) => {
-            this.onResize(e)
+        window.addEventListener("resize", () => {
+            this.onResize()
         })
 
         this._scene.add(this._terrain.mesh);
@@ -83,7 +84,7 @@ export default class GameEngine {
         requestAnimationFrame(this.update);
     }
 
-    onResize(e : UIEvent) {
+    onResize() {
         this._camera.aspect = window.innerWidth / window.innerHeight;
         this._camera.updateProjectionMatrix();
         this.renderer.setSize(this._container.clientWidth, this._container.clientHeight);
