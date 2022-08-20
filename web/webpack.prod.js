@@ -1,7 +1,7 @@
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     mode: "production",
@@ -28,12 +28,10 @@ module.exports = {
             {
                 test: /\.svg$/,
                 use: ["svg-url-loader"]
-            },
-            {
+            }, {
                 test: /\.png$/,
                 use: ["url-loader"]
-            },            
-            {
+            }, {
                 test: /\.mp3$/,
                 use: ["url-loader"]
             }
@@ -50,7 +48,11 @@ module.exports = {
                 filename: 'index.html'
             }
         ),
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin(),        
+        new CopyWebpackPlugin({patterns : [{
+                from: path.join(__dirname, 'public/assets'),
+                to: path.join(__dirname, '../docs/assets')
+            }]}),
     ],
     output: {
         filename: '[name].[contenthash].js',

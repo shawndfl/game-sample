@@ -28,17 +28,24 @@ module.exports = {
             {
                 test: /\.png$/,
                 use: ["url-loader"]
-            },
-            {
+            }, 
+            {   
                 test: /\.mp3$/,
                 use: ["url-loader"]
             }
+
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', 'png', 'scss', 'json'],        
-        mainFiles: [path.resolve(__dirname, './')],        
-    },    
+        extensions: [
+            '.ts',
+            '.js',
+            '.png',
+            '.scss',
+            '.svg'
+        ],
+        mainFiles: [path.resolve(__dirname, './')]
+    },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
@@ -52,7 +59,7 @@ module.exports = {
                 filename: 'index.html'
             }
         ),
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin()
     ],
 
     devServer: {
@@ -60,7 +67,7 @@ module.exports = {
             'src/**/*.ts', 'public/**/*'
         ],
         static: {
-            publicPath: './',
+            publicPath: '/',
             directory: path.join(__dirname, 'public')
         },
         compress: true,

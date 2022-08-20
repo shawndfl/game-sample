@@ -10,7 +10,8 @@ import {
     Vector3,
     AudioListener,
     Audio,
-    AudioLoader
+    AudioLoader,
+    AmbientLight
 } from "three";
 import CharacterController from './controllers/CharacterController';
 import CharacterComponent from './components/CharacterComponent';
@@ -42,6 +43,8 @@ export default class GameEngine {
         this._cameraController = new CameraController(this._container, this._camera);
         this._camera.position.add(new Vector3(0, 1, 0));
 
+        const light = new AmbientLight( 0x404040 ); // soft white light
+        this._scene.add( light );
         this.onResize();
         this._terrain = new Terrain();
         this._initialize(this._container)
@@ -49,6 +52,8 @@ export default class GameEngine {
         // make a character
         this._characterComp = new CharacterComponent({});
         this._characterCtl = new CharacterController(this._characterComp);
+        this._characterComp.load();
+
 
         this._scene.add(this._characterComp);
         this._audio = new Audio(listen);
