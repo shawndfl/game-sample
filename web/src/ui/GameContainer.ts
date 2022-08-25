@@ -1,4 +1,3 @@
-import GameEngine from "./GameEngine";
 
 export class GameContainer {
     constructor(root: HTMLElement) {        

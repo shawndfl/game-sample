@@ -2,7 +2,7 @@ import {
     Mesh, MeshBasicMaterial, PlaneGeometry, MathUtils, Texture, TextureLoader, Vector2, MirroredRepeatWrapping, RepeatWrapping
 } from 'three';
 
-import ground from "./assets/img/ground_grass_gen_10.png";
+import ground from "../assets/img/ground_grass_gen_10.png";
 
 export default class Terrain {
 

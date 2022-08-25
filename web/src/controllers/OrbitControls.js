@@ -80,8 +80,8 @@ export default class OrbitControls extends EventDispatcher {
 
 		// Set to true to automatically rotate around the target
 		// If auto-rotate is enabled, you must call controls.update() in your animation loop
-		this.autoRotate = false;
-		this.autoRotateSpeed = 2.0; // 30 seconds per orbit when fps is 60
+		this.autoRotate = true;
+		this.autoRotateSpeed = 3.0; // 30 seconds per orbit when fps is 60
 
 		// The four arrow keys
 		this.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown' };

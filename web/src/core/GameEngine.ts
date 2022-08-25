@@ -1,4 +1,4 @@
-import CameraController from './controllers/CameraController';
+import CameraController from '../controllers/CameraController';
 import Terrain from './Terrain';
 
 import {
@@ -13,15 +13,20 @@ import {
     AudioLoader,
     AmbientLight
 } from "three";
-import CharacterController from './controllers/CharacterController';
-import CharacterComponent from './components/CharacterComponent';
+import CharacterController from '../controllers/CharacterController'
+import CharacterComponent from '../components/CharacterComponent';
 
-import bgSound from './assets/sound/TownTheme.mp3'
+import bgSound from '../assets/sound/TownTheme.mp3'
 
+/**
+ * The game engin is used to manage the scenes, user input,
+ * and controller lifecycle.
+ */
 export default class GameEngine {
     private _scene : Scene;
     private _camera : PerspectiveCamera;
     private _cameraController : CameraController;
+    private _container: HTMLElement;
 
     private _characterCtl : CharacterController;
     private _characterComp : CharacterComponent;
@@ -32,7 +37,7 @@ export default class GameEngine {
     private _terrain : Terrain;
     private _audio : Audio;
 
-    constructor(private _container : HTMLElement) {
+    constructor(root : HTMLElement) {
         this._scene = new Scene();
         this._clock = new Clock();
         const listen = new AudioListener ();
@@ -40,6 +45,12 @@ export default class GameEngine {
         this._camera = new PerspectiveCamera(45, 1.25, .01, 1000);
         this._camera.add(listen);
         this.renderer = new WebGLRenderer();
+
+        // create a new container for the graphics
+        this._container = document.createElement('div');
+        this._container.classList.add('graphics-container');
+        root.append(this._container);
+
         this._cameraController = new CameraController(this._container, this._camera);
         this._camera.position.add(new Vector3(0, 1, 0));
 
@@ -108,4 +119,5 @@ export default class GameEngine {
     });
 
 
+    
 }

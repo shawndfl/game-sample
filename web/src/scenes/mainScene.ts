@@ -1,7 +1,7 @@
 import OrbitControls from "../controllers/OrbitControls";
 import GLTFLoader from '../core/GLTFLoader';
 import floorTexture from '../assets/img/ground_grass_gen_10.png';
-import Sky from "../core/Sky"
+import Sky from "../graphics/Sky"
 import {
     ACESFilmicToneMapping,
     AmbientLight,

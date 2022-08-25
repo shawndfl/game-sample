@@ -1,23 +1,24 @@
-import { GameContainer } from "./GameContainer";
-import GameEngine from './GameEngine';
+import GameEngine from './core/GameEngine';
+import Designer from './ui/Designer';
 
+/**
+ * The main application
+ */
 class _App {
     private _engine: GameEngine;
+    private _designer: Designer;
 
     get Engine(): GameEngine {
         return this._engine;
     }    
 
-    constructor(root: HTMLElement) {
-        this._initializeView(root);
-        this._engine = new GameEngine(root);
+    get Designer(): Designer {
+        return this._designer;
     }
 
-    private _initializeView(root: HTMLElement) {
-        root.style.height = "100vh";
-        root.style.width = "100%"
-        root.style.background = "#646464";
-        root.style.border = "1";    
+    constructor(root: HTMLElement) {       
+        this._engine = new GameEngine(root);
+        this._designer = new Designer(root);
     }
 }
 
