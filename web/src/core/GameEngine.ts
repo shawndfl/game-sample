@@ -1,22 +1,18 @@
 import CameraController from '../controllers/CameraController';
 import Terrain from './Terrain';
-
+import './scss/GameEngine';
 import {
     Scene,
     Renderer,
     PerspectiveCamera,
     WebGLRenderer,   
     Clock,
-    Vector3,
-    AudioListener,
-    Audio,
-    AudioLoader,
+    Vector3,   
     AmbientLight
 } from "three";
 import CharacterController from '../controllers/CharacterController'
 import CharacterComponent from '../components/CharacterComponent';
-
-import bgSound from '../assets/sound/TownTheme.mp3'
+import SoundManager from './SoundManager';
 
 /**
  * The game engin is used to manage the scenes, user input,
@@ -30,25 +26,36 @@ export default class GameEngine {
 
     private _characterCtl : CharacterController;
     private _characterComp : CharacterComponent;
+    private _soundManager: SoundManager;    
 
     private renderer : Renderer;
     private _clock : Clock;
 
-    private _terrain : Terrain;
-    private _audio : Audio;
+    private _terrain : Terrain;    
 
+    /**
+     * Gets the sound manager
+     */
+    get SoundManager() {
+        return this._soundManager;
+    }
+ 
     constructor(root : HTMLElement) {
         this._scene = new Scene();
-        this._clock = new Clock();
-        const listen = new AudioListener ();
+        this._clock = new Clock();        
+        this._soundManager = new SoundManager();
 
-        this._camera = new PerspectiveCamera(45, 1.25, .01, 1000);
-        this._camera.add(listen);
+        this._camera = new PerspectiveCamera(45, 1.25, .01, 1000);        
+
+        this._soundManager.assignToCamera(this._camera);
+        //this._soundManager.play();
+
         this.renderer = new WebGLRenderer();
 
         // create a new container for the graphics
         this._container = document.createElement('div');
         this._container.classList.add('graphics-container');
+
         root.append(this._container);
 
         this._cameraController = new CameraController(this._container, this._camera);
@@ -67,15 +74,7 @@ export default class GameEngine {
 
 
         this._scene.add(this._characterComp);
-        this._audio = new Audio(listen);
-
-        const audioLoader = new AudioLoader();
-        audioLoader.load(bgSound, (buffer) => {
-            this._audio.setBuffer(buffer);
-            this._audio.setLoop(true);
-            this._audio.setVolume(0.5);
-            this._audio.play();
-        });
+       
     }
 
 
@@ -85,8 +84,7 @@ export default class GameEngine {
      */
     private _initialize(container : HTMLElement) {
 
-
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(this.renderer.domElement);
 
         window.addEventListener("resize", () => {

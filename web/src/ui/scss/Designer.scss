@@ -1,0 +1,10 @@
+.designer-container {    
+    width: 500px;     
+    min-width: 500px;
+    background-color: #242424;
+    .panel {
+        padding: 5px;
+        box-shadow: 5px 5px 10px #0000004b;
+        border-radius: 5px;        
+    }
+}

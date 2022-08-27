@@ -1,5 +1,6 @@
 import GameEngine from './core/GameEngine';
 import Designer from './ui/Designer';
+import './scss/index';
 
 /**
  * The main application
@@ -16,10 +17,10 @@ class _App {
         return this._designer;
     }
 
-    constructor(root: HTMLElement) {       
-        this._engine = new GameEngine(root);
+    constructor(root: HTMLElement) {               
         this._designer = new Designer(root);
+        this._engine = new GameEngine(root);
     }
 }
 
-export const App = new _App(document.getElementById("gameContainer") as HTMLElement);
+export const App = new _App(document.getElementById("game-container") as HTMLElement);

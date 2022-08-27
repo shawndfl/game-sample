@@ -18,22 +18,19 @@ module.exports = {
                 use: ['html-loader']
             },
             {
-                test: /\.(css|scss)$/,
+                test: /\.scss$/,
                 use: ["style-loader", "css-loader", "sass-loader"]
             },
             {
                 test: /\.svg$/,
                 use: ["svg-url-loader"]
-            },
-            {
+            }, {
                 test: /\.png$/,
                 use: ["url-loader"]
-            }, 
-            {   
+            }, {
                 test: /\.mp3$/,
                 use: ["url-loader"]
             }
-
         ]
     },
     resolve: {
@@ -59,12 +56,17 @@ module.exports = {
                 filename: 'index.html'
             }
         ),
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin(
+            {
+                filename: '[name].css',
+                chunkFilename: '[id].css'
+            }
+        )
     ],
 
     devServer: {
         watchFiles: [
-            'src/**/*.ts', 'public/**/*'
+            'src/**/*.ts', 'public/**/*', 'src/**/*.scss'
         ],
         static: {
             publicPath: '/',
