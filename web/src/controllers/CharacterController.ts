@@ -1,3 +1,4 @@
+import { LineCharacterMesh } from "components/LineCharacterMesh";
 import CharacterComponent from "../components/CharacterComponent";
 
 /**
@@ -7,7 +8,7 @@ import CharacterComponent from "../components/CharacterComponent";
  */
 export default class CharacterController {
     
-    constructor(private _component: CharacterComponent) {
+    constructor(private _component: LineCharacterMesh) {
 
     }
 

@@ -20,7 +20,7 @@ export enum CharacterAnimations {
 export default class CharacterComponent extends Object3D {
 
 
-    //private _character : CharacterBuilder;
+    private _character : CharacterBuilder;
     private _animationClip : CharacterWalkAnimation;
     private _mixer : AnimationMixer;
 
@@ -28,8 +28,8 @@ export default class CharacterComponent extends Object3D {
         super();
 
         // build the character
-        //this._character = new CharacterBuilder({});
-        //this.add(this._character);
+        this._character = new CharacterBuilder({});
+        this.add(this._character);
 
         // create the animations
         this._animationClip = new CharacterWalkAnimation();
