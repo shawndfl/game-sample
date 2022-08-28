@@ -22,7 +22,7 @@ import {LineCharacterMesh} from '../components/LineCharacterMesh';
 export default class GameEngine {
     private _scene : Scene;
     private _camera : PerspectiveCamera;
-    // private _cameraController : CameraController;
+    private _cameraController : CameraController;
     private _container : HTMLElement;
 
     private _characterCtl : CharacterController;
@@ -46,10 +46,8 @@ export default class GameEngine {
         this._clock = new Clock();
         this._soundManager = new SoundManager();
 
-        this._camera = new PerspectiveCamera(33, 1.25, 1, 10000);
-        this._camera.position.z = 1000;
-        this._camera.position.y = 100;
-
+        this._camera = new PerspectiveCamera(33, 1.25, .01, 1000);        
+        this._camera.position.z = 2;
         this._soundManager.assignToCamera(this._camera);
         // this._soundManager.play();
 
@@ -63,8 +61,8 @@ export default class GameEngine {
 
         root.append(this._container);
 
-        // this._cameraController = new CameraController(this._container, this._camera);
-        // this._camera.position.add(new Vector3(0, 1, 0));
+        this._cameraController = new CameraController(this._container, this._camera);
+        this._camera.position.add(new Vector3(0, 1, 0));
 
         const light = new AmbientLight(0x404040); // soft white light
         //this._scene.add(light);
@@ -107,31 +105,15 @@ export default class GameEngine {
         this._camera.aspect = window.innerWidth / window.innerHeight;
         this._camera.updateProjectionMatrix();
         this.renderer.setSize(this._container.clientWidth, this._container.clientHeight);
-        // this._cameraController.onResize();
+        this._cameraController.onResize();
     }
 
     update = (() => { // get dt
         const dt = this._clock.getDelta();
 
         // update stuff
-        // this._cameraController.update(dt);
-        requestAnimationFrame(this.update);
-
-        this._camera.lookAt(new Vector3());
-
-        const time = Date.now() * 0.0005;
-        for (let i = 0; i < this._scene.children.length; i++) {
-
-            const object = this._scene.children[i];
-
-            if ((object as any).isLine) {
-                
-                object.rotation.y = time * (i % 2 ? 1 : - 1);
-                object.updateMatrixWorld();
-
-            }
-
-        }
+        this._cameraController.update(dt);
+        requestAnimationFrame(this.update);       
 
         // render
         this.renderer.render(this._scene, this._camera);
