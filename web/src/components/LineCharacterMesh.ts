@@ -49,8 +49,7 @@ class Circle2D extends Object3D {
             points.push(center.x + x, center.y + y, center.z);
             const color1 = params.startColor.clone().multiplyScalar(1.0 - colorFade);
             const color2 = params.endColor.clone().multiplyScalar(colorFade);
-            const color = color1.add(color2);
-            console.debug(colorFade, color1, color2, color);
+            const color = color1.add(color2);            
 
             colors.push(color.x, color.y, color.z);
             colorFade += step / endAngle;
@@ -97,8 +96,7 @@ class Line2D extends Object3D {
 
         points.push(params.end.x, params.end.y, params.end.z);
         colors.push(params.endColor.x, params.endColor.y, params.endColor.z);
-
-        console.debug(points, colors);
+        
         this._geo.setAttribute('position', new Float32BufferAttribute(points, 3));
         this._geo.setAttribute('color', new Float32BufferAttribute(colors, 3));
 
@@ -115,25 +113,25 @@ export class LineCharacterMesh extends Object3D {
     rArm : Line2D;
     lArm : Line2D;
     rLeg : Line2D;
-    lLeg : Line2D;
+    lLeg : Line2D;    
 
     constructor(scene : Scene) {
-        super();
+        super();        
 
         this.body = new Line2D({
             start: new Vector3(0, .5, 0),
             end: new Vector3(0, 0, 0),
-            startColor: new Vector3(1, 0, 0),
-            endColor: new Vector3(0, 0, 0)
+            startColor: new Vector3(1, 1, 1),
+            endColor: new Vector3(1, 1, 1)
         });
         this.body.position.set(0, .5, 0);
-        scene.add(this.body);
+        this.add(this.body);
 
         this.head = new Circle2D({
             center: new Vector3(0, .1, 0),
             size: .1,
-            startColor: new Vector3(0, 0, 0),
-            endColor: new Vector3(1, 0, 0)
+            startColor: new Vector3(1, 1, 1),
+            endColor: new Vector3(1, 1, 1)
         });
         this.head.position.set(0,.5, 0)
         this.body.add(this.head);
@@ -141,42 +139,39 @@ export class LineCharacterMesh extends Object3D {
 
         this.rArm = new Line2D({
             start: new Vector3(0, 0, 0),
-            end: new Vector3(.5, -.5, 0),
-            startColor: new Vector3(0, 1, 0),
-            endColor: new Vector3(0, 0, 0)
+            end: new Vector3(-.5, -.5, 0),
+            startColor: new Vector3(1, 0, 0),
+            endColor: new Vector3(1, 0, 0)
         });
         this.rArm.position.set(0, .5, 0);
         this.body.add(this.rArm);
 
         this.lArm = new Line2D({
             start: new Vector3(0, 0, 0),
-            end: new Vector3(-.5, -.5, 0),
+            end: new Vector3(.5, -.5, 0),
             startColor: new Vector3(0, 0, 1),
-            endColor: new Vector3(0, 0, 0)
+            endColor: new Vector3(0, 0, 1)
         });
         this.lArm.position.set(0, .5, 0);
         this.body.add(this.lArm);
 
         this.rLeg = new Line2D({
             start: new Vector3(0, 0, 0),
-            end: new Vector3(.5, -.5, 0),
-            startColor: new Vector3(0, 0, 1),
-            endColor: new Vector3(0, 0, 0)
+            end: new Vector3(-.5, -.5, 0),
+            startColor: new Vector3(1, 1, 0),
+            endColor: new Vector3(1, 1, 0)
         });
         //this.rLeg.position.set(0, .5, 0);
         this.body.add(this.rLeg);
 
         this.lLeg = new Line2D({
             start: new Vector3(0, 0, 0),
-            end: new Vector3(-.5, -.5, 0),
-            startColor: new Vector3(1, 1, 1),
-            endColor: new Vector3(1, 1, 1)
+            end: new Vector3(.5, -.5, 0),
+            startColor: new Vector3(0, 1, 1),
+            endColor: new Vector3(0, 1, 1)
         });
         //this.lLeg.position.set(0, .5, 0);
         this.body.add(this.lLeg);
-
-    }
-
-    update(dt : number) {}
+    }   
 
 }

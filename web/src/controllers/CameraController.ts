@@ -96,23 +96,19 @@ export default class CameraController {
         window.addEventListener("keydown", (e : KeyboardEvent) => {
 
             switch (e.code) {
-
-                case 'ArrowUp':
+                
                 case 'KeyW':
                     this._moveForward = true;
                     break;
-
-                case 'ArrowLeft':
+                
                 case 'KeyA':
                     this._moveLeft = true;
                     break;
 
-                case 'ArrowDown':
                 case 'KeyS':
                     this._moveBackward = true;
                     break;
 
-                case 'ArrowRight':
                 case 'KeyD':
                     this._moveRight = true;
                     break;

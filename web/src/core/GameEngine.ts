@@ -46,8 +46,7 @@ export default class GameEngine {
         this._clock = new Clock();
         this._soundManager = new SoundManager();
 
-        this._camera = new PerspectiveCamera(33, 1.25, .01, 1000);        
-        this._camera.position.z = 2;
+        this._camera = new PerspectiveCamera(33, 1.25, .01, 1000);                
         this._soundManager.assignToCamera(this._camera);
         // this._soundManager.play();
 
@@ -62,7 +61,7 @@ export default class GameEngine {
         root.append(this._container);
 
         this._cameraController = new CameraController(this._container, this._camera);
-        this._camera.position.add(new Vector3(0, 1, 0));
+        this._camera.position.add(new Vector3(0, 1, 2));
 
         const light = new AmbientLight(0x404040); // soft white light
         //this._scene.add(light);
@@ -73,11 +72,10 @@ export default class GameEngine {
 
         // make a character        
         this._characterComp = new LineCharacterMesh(this._scene);
-        this._characterCtl = new CharacterController(this._characterComp);
+        this._characterCtl = new CharacterController(this._container, this._characterComp);
         // this._characterComp.load();
         
-        //this._scene.add(this._characterComp);        
-
+        this._scene.add(this._characterComp);        
     }
 
 
@@ -96,9 +94,7 @@ export default class GameEngine {
 
         this._scene.add(this._terrain.mesh);
         
-        requestAnimationFrame(this.update);
-        
-        console.debug(this._camera.position, this._camera.getWorldDirection(new Vector3()));
+        requestAnimationFrame(this.update);        
     }
 
     onResize() {
@@ -113,6 +109,8 @@ export default class GameEngine {
 
         // update stuff
         this._cameraController.update(dt);
+
+        this._characterCtl.update(dt);
         requestAnimationFrame(this.update);       
 
         // render
