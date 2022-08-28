@@ -7,7 +7,9 @@ import {
     WebGLRenderer,
     Clock,
     Vector3,
-    AmbientLight
+    AmbientLight,
+    SpotLight,
+    PCFShadowMap
 } from "three";
 
 import CharacterController from '../controllers/CharacterController'
@@ -46,13 +48,31 @@ export default class GameEngine {
         this._clock = new Clock();
         this._soundManager = new SoundManager();
 
-        this._camera = new PerspectiveCamera(33, 1.25, .01, 1000);                
+        this._camera = new PerspectiveCamera(33, 1.25, .01, 1000);
         this._soundManager.assignToCamera(this._camera);
         // this._soundManager.play();
 
-        this.renderer = new WebGLRenderer( { antialias: true } );
-		this.renderer.setPixelRatio( window.devicePixelRatio );
+        this.renderer = new WebGLRenderer({antialias: true});
+        this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setClearColor(0x646464, 1);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = PCFShadowMap;
+
+        // test light
+        const light = new SpotLight(0xffffff, 1.5);
+        light.position.set(0, 5, -5);
+        light.angle = Math.PI * 0.2;
+        light.castShadow = true;
+        light.shadow.camera.near = 0.1;
+        light.shadow.camera.far = 100;
+        light.shadow.bias = -0.000222;
+        light.shadow.mapSize.width = 1024;
+        light.shadow.mapSize.height = 1024;
+        this._scene.add(light);
+
+        // soft white light    
+        const lightAmbient = new AmbientLight(0x404040);
+        this._scene.add(lightAmbient);
 
         // create a new container for the graphics
         this._container = document.createElement('div');
@@ -61,21 +81,20 @@ export default class GameEngine {
         root.append(this._container);
 
         this._cameraController = new CameraController(this._container, this._camera);
-        this._camera.position.add(new Vector3(0, 1, 2));
+        this._camera.position.add(new Vector3(0, 1, 5));
 
-        const light = new AmbientLight(0x404040); // soft white light
-        //this._scene.add(light);
+                    
         this.onResize();
-        this._terrain = new Terrain();        
+        this._terrain = new Terrain();
 
         this._initialize(this._container);
 
-        // make a character        
+        // make a character
         this._characterComp = new LineCharacterMesh(this._scene);
         this._characterCtl = new CharacterController(this._container, this._characterComp);
         // this._characterComp.load();
-        
-        this._scene.add(this._characterComp);        
+
+        this._scene.add(this._characterComp);
     }
 
 
@@ -93,8 +112,8 @@ export default class GameEngine {
         })
 
         this._scene.add(this._terrain.mesh);
-        
-        requestAnimationFrame(this.update);        
+
+        requestAnimationFrame(this.update);
     }
 
     onResize() {
@@ -111,7 +130,7 @@ export default class GameEngine {
         this._cameraController.update(dt);
 
         this._characterCtl.update(dt);
-        requestAnimationFrame(this.update);       
+        requestAnimationFrame(this.update);
 
         // render
         this.renderer.render(this._scene, this._camera);

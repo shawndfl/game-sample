@@ -64,6 +64,7 @@ class Circle2D extends Object3D {
 
         var material = new LineBasicMaterial({color: 0xff0000, vertexColors: true});
         this.mesh = new Line(this._geo, material);
+        this.mesh.castShadow = true;
         this.add(this.mesh);
     }
 }
@@ -102,6 +103,7 @@ class Line2D extends Object3D {
 
         var material = new LineBasicMaterial({color: 0xffffff, vertexColors: true});
         this.mesh = new Line(this._geo, material);
+        this.mesh.castShadow = true;
         this.add(this.mesh);
     }
 }

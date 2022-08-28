@@ -15,7 +15,7 @@ export default class CharacterController {
     constructor(private _container: HTMLElement,  private _component: LineCharacterMesh) {
 
         this._velocity = new Vector3();
-        this._moveSpeed = 0.4;
+        this._moveSpeed = 1.4;
 
         window.addEventListener("keydown", (e) => {this._keydown(e);});
         window.addEventListener("keyup", (e) => {this._keyup(e);});
@@ -47,6 +47,8 @@ export default class CharacterController {
     }
 
     update(dt: number) {
+        const currentPos = this._component.position.clone();
+        
         this._component.position.add(this._velocity.multiplyScalar(dt));
     }
 
