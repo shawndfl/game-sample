@@ -57,6 +57,10 @@ export default class CharacterController {
         const currentPos = this._component.position.clone();
         this._animationMixer.update(dt);
         this._component.position.add(this._velocity.multiplyScalar(dt));
+
+        if(this._component.customValue > 0) {
+            console.debug(' custom value: ', this._component.customValue);
+        }
     }
 
     dispose() {

@@ -80,15 +80,11 @@ interface LineParams {
 class Line2D extends Object3D {
     private _geo : BufferGeometry;
     private _mat : LineBasicMaterial;
-    mesh : Line;
-
-    set testPosition(value: Vector3) {
-        this.position.copy(value);
-    }
+    mesh : Line;       
 
     constructor(params : LineParams) {
         super();
-
+        
         this._geo = new BufferGeometry();
         this._mat = new LineBasicMaterial();
 
@@ -121,8 +117,12 @@ export class LineCharacterMesh extends Object3D {
     rLeg : Line2D;
     lLeg : Line2D;    
 
+    customValue: number;
+        
     constructor(scene : Scene) {
         super();        
+        this.name = 'character'
+        this.customValue = 0;
 
         this.body = new Line2D({
             start: new Vector3(0, .5, 0),
@@ -130,6 +130,7 @@ export class LineCharacterMesh extends Object3D {
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
         });
+        this.body.name = 'body';
         this.body.position.set(0, .5, 0);
         this.add(this.body);
 
@@ -139,44 +140,46 @@ export class LineCharacterMesh extends Object3D {
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
         });
+        this.head.name = 'head';
         this.head.position.set(0,.5, 0)
-        this.body.add(this.head);
-        
+        this.body.add(this.head);        
 
         this.rArm = new Line2D({
             start: new Vector3(0, 0, 0),
             end: new Vector3(-.5, -.5, 0),
-            startColor: new Vector3(1, 0, 0),
-            endColor: new Vector3(1, 0, 0)
+            startColor: new Vector3(1, 1, 1),
+            endColor: new Vector3(1, 1, 1)
         });
+        this.rArm.name = 'rArm';
         this.rArm.position.set(0, .5, 0);
         this.body.add(this.rArm);
 
         this.lArm = new Line2D({
             start: new Vector3(0, 0, 0),
             end: new Vector3(.5, -.5, 0),
-            startColor: new Vector3(0, 0, 1),
-            endColor: new Vector3(0, 0, 1)
+            startColor: new Vector3(1, 1, 1),
+            endColor: new Vector3(1, 1, 1)
         });
+        this.lArm.name = 'lArm,';
         this.lArm.position.set(0, .5, 0);
         this.body.add(this.lArm);
 
         this.rLeg = new Line2D({
             start: new Vector3(0, 0, 0),
             end: new Vector3(-.5, -.5, 0),
-            startColor: new Vector3(1, 1, 0),
-            endColor: new Vector3(1, 1, 0)
+            startColor: new Vector3(1, 1, 1),
+            endColor: new Vector3(1, 1, 1)
         });
-        //this.rLeg.position.set(0, .5, 0);
+        this.rLeg.name = 'rLeg';        
         this.body.add(this.rLeg);
 
         this.lLeg = new Line2D({
             start: new Vector3(0, 0, 0),
             end: new Vector3(.5, -.5, 0),
-            startColor: new Vector3(0, 1, 1),
-            endColor: new Vector3(0, 1, 1)
+            startColor: new Vector3(1, 1, 1),
+            endColor: new Vector3(1, 1, 1)
         });
-        //this.lLeg.position.set(0, .5, 0);
+        this.lLeg.name = 'lLeg';        
         this.body.add(this.lLeg);
     }   
 
