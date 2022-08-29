@@ -9,7 +9,8 @@ import {
     Vector3,
     AmbientLight,
     SpotLight,
-    PCFShadowMap
+    PCFShadowMap,
+    LightShadow
 } from "three";
 
 import CharacterController from '../controllers/CharacterController'
@@ -62,6 +63,7 @@ export default class GameEngine {
         const light = new SpotLight(0xffffff, 1.5);
         light.position.set(0, 5, -5);
         light.angle = Math.PI * 0.2;
+        light.penumbra = Math.PI * 0.5;
         light.castShadow = true;
         light.shadow.camera.near = 0.1;
         light.shadow.camera.far = 100;

@@ -82,6 +82,10 @@ class Line2D extends Object3D {
     private _mat : LineBasicMaterial;
     mesh : Line;
 
+    set testPosition(value: Vector3) {
+        this.position.copy(value);
+    }
+
     constructor(params : LineParams) {
         super();
 

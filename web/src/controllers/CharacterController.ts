@@ -1,5 +1,6 @@
-import { LineCharacterMesh } from "components/LineCharacterMesh";
-import { Vector3 } from "three";
+import { AnimationBuilder } from "../components/AnimationBuilder";
+import { LineCharacterMesh } from "../components/LineCharacterMesh";
+import { AnimationMixer, Vector3 } from "three";
 import CharacterComponent from "../components/CharacterComponent";
 
 /**
@@ -11,8 +12,14 @@ export default class CharacterController {
     
     private _velocity : Vector3;
     private _moveSpeed: number;     /// in meters / second 
+    private _animationMixer: AnimationMixer;
 
     constructor(private _container: HTMLElement,  private _component: LineCharacterMesh) {
+
+        this._animationMixer = new AnimationMixer(_component);
+        const clip = AnimationBuilder.createIdleClip();
+        const action = this._animationMixer.clipAction( clip );
+        action.play();        
 
         this._velocity = new Vector3();
         this._moveSpeed = 1.4;
@@ -48,7 +55,7 @@ export default class CharacterController {
 
     update(dt: number) {
         const currentPos = this._component.position.clone();
-        
+        this._animationMixer.update(dt);
         this._component.position.add(this._velocity.multiplyScalar(dt));
     }
 
