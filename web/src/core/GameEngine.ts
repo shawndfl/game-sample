@@ -9,14 +9,12 @@ import {
     Vector3,
     AmbientLight,
     SpotLight,
-    PCFShadowMap,
-    LightShadow
+    PCFShadowMap    
 } from "three";
 
 import CharacterController from '../controllers/CharacterController'
-import CharacterComponent from '../components/CharacterComponent';
 import SoundManager from './SoundManager';
-import {LineCharacterMesh} from '../components/LineCharacterMesh';
+import { LineCharacterMesh } from '../meshes/LineCharacterMesh';
 
 /**
  * The game engin is used to manage the scenes, user input,
@@ -29,7 +27,7 @@ export default class GameEngine {
     private _container : HTMLElement;
 
     private _characterCtl : CharacterController;
-    private _characterComp : LineCharacterMesh;
+    private _characterMesh : LineCharacterMesh;
     private _soundManager : SoundManager;
 
     private renderer : WebGLRenderer;
@@ -92,11 +90,11 @@ export default class GameEngine {
         this._initialize(this._container);
 
         // make a character
-        this._characterComp = new LineCharacterMesh(this._scene);
-        this._characterCtl = new CharacterController(this._container, this._characterComp);
-        // this._characterComp.load();
+        this._characterMesh = new LineCharacterMesh();
+        this._scene.add(this._characterMesh);
 
-        this._scene.add(this._characterComp);
+        // control the character
+        this._characterCtl = new CharacterController(this._container, this._characterMesh);        
     }
 
 

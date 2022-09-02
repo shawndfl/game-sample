@@ -1,4 +1,4 @@
-import { LineCharacterMesh } from "../components/LineCharacterMesh";
+import { LineCharacterMesh } from "meshes/LineCharacterMesh";
 import { AnimationMixer, Vector3 } from "three";
 import { AnimationIdle } from "../animations/AnimationIdle";
 import { AnimationWalk } from "../animations/AnimationWalk";
@@ -19,6 +19,7 @@ export default class CharacterController {
         this._animationMixer = new AnimationMixer(_component);
         const clip = new AnimationIdle();
         //const clip = new AnimationWalk();
+
         const action = this._animationMixer.clipAction( clip );
         action.play();        
 
