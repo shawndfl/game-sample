@@ -12,12 +12,6 @@ import {
     Vector3
 } from "three";
 
-import {Line2} from 'three/examples/jsm/lines/Line2.js';
-import {LineMaterial} from 'three/examples/jsm/lines/LineMaterial.js';
-import {LineGeometry} from 'three/examples/jsm/lines/LineGeometry.js';
-
-import {hilbert3D} from "three/examples/jsm/utils/GeometryUtils";
-
 interface CircleParams {
     center: Vector3;
     size: number;
@@ -83,14 +77,14 @@ interface LineParams {
 
 
 class Line2D extends Object3D {
-    private _geo : LineGeometry;
+    private _geo : BufferGeometry;
     private _mat : LineBasicMaterial;
-    mesh : Line2;
+    mesh : Line;
 
     constructor(params : LineParams) {
         super();
 
-        this._geo = new LineGeometry();
+        this._geo = new BufferGeometry();
         this._mat = new LineBasicMaterial();
 
         let points: number[] = [];
@@ -103,25 +97,12 @@ class Line2D extends Object3D {
         points.push(params.end.x, params.end.y, params.end.z);
         colors.push(params.endColor.x, params.endColor.y, params.endColor.z);
 
-        this._geo.setPositions(points);
-        //this._geo.setAttribute('position', new Float32BufferAttribute(points, 3));
-        //this._geo.setAttribute('color', new Float32BufferAttribute(colors, 3));
+        //this._geo.setPositions(points);
+        this._geo.setAttribute('position', new Float32BufferAttribute(points, 3));
+        this._geo.setAttribute('color', new Float32BufferAttribute(colors, 3));
 
-        var material = new LineMaterial({
-            color: 0xffffff,
-            vertexColors: true,
-            linewidth: 5,
-            dashed: false,
-            alphaToCoverage: true
-        });
-
-
-        material.worldUnits = false;
-		material.needsUpdate = true;
-        material.resolution.set(window.innerWidth, window.innerHeight);
-        this.mesh = new Line2(this._geo, material);
-        this.mesh.computeLineDistances();
-        this.mesh.scale.set(1, 1, 1);
+        var material = new LineBasicMaterial({color: 0xffffff, vertexColors: true});
+        this.mesh = new Line(this._geo, material);
         this.mesh.castShadow = true;
         this.add(this.mesh);
     }
