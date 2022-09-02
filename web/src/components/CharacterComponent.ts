@@ -20,20 +20,14 @@ export enum CharacterAnimations {
 export default class CharacterComponent extends Object3D {
 
 
-    private _character : CharacterBuilder;
-    private _animationClip : CharacterWalkAnimation;
-    private _mixer : AnimationMixer;
+    private _character : CharacterBuilder;        
 
     constructor(props : CharacterProps) {
         super();
 
         // build the character
         this._character = new CharacterBuilder({});
-        this.add(this._character);
-
-        // create the animations
-        this._animationClip = new CharacterWalkAnimation();
-        this._mixer = new AnimationMixer(this);
+        this.add(this._character);        
     }
 
     load() {
@@ -44,11 +38,5 @@ export default class CharacterComponent extends Object3D {
             this.add(gltf.scene);
         });
 
-    }
-
-    play(animation : CharacterAnimations) {}
-
-    update(dt : number) {
-        this._mixer.update(dt);
     }
 }

@@ -11,6 +11,11 @@ import {
     Scene,
     Vector3
 } from "three";
+
+import {Line2} from 'three/examples/jsm/lines/Line2.js';
+import {LineMaterial} from 'three/examples/jsm/lines/LineMaterial.js';
+import {LineGeometry} from 'three/examples/jsm/lines/LineGeometry.js';
+
 import {hilbert3D} from "three/examples/jsm/utils/GeometryUtils";
 
 interface CircleParams {
@@ -49,11 +54,11 @@ class Circle2D extends Object3D {
             points.push(center.x + x, center.y + y, center.z);
             const color1 = params.startColor.clone().multiplyScalar(1.0 - colorFade);
             const color2 = params.endColor.clone().multiplyScalar(colorFade);
-            const color = color1.add(color2);            
+            const color = color1.add(color2);
 
             colors.push(color.x, color.y, color.z);
             colorFade += step / endAngle;
-            
+
         }
 
         points.push(center.x + size, center.y, center.z);
@@ -78,14 +83,14 @@ interface LineParams {
 
 
 class Line2D extends Object3D {
-    private _geo : BufferGeometry;
+    private _geo : LineGeometry;
     private _mat : LineBasicMaterial;
-    mesh : Line;       
+    mesh : Line2;
 
     constructor(params : LineParams) {
         super();
-        
-        this._geo = new BufferGeometry();
+
+        this._geo = new LineGeometry();
         this._mat = new LineBasicMaterial();
 
         let points: number[] = [];
@@ -97,12 +102,26 @@ class Line2D extends Object3D {
 
         points.push(params.end.x, params.end.y, params.end.z);
         colors.push(params.endColor.x, params.endColor.y, params.endColor.z);
-        
-        this._geo.setAttribute('position', new Float32BufferAttribute(points, 3));
-        this._geo.setAttribute('color', new Float32BufferAttribute(colors, 3));
 
-        var material = new LineBasicMaterial({color: 0xffffff, vertexColors: true});
-        this.mesh = new Line(this._geo, material);
+        this._geo.setPositions(points);
+        //this._geo.setAttribute('position', new Float32BufferAttribute(points, 3));
+        //this._geo.setAttribute('color', new Float32BufferAttribute(colors, 3));
+
+        var material = new LineMaterial({
+            color: 0xffffff,
+            vertexColors: true,
+            linewidth: 5,
+            dashed: false,
+            alphaToCoverage: true
+        });
+
+
+        material.worldUnits = false;
+		material.needsUpdate = true;
+        material.resolution.set(window.innerWidth, window.innerHeight);
+        this.mesh = new Line2(this._geo, material);
+        this.mesh.computeLineDistances();
+        this.mesh.scale.set(1, 1, 1);
         this.mesh.castShadow = true;
         this.add(this.mesh);
     }
@@ -115,17 +134,17 @@ export class LineCharacterMesh extends Object3D {
     rArm : Line2D;
     lArm : Line2D;
     rLeg : Line2D;
-    lLeg : Line2D;    
+    lLeg : Line2D;
 
-    customValue: number;
-        
+    customValue : number;
+
     constructor(scene : Scene) {
-        super();        
+        super();
         this.name = 'character'
         this.customValue = 0;
 
         this.body = new Line2D({
-            start: new Vector3(0, .5, 0),
+            start: new Vector3(0, .6, 0),
             end: new Vector3(0, 0, 0),
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
@@ -141,12 +160,12 @@ export class LineCharacterMesh extends Object3D {
             endColor: new Vector3(1, 1, 1)
         });
         this.head.name = 'head';
-        this.head.position.set(0,.5, 0)
-        this.body.add(this.head);        
+        this.head.position.set(0, .6, 0)
+        this.body.add(this.head);
 
         this.rArm = new Line2D({
             start: new Vector3(0, 0, 0),
-            end: new Vector3(-.5, -.5, 0),
+            end: new Vector3(-.3, -.3, 0),
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
         });
@@ -156,11 +175,11 @@ export class LineCharacterMesh extends Object3D {
 
         this.lArm = new Line2D({
             start: new Vector3(0, 0, 0),
-            end: new Vector3(.5, -.5, 0),
+            end: new Vector3(.3, -.3, 0),
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
         });
-        this.lArm.name = 'lArm,';
+        this.lArm.name = 'lArm';
         this.lArm.position.set(0, .5, 0);
         this.body.add(this.lArm);
 
@@ -170,7 +189,7 @@ export class LineCharacterMesh extends Object3D {
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
         });
-        this.rLeg.name = 'rLeg';        
+        this.rLeg.name = 'rLeg';
         this.body.add(this.rLeg);
 
         this.lLeg = new Line2D({
@@ -179,8 +198,8 @@ export class LineCharacterMesh extends Object3D {
             startColor: new Vector3(1, 1, 1),
             endColor: new Vector3(1, 1, 1)
         });
-        this.lLeg.name = 'lLeg';        
+        this.lLeg.name = 'lLeg';
         this.body.add(this.lLeg);
-    }   
+    }
 
 }

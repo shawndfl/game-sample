@@ -1,7 +1,7 @@
-import { AnimationBuilder } from "../components/AnimationBuilder";
 import { LineCharacterMesh } from "../components/LineCharacterMesh";
 import { AnimationMixer, Vector3 } from "three";
-import CharacterComponent from "../components/CharacterComponent";
+import { AnimationIdle } from "../animations/AnimationIdle";
+import { AnimationWalk } from "../animations/AnimationWalk";
 
 /**
  * This class will be used to control the character 
@@ -17,7 +17,8 @@ export default class CharacterController {
     constructor(private _container: HTMLElement,  private _component: LineCharacterMesh) {
 
         this._animationMixer = new AnimationMixer(_component);
-        const clip = AnimationBuilder.createIdleClip();
+        const clip = new AnimationIdle();
+        //const clip = new AnimationWalk();
         const action = this._animationMixer.clipAction( clip );
         action.play();        
 
