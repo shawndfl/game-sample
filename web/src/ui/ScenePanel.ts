@@ -1,7 +1,10 @@
 
 import SceneNodeItem from './SceneNodeItem';
 import './scss/ScenePanel';
-
+/**
+ * This is a scene graph panel. this panel allows the user to select 
+ * a node in the scene graph.
+ */
 export class ScenePanel {
 
     private _sceneGraphList: HTMLElement;

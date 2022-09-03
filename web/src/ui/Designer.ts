@@ -1,3 +1,6 @@
+import GameEngine from 'core/GameEngine';
+import { Scene } from 'three';
+import { EventNames, MsgManager } from '../core/MsgManager';
 import {ScenePanel} from './ScenePanel';
 import './scss/Designer';
 /**
@@ -16,6 +19,15 @@ export default class Designer {
         this._buildView(this._container);
 
         this._scenePanel = new ScenePanel(this._container);
+
+        MsgManager.subscribe(EventNames.SceneLoaded, (engine: GameEngine)=>{
+            this.buildSceneGraph(engine.scene);
+        });
+    }
+
+    private buildSceneGraph(scene: Scene) {
+        // clean scene graph
+        // add nodes
     }
 
     private _buildView(container : HTMLElement) {

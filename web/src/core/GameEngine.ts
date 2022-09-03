@@ -16,6 +16,7 @@ import CharacterController from '../controllers/CharacterController'
 import SoundManager from './SoundManager';
 import { LineCharacterMesh } from '../meshes/LineCharacterMesh';
 import { CurveLineMesh } from '../meshes/CurveLineMesh';
+import { EventNames, MsgManager } from './MsgManager';
 
 /**
  * The game engin is used to manage the scenes, user input,
@@ -36,6 +37,13 @@ export default class GameEngine {
 
     private _terrain : Terrain;
 
+    /**
+     * Get the scene
+     */
+    get scene(): Scene {
+        return this._scene;
+    }
+    
     /**
      * Gets the sound manager
      */
@@ -99,6 +107,9 @@ export default class GameEngine {
 
         const mesh = new CurveLineMesh();
         this._scene.add(mesh);
+
+        // raise the scene is loaded.
+        MsgManager.raise(EventNames.SceneLoaded, this);
     }
 
 

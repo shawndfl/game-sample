@@ -7,8 +7,7 @@ import lineFrag from '../shaders/line.frag'
  */
 class LineMaterial extends ShaderMaterial {
 
-    constructor() {
-        console.debug("vert: ", lineVert, " Frag: ", lineFrag);
+    constructor() {        
         super({
             uniforms: {
                 time: {
@@ -20,6 +19,7 @@ class LineMaterial extends ShaderMaterial {
             fragmentShader: lineFrag
 
         });
+        this.defines['USE_COLOR'] = true;
     }
 }
 
@@ -34,10 +34,16 @@ export class CurveLineMesh extends Object3D {
         this._mat = new LineMaterial();
 
         const points = [];
-        points.push(-1, 0, 0);
-        points.push(1, 0, 0);        
-        this._geo.setAttribute('position', new Float32BufferAttribute(points, 3) );
+        const colors = [];
+        points.push(-1, 1, 0);
+        points.push(1, 1, 0);    
 
+        colors.push(1,0,0);
+        colors.push(1,1,1);
+
+        this._geo.setAttribute('position', new Float32BufferAttribute(points, 3) );
+        this._geo.setAttribute('color', new Float32BufferAttribute(colors, 3) );
+        
         this.line = new Line(this._geo, this._mat);
         this.add(this.line);
     }    
