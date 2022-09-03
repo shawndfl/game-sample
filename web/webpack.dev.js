@@ -30,6 +30,13 @@ module.exports = {
             }, {
                 test: /\.mp3$/,
                 use: ["url-loader"]
+            }, {
+                test: /\.(vert|frag)$/,
+                use: [
+                    {
+                        loader: "raw-loader",                        
+                    },
+                ]
             }
         ]
     },
@@ -57,10 +64,7 @@ module.exports = {
             }
         ),
         new MiniCssExtractPlugin(
-            {
-                filename: '[name].css',
-                chunkFilename: '[id].css'
-            }
+            {filename: '[name].css', chunkFilename: '[id].css'}
         )
     ],
 

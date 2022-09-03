@@ -17,3 +17,14 @@ declare module '*.svg' {
     const content: any;
     export default content;
 }
+
+// shaders
+declare module '*.vert' {
+    const content: string;
+    export default content;
+}
+
+declare module '*.frag' {
+    const content: string;
+    export default content;
+}

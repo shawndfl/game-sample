@@ -15,6 +15,7 @@ import {
 import CharacterController from '../controllers/CharacterController'
 import SoundManager from './SoundManager';
 import { LineCharacterMesh } from '../meshes/LineCharacterMesh';
+import { CurveLineMesh } from '../meshes/CurveLineMesh';
 
 /**
  * The game engin is used to manage the scenes, user input,
@@ -95,6 +96,9 @@ export default class GameEngine {
 
         // control the character
         this._characterCtl = new CharacterController(this._container, this._characterMesh);        
+
+        const mesh = new CurveLineMesh();
+        this._scene.add(mesh);
     }
 
 
