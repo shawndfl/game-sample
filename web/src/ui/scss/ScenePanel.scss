@@ -1,15 +1,9 @@
 .scene-panel {    
-    height: 100%;   
-
-    /* Element separation */
-    //li + li {
-    //    border-top: 1px solid rgba(255,255,255,0.2);
-   // }
-    
+    height: 50vh;   
 
     ul {
         margin: 5px;
-        height: 95vh;
+        height: 100%;
         overflow: auto;        
         background-color: #e0e0e0;
         padding: 0px 5px;
@@ -41,9 +35,14 @@
                 padding: 0px 10px;
                 margin: 0px;
                 display: inline-block;
-                color: #606060;
+                color: #3e3f52;
                 font-size: medium;
-            }                
+            }       
+            span {
+                color: #9c9c9c;
+                font-size: smaller;
+                vertical-align: bottom;
+            }         
         }
     }
 }

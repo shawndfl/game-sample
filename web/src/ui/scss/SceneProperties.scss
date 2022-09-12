@@ -1,0 +1,12 @@
+.scene-properties {    
+    height: 50vh;   
+    width: 100%;
+    
+    .property-panel {
+        margin: 5px;
+        height: 100%;
+        overflow: auto;        
+        background-color: #e0e0e0;
+        padding: 0px 5px;
+    }
+}

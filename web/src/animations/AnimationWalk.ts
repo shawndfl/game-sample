@@ -6,18 +6,40 @@ import {
     VectorKeyframeTrack
 } from "three";
 
+export interface ITrack<T> {    
+    time: number,
+    value: T
 
-export class AnimationWalk extends AnimationClip { /**
+}
+
+export class AnimationData {    
+    rotation?: ITrack<number[]>[];
+    position?: ITrack<number[]>[];    
+    scale?: ITrack<number[]>[]; 
+    event?: ITrack<string>[];
+}
+
+
+export class AnimationWalk extends AnimationClip {   
+
+    /**
      * Creates a simple walk animation for a character
      * @returns 
      */
     constructor() {
 
+        const animationData = {
+            rotation: [{
+                time: 0,
+                value:[0,0,0]
+            },
+        ]
+        }
         const times = [0, 2, 4];
 
         const name2 = 'rArm.rotation';
         const times2 = [0, 2, 4];
-        const values2 = AnimationWalk.rot(new Vector3(1,0,0), 0, 90, 20);
+        const values2 = AnimationWalk.rot(new Vector3(1, 0, 0), 0, 90, 20);
         const rArmTrack = new NumberKeyframeTrack(name2, times2, values2);
 
         const name3 = 'lArm.position';

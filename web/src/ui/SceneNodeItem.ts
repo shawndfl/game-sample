@@ -1,3 +1,4 @@
+import { Object3D } from 'three';
 import expand from '../svgs/solid/square-plus.svg'
 
 /**
@@ -9,6 +10,7 @@ export default class SceneNodeItem {
 
     private _itemContainer : HTMLLIElement;
     private _headerNode : HTMLElement;    
+    private _detailNode : HTMLElement;    
     private _expandNode: HTMLImageElement;
     private _expanded : boolean;
     private _children : SceneNodeItem[];
@@ -36,19 +38,27 @@ export default class SceneNodeItem {
         return this._itemContainer;
     }
 
-    constructor(name : string) {
+    constructor(node: Object3D, depth: number) {
         this._children = [];
         this._expanded = false;
         this._itemContainer = document.createElement('li');
+        this._itemContainer.style.marginLeft = (depth * 10) + 'px';
 
         this._expandNode = document.createElement('img');
         this._expandNode.classList.add('expand');
         this._expandNode.src = expand;
 
-        this._headerNode = document.createElement('h2');
-        this._headerNode.innerHTML = name;
+        this._headerNode = document.createElement('h2');        
+        this._headerNode.innerHTML = node.name;
 
-        this._itemContainer.append(this._expandNode, this._headerNode);
+        this._detailNode = document.createElement('span');
+        this._detailNode.innerHTML = node.type;               
+
+        this._itemContainer.append(this._expandNode, this._headerNode, this._detailNode);
+    }
+
+    decorateItem() {
+        
     }
 
     setHeaderText(name : string) {

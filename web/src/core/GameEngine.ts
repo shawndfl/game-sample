@@ -17,6 +17,7 @@ import SoundManager from './SoundManager';
 import { LineCharacterMesh } from '../meshes/LineCharacterMesh';
 import { CurveLineMesh } from '../meshes/CurveLineMesh';
 import { EventNames, MsgManager } from './MsgManager';
+import { Snow } from './Snow';
 
 /**
  * The game engin is used to manage the scenes, user input,
@@ -65,6 +66,8 @@ export default class GameEngine {
         this.renderer.setClearColor(0x646464, 1);
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = PCFShadowMap;
+
+        const snow  = new Snow(this.scene);
 
         // test light
         const light = new SpotLight(0xffffff, 1.5);

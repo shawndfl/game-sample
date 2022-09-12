@@ -7,7 +7,6 @@ import {
     MeshBasicMaterial,
     Object3D
 } from "three";
-import {CharacterWalkAnimation} from "../builders/CharacterWalkAnimation";
 import GLTFLoader from "../core/GLTFLoader";
 
 export enum CharacterAnimations {
