@@ -9,7 +9,8 @@ import {
     Vector3,
     AmbientLight,
     SpotLight,
-    PCFShadowMap    
+    PCFShadowMap,    
+    FogExp2
 } from "three";
 
 import CharacterController from '../controllers/CharacterController'
@@ -38,6 +39,8 @@ export default class GameEngine {
 
     private _terrain : Terrain;
 
+    private _snow: Snow;
+
     /**
      * Get the scene
      */
@@ -58,8 +61,13 @@ export default class GameEngine {
         this._soundManager = new SoundManager();
 
         this._camera = new PerspectiveCamera(33, 1.25, .01, 1000);
+        this._scene.add(this._camera);
+
         this._soundManager.assignToCamera(this._camera);
         // this._soundManager.play();
+
+        // scene setup
+        this._scene.fog = new FogExp2(0x000000, 0.0008);
 
         this.renderer = new WebGLRenderer({antialias: true});
         this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -67,7 +75,7 @@ export default class GameEngine {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = PCFShadowMap;
 
-        const snow  = new Snow(this.scene);
+        this._snow  = new Snow(this._camera);
 
         // test light
         const light = new SpotLight(0xffffff, 1.5);
@@ -146,6 +154,8 @@ export default class GameEngine {
 
         // update stuff
         this._cameraController.update(dt);
+
+        this._snow.update(dt);
 
         this._characterCtl.update(dt);
         requestAnimationFrame(this.update);

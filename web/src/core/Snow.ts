@@ -3,6 +3,7 @@ import {
     BufferGeometry,
     Float32BufferAttribute,
     FogExp2,
+    Object3D,
     Points,
     PointsMaterial,
     Scene,
@@ -17,8 +18,10 @@ import snowflake4 from '../assets/img/snowflake4.png'
 import snowflake5 from '../assets/img/snowflake5.png'
 
 export class Snow {
-    constructor(scene : Scene) {
-        scene.fog = new FogExp2(0x000000, 0.0008);
+
+    particles : Points[];
+
+    constructor(parent : Object3D) {
 
         const geometry = new BufferGeometry();
         const vertices = [];
@@ -80,6 +83,7 @@ export class Snow {
                 5
             ]
         ];
+        this.particles = [];
 
         for (let i = 0; i < parameters.length; i++) {
 
@@ -102,10 +106,19 @@ export class Snow {
             particles.rotation.y = Math.random() * 6;
             particles.rotation.z = Math.random() * 6;
 
-            scene.add(particles);
+            this.particles.push(particles);
+
+            parent.add(particles);
 
         }
 
+    }
+
+    update(dt : number) {
+        this.particles.forEach((p, i : number) => {
+
+            p.rotation.x -= dt * .08 + i * .01;
+        })
     }
 
 }
