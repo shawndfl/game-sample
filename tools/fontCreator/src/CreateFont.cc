@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
    // inputs
    std::string filenameImage = "font.png";
    std::string filenameData = "font.dat";
+   std::string filenameJson = "font.json";
    int imageWidth = 1024;
    int imageHeight = 1024;
    std::string fontFile = "fonts/LiberationSerif-Regular.ttf";
@@ -110,6 +111,13 @@ int main(int argc, char *argv[]) {
       return 1;
    }
 
+   std::ofstream fileJsonData;
+   fileJsonData.open(filenameJson.c_str());
+   if (!fileJsonData) {
+      return 1;
+   }
+
+   fileJsonData << "[\n";
    // loop over all characters from ' ' to 127
    std::vector<Character> characters;
    for (unsigned char ch = 32; ch < 127; ch++) {
@@ -145,6 +153,26 @@ int main(int argc, char *argv[]) {
       fileData << "'" << ch << "' " << (int) ch << " " << data.sizeX << " " << data.sizeY << " " << data.bearingX << " " << data.bearingY << " " << data.advance << " " << data.u1
             << " " << data.v1 << " " << data.u2 << " " << data.v2 << "\n";
 
+      
+      fileJsonData << "  {\n";
+      if(ch != '\\' && ch != '\"') {
+         fileJsonData << "     \"ch\" : \"" << ch << "\",\n";
+      } else {
+         fileJsonData << "     \"ch\" : \"\\" << ch << "\",\n";
+      }
+      fileJsonData << "     \"value\" : \"" << (int)ch << "\",\n";
+      fileJsonData << "     \"sizeX\" : " << data.sizeX << ",\n";
+      fileJsonData << "     \"sizeY\" : " << data.sizeY << ",\n";
+      fileJsonData << "     \"bearingX\" : " << data.bearingX << ",\n";
+      fileJsonData << "     \"bearingY\" : " << data.bearingY << ",\n";
+      fileJsonData << "     \"advance\" : " << data.advance << ",\n";
+      fileJsonData << "     \"u1\" : " << data.u1 << ",\n";
+      fileJsonData << "     \"v1\" : " << data.v1 << ",\n";
+      fileJsonData << "     \"u2\" : " << data.u2 << ",\n";
+      fileJsonData << "     \"v2\" : " << data.v2 << "\n";
+      fileJsonData << "  },\n";
+
+      
       // save the character
       characters.push_back(data);
 
@@ -181,6 +209,8 @@ int main(int argc, char *argv[]) {
       // adjust the offset for the next glyph
       xOffset += data.sizeX;
    }
+
+   fileJsonData << "]\n";
 
    png_write_image(png, imageData);
 
