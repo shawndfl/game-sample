@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
    int imageWidth = 1024;
    int imageHeight = 1024;
    std::string fontFile = "fonts/LiberationSerif-Regular.ttf";
-   int scale = 128;
+   int scale = 32;
 
    // open a png file
    FILE *fileImage = fopen(filenameImage.c_str(), "wb");

@@ -43,3 +43,5 @@ unittests/tests
 *.project
 *.cproject
 .settings/
+
+*.vscode
